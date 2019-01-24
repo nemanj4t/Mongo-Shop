@@ -7,8 +7,24 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import 'slick.css';
+@import 'nouislider.min.css';
+@import 'slick-theme.css';
+@import 'style.css';
 
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.navitemlink {
+  color: black !important;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.navitemlink:hover {
+  color: #d1374d !important;
+  text-decoration: none;
+
 }
