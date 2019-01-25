@@ -6,13 +6,10 @@
  */
 
 require('./bootstrap');
-require('./jquery.min');
-require('./jquery.zoom.min');
-require('./main');
-require('./nouislider.min');
-require('./slick.min');
 
 window.Vue = require('vue');
+
+
 
 /**
  * The following block of code may be used to automatically register your
