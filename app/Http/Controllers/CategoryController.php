@@ -11,16 +11,24 @@ class CategoryController extends Controller
     public function show(Request $request, $id)
     {
         $category = Category::find($id);
-        if($category)   // ako postoji
+        if ($category)
         {
-            // Prvo bi trebalo da se proveri da li ima
-            // ili nema podkategorije jer u zavinosti
-            // od toga zavisi da li ima filtere ili nema ???
+            // $products = Product::where('category._id', $category->_id)->get();
             if(!$category->children)
             {
-                // ako nema podkategorija onda
-                $product = Product::where('category.name', $category->name)->first();
-                return ($product->name) ? $product->name : "String";
+                // ako nema dece onda se vracaju dodatni filteri po ko kojima
+                // mogu da se pretrazuju proizvodi iz te kategorije
+                // jer onda ova kategorija direktno sadrzi proizvode
+                $filters = Category::getFiltersAndCount($category);
+                dd($filters);
+            }
+            else
+            {
+                // ako ima dece onda treba rekurzivno da se prodje i pronadju
+                // "listovi" podkategorije koje direktno sadrze decu
+                // krece se od trenutne kategorije i traze se sve leaf kategorije
+                $products = Category::getProductsForLeafCategories($category);
+                dd($products);
             }
         }
     }
