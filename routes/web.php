@@ -31,6 +31,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Kada se promeni kategorija onda se izbace
 // proizvodi koji spadaju tu kategoriju ???
+Route::get('/categories', 'CategoryController@index');
 Route::get('/categories/{category}', 'CategoryController@show');
 
 

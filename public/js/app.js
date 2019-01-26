@@ -1795,8 +1795,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "categories"
+  name: "categories",
+  props: ['category'],
+  data: function data() {
+    return {
+      currentCategory: {},
+      hasChildren: false,
+      // v-show na osnovu ovog atributa
+      products: {},
+      filters: {},
+      children: {}
+    };
+  },
+  methods: {
+    showMoreLess: function showMoreLess(event) {
+      if (event.target.innerHTML.includes("Show more")) {
+        event.target.innerHTML = "Show less <i class=\"fas fa-angle-up\"></i>";
+      } else if (event.target.innerHTML.includes("Show less")) {
+        event.target.innerHTML = "Show more <i class=\"fas fa-angle-down\"></i>";
+      }
+    },
+    getData: function getData() {
+      var _this = this;
+
+      axios.get('/categories/' + this.currentCategory._id).then(function (response) {
+        _this.currentCategory = response.data.category;
+        _this.hasChildren = _this.currentCategory.hasOwnProperty('children');
+
+        if (_this.hasChildren) {
+          _this.children = _this.currentCategory.children;
+        } else {
+          _this.filters = _this.currentCategory.filters;
+        }
+
+        console.log(_this);
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.currentCategory = this.category;
+    this.getData();
+  }
 });
 
 /***/ }),
@@ -6105,7 +6154,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.sidebar[data-v-033a6ba6] {\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 100; /* Behind the navbar */\n    padding: 48px 0 0; /* Height of navbar */\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\n}\n.sidebar-sticky[data-v-033a6ba6] {\n    position: relative;\n    top: 0;\n    height: calc(100vh - 48px);\n    padding-top: .5rem;\n    overflow-x: hidden;\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\n}\n@supports ((position: -webkit-sticky) or (position: sticky)) {\n.sidebar-sticky[data-v-033a6ba6] {\n        position: -webkit-sticky;\n        position: sticky;\n}\n}\n.sidebar .nav-link[data-v-033a6ba6] {\n    font-weight: 500;\n    color: #333;\n}\n.sidebar .nav-link .feather[data-v-033a6ba6] {\n    margin-right: 4px;\n    color: #999;\n}\n.sidebar .nav-link.active[data-v-033a6ba6] {\n    color: #007bff;\n}\n.sidebar .nav-link:hover .feather[data-v-033a6ba6],\n.sidebar .nav-link.active .feather[data-v-033a6ba6] {\n    color: inherit;\n}\n.sidebar-heading[data-v-033a6ba6] {\n    font-size: .75rem;\n    text-transform: uppercase;\n}\n\n\n", ""]);
+exports.push([module.i, "\n.sidebar[data-v-033a6ba6] {\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 100; /* Behind the navbar */\n    padding: 48px 0 0; /* Height of navbar */\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\n}\n.sidebar-sticky[data-v-033a6ba6] {\n    position: relative;\n    top: 0;\n    height: calc(100vh - 48px);\n    padding-top: .5rem;\n    overflow-x: hidden;\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\n}\n@supports ((position: -webkit-sticky) or (position: sticky)) {\n.sidebar-sticky[data-v-033a6ba6] {\n        position: -webkit-sticky;\n        position: sticky;\n}\n}\n.sidebar .nav-link[data-v-033a6ba6] {\n    font-weight: 500;\n    color: #333;\n}\n.sidebar .nav-link .feather[data-v-033a6ba6] {\n    margin-right: 4px;\n    color: #999;\n}\n.sidebar .nav-link.active[data-v-033a6ba6] {\n    color: #007bff;\n}\n.sidebar .nav-link:hover .feather[data-v-033a6ba6],\n.sidebar .nav-link.active .feather[data-v-033a6ba6] {\n    color: inherit;\n}\n.sidebar-heading[data-v-033a6ba6] {\n    font-size: .75rem;\n    text-transform: uppercase;\n}\n", ""]);
 
 // exports
 
@@ -37326,66 +37375,121 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "nav",
+    { staticClass: "col-md-2 d-none d-md-block sidebar bg-white" },
+    [
+      _c("div", { staticClass: "sidebar-sticky" }, [
+        _c(
+          "ul",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.hasChildren,
+                expression: "hasChildren"
+              }
+            ],
+            attrs: { lass: "list-group" }
+          },
+          [_vm._m(0)]
+        ),
+        _vm._v(" "),
+        _c(
+          "ul",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.hasChildren,
+                expression: "!hasChildren"
+              }
+            ],
+            staticClass: "list-group"
+          },
+          [
+            _c("li", { staticClass: "nav flex-column list-group-item" }, [
+              _c("h5", { staticClass: "nav-link font-weight-bold" }, [
+                _vm._v("Kapacitet:")
+              ]),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "nav-link text-nowrap border-top",
+                  staticStyle: { width: "100px", cursor: "pointer" },
+                  attrs: {
+                    "data-toggle": "collapse",
+                    "data-target": ".multi-collapse"
+                  },
+                  on: {
+                    click: function($event) {
+                      if ($event.target !== $event.currentTarget) {
+                        return null
+                      }
+                      return _vm.showMoreLess($event)
+                    }
+                  }
+                },
+                [
+                  _vm._v("\n                    Show more "),
+                  _c("i", { staticClass: "fas fa-angle-down" })
+                ]
+              )
+            ])
+          ]
+        )
+      ])
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c(
-        "nav",
-        { staticClass: "col-md-2 d-none d-md-block bg-light sidebar" },
-        [
-          _c("div", { staticClass: "sidebar-sticky" }, [
-            _c("ul", { staticClass: "nav flex-column" }, [
-              _c("li", { staticClass: "nav-item" }, [
-                _c(
-                  "a",
-                  { staticClass: "nav-link active", attrs: { href: "#" } },
-                  [
-                    _c("span", { attrs: { "data-feather": "home" } }),
-                    _vm._v("\n                        Dashboard "),
-                    _c("span", { staticClass: "sr-only" })
-                  ]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "h6",
-              {
-                staticClass:
-                  "sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
-              },
-              [
-                _c("span", [_vm._v("Neki filteri npr")]),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "d-flex align-items-center text-muted",
-                    attrs: { href: "#" }
-                  },
-                  [_c("span", { attrs: { "data-feather": "plus-circle" } })]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("ul", { staticClass: "nav flex-column mb-2" }, [
-              _c("li", { staticClass: "nav-item" }, [
-                _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-                  _c("span", { attrs: { "data-feather": "file-text" } }),
-                  _vm._v(
-                    "\n                        Current month\n                    "
-                  )
-                ])
-              ])
-            ])
-          ])
-        ]
-      )
+    return _c("li", { staticClass: "nav-item" }, [
+      _c("label", [_vm._v("Test")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", [
+      _c("li", { staticClass: "nav-item" }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+          _c("input", {
+            staticClass: "form-check-inline",
+            attrs: { type: "checkbox", value: "" }
+          }),
+          _vm._v("4GB\n                        ")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item collapse multi-collapse" }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+          _c("input", {
+            staticClass: "form-check-inline",
+            attrs: { type: "checkbox", value: "" }
+          }),
+          _vm._v("8GB\n                        ")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item collapse multi-collapse" }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+          _c("input", {
+            staticClass: "form-check-inline",
+            attrs: { type: "checkbox", value: "" }
+          }),
+          _vm._v("16GB\n                        ")
+        ])
+      ])
     ])
   }
 ]
