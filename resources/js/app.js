@@ -28,6 +28,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('categories', require('./components/CategoriesComponent.vue').default);
 Vue.component('shopping-cart', require('./components/ShoppingCart.vue').default);
 Vue.component('wish-list', require('./components/WishList.vue').default);
+Vue.component('admin-panel', require('./components/admin-components/AdminPanel.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
