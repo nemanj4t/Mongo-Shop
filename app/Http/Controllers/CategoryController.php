@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Product;
-use function MongoDB\BSON\toJSON;
+use MongoDB\BSON;
 
 class CategoryController extends Controller
 {
@@ -24,12 +24,23 @@ class CategoryController extends Controller
 
             if(!$category->children)
             {
+                // ako ima filtere
+                if(!empty($request->all())) {
+                    $products = self::buildFilterQuery($request->all()); // filtrira
+                    return compact('products');
+                }
+                else {
+                    $products = Product::where('category.name', $category->name)->get();
+                }
                 // ako nema dece onda se vracaju filteri po kojima mogu da se pretrazuju proizvodi
                 $filters = Category::getFiltersAndCount($category);
-                $products = Product::where('category.name', $category->name)->get();
+                $filters = array_filter($filters, function($filter) {   // izbace se prazni
+                    return (!empty($filter));
+                });
+
                 // treba da vratim i sve prethodnike da bih prikazao path
 
-                return compact('category', 'filters', 'products');
+                return compact('filters', 'category', 'products');
             }
             else
             {
@@ -45,5 +56,24 @@ class CategoryController extends Controller
             // ovde neki redirect da se odradi
             return view('categories');
         }
+    }
+
+    private static function buildFilterQuery($filters)
+    {
+        // treba da dodam i da matchuje kategoriju prvo
+        $query = [['$match' => ['$or' => []]]]; // $query[0]['$match']['$or'] ovde ubacujem
+        foreach($filters as $key => $filter) {
+            $filterArray = [$key => ['$in' => []]];  // $filterArray[$key]['$in']
+            foreach($filter as $value) {
+                $filterArray[$key]['$in'][] = $value;
+            }
+            $query[0]['$match']['$or'][] = $filterArray;
+        }
+        $result = Product::raw()->aggregate($query);
+        $products = [];
+        foreach($result as $doc) {
+            $products[] = $doc;
+        }
+        return $products;
     }
 }

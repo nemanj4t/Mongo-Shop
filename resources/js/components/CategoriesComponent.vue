@@ -7,30 +7,21 @@
                 <li class="nav-item"><label>Test</label></li>
             </ul>
 
-            <ul class="list-group" v-show="!hasChildren">
+            <ul class="list-group" v-show="!hasChildren" >
                 <!--Za svaki atribut-->
-                <li class="nav flex-column list-group-item">
-                    <h5 class="nav-link font-weight-bold" >Kapacitet:</h5>
+                <li class="nav flex-column list-group-item" v-for="(filter, fkey) in filters" :key="fkey">
+                    <h5 class="nav-link font-weight-bold">{{ fkey }}</h5>
                     <!--Za svaku vrednost-->
                     <ul>
-                        <li class="nav-item">
+                        <li v-bind:class="[index > 1 ? ['collapse', 'multi-collapse-' + fkey] : '', 'nav-item']" v-for="(item, ikey, index) in filter" :key="ikey">
                             <a class="nav-link" href="#">
-                                <input class="form-check-inline" type="checkbox" value="">4GB
-                            </a>
-                        </li>
-                        <li class="nav-item collapse multi-collapse">
-                            <a class="nav-link" href="#">
-                                <input class="form-check-inline" type="checkbox" value="">8GB
-                            </a>
-                        </li>
-                        <li class="nav-item collapse multi-collapse">
-                            <a class="nav-link" href="#">
-                                <input class="form-check-inline" type="checkbox" value="">16GB
+                                <input class="form-check-inline" type="checkbox" v-on:change="getFilteredData(fkey, ikey)">{{ ikey }}
+                                <span class="font-weight-bold">({{ item }})</span>
                             </a>
                         </li>
                     </ul>
                     <label style="width: 100px;cursor: pointer;" class="nav-link text-nowrap border-top"
-                           v-on:click.self="showMoreLess" data-toggle="collapse" data-target=".multi-collapse">
+                           v-on:click.self="showMoreLess" data-toggle="collapse" :data-target="'.multi-collapse-' + fkey">
                         Show more <i class="fas fa-angle-down"></i>
                     </label>
                 </li>
@@ -47,9 +38,10 @@
             return {
                 currentCategory: {},
                 hasChildren: false, // v-show na osnovu ovog atributa
-                products: {},
-                filters: {},
-                children: {}
+                products: [],
+                filters: [],
+                children: [],
+                selectedFilters: []
             }
         },
         methods: {
@@ -68,9 +60,45 @@
                         if(this.hasChildren) {
                             this.children = this.currentCategory.children;
                         } else {
-                            this.filters= this.currentCategory.filters;
+                            this.filters = response.data.filters;
                         }
-                        console.log(this);
+                        this.initSelectedFilters();
+                    });
+            },
+            initSelectedFilters() {
+                // Za svaku vrednost svakog filtera cuva da li je checked
+                for (let filter in this.filters) {
+                    if (this.filters.hasOwnProperty(filter)) {
+                        this.selectedFilters[filter] = [];
+                        for(let value in this.filters[filter]) {
+                            if(this.filters[filter].hasOwnProperty(value)) {
+                                this.selectedFilters[filter][value] = false;
+                            }
+                        }
+                    }
+                }
+            },
+            getFilteredData(filter, value) {
+                this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
+                let paramFilters = {};
+                // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
+                for(let f in this.selectedFilters) {
+                    let values = [];
+                    for(let val in this.selectedFilters[f]) {
+                        if(this.selectedFilters[f][val] === true) {
+                            values.push(val);
+                        }
+                    }
+                    if(values.length !== 0) {
+                        paramFilters[f] = values;
+                    }
+                }
+                axios.get('/categories/' + this.currentCategory._id, {
+                        params : paramFilters
+                    })
+                    .then(response => {
+                        console.log(response.data.products);
+                        // this.products = response.data.products;
                     });
             }
         },

@@ -1795,15 +1795,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "categories",
   props: ['category'],
@@ -1812,9 +1803,10 @@ __webpack_require__.r(__webpack_exports__);
       currentCategory: {},
       hasChildren: false,
       // v-show na osnovu ovog atributa
-      products: {},
-      filters: {},
-      children: {}
+      products: [],
+      filters: [],
+      children: [],
+      selectedFilters: []
     };
   },
   methods: {
@@ -1835,10 +1827,48 @@ __webpack_require__.r(__webpack_exports__);
         if (_this.hasChildren) {
           _this.children = _this.currentCategory.children;
         } else {
-          _this.filters = _this.currentCategory.filters;
+          _this.filters = response.data.filters;
         }
 
-        console.log(_this);
+        _this.initSelectedFilters();
+      });
+    },
+    initSelectedFilters: function initSelectedFilters() {
+      // Za svaku vrednost svakog filtera cuva da li je checked
+      for (var filter in this.filters) {
+        if (this.filters.hasOwnProperty(filter)) {
+          this.selectedFilters[filter] = [];
+
+          for (var value in this.filters[filter]) {
+            if (this.filters[filter].hasOwnProperty(value)) {
+              this.selectedFilters[filter][value] = false;
+            }
+          }
+        }
+      }
+    },
+    getFilteredData: function getFilteredData(filter, value) {
+      this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
+      var paramFilters = {}; // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
+
+      for (var f in this.selectedFilters) {
+        var values = [];
+
+        for (var val in this.selectedFilters[f]) {
+          if (this.selectedFilters[f][val] === true) {
+            values.push(val);
+          }
+        }
+
+        if (values.length !== 0) {
+          paramFilters[f] = values;
+        }
+      }
+
+      axios.get('/categories/' + this.currentCategory._id, {
+        params: paramFilters
+      }).then(function (response) {
+        console.log(response.data.products); // this.products = response.data.products;
       });
     }
   },
@@ -37409,39 +37439,84 @@ var render = function() {
             ],
             staticClass: "list-group"
           },
-          [
-            _c("li", { staticClass: "nav flex-column list-group-item" }, [
-              _c("h5", { staticClass: "nav-link font-weight-bold" }, [
-                _vm._v("Kapacitet:")
-              ]),
-              _vm._v(" "),
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "nav-link text-nowrap border-top",
-                  staticStyle: { width: "100px", cursor: "pointer" },
-                  attrs: {
-                    "data-toggle": "collapse",
-                    "data-target": ".multi-collapse"
-                  },
-                  on: {
-                    click: function($event) {
-                      if ($event.target !== $event.currentTarget) {
-                        return null
+          _vm._l(_vm.filters, function(filter, fkey) {
+            return _c(
+              "li",
+              { key: fkey, staticClass: "nav flex-column list-group-item" },
+              [
+                _c("h5", { staticClass: "nav-link font-weight-bold" }, [
+                  _vm._v(_vm._s(fkey))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  _vm._l(filter, function(item, ikey, index) {
+                    return _c(
+                      "li",
+                      {
+                        key: ikey,
+                        class: [
+                          index > 1
+                            ? ["collapse", "multi-collapse-" + fkey]
+                            : "",
+                          "nav-item"
+                        ]
+                      },
+                      [
+                        _c(
+                          "a",
+                          { staticClass: "nav-link", attrs: { href: "#" } },
+                          [
+                            _c("input", {
+                              staticClass: "form-check-inline",
+                              attrs: { type: "checkbox" },
+                              on: {
+                                change: function($event) {
+                                  _vm.getFilteredData(fkey, ikey)
+                                }
+                              }
+                            }),
+                            _vm._v(
+                              _vm._s(ikey) + "\n                            "
+                            ),
+                            _c("span", { staticClass: "font-weight-bold" }, [
+                              _vm._v("(" + _vm._s(item) + ")")
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "nav-link text-nowrap border-top",
+                    staticStyle: { width: "100px", cursor: "pointer" },
+                    attrs: {
+                      "data-toggle": "collapse",
+                      "data-target": ".multi-collapse-" + fkey
+                    },
+                    on: {
+                      click: function($event) {
+                        if ($event.target !== $event.currentTarget) {
+                          return null
+                        }
+                        return _vm.showMoreLess($event)
                       }
-                      return _vm.showMoreLess($event)
                     }
-                  }
-                },
-                [
-                  _vm._v("\n                    Show more "),
-                  _c("i", { staticClass: "fas fa-angle-down" })
-                ]
-              )
-            ])
-          ]
+                  },
+                  [
+                    _vm._v("\n                    Show more "),
+                    _c("i", { staticClass: "fas fa-angle-down" })
+                  ]
+                )
+              ]
+            )
+          }),
+          0
         )
       ])
     ]
@@ -37454,42 +37529,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("li", { staticClass: "nav-item" }, [
       _c("label", [_vm._v("Test")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", [
-      _c("li", { staticClass: "nav-item" }, [
-        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-          _c("input", {
-            staticClass: "form-check-inline",
-            attrs: { type: "checkbox", value: "" }
-          }),
-          _vm._v("4GB\n                        ")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "nav-item collapse multi-collapse" }, [
-        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-          _c("input", {
-            staticClass: "form-check-inline",
-            attrs: { type: "checkbox", value: "" }
-          }),
-          _vm._v("8GB\n                        ")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "nav-item collapse multi-collapse" }, [
-        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-          _c("input", {
-            staticClass: "form-check-inline",
-            attrs: { type: "checkbox", value: "" }
-          }),
-          _vm._v("16GB\n                        ")
-        ])
-      ])
     ])
   }
 ]
@@ -49070,8 +49109,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -45,6 +45,7 @@ class Category extends Model
     public static function getFiltersAndCount(Category $category)
     {
         $filterArray = [];  // za svaki atribut kategorije se izbaci broj proizvoda
+
         if(!$category->details) return null;
         foreach ($category->details as $detail) {
             // $details je zapravo: Tip | Kapacitet | Brzina | Broj jezgara itd.
