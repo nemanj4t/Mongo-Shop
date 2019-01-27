@@ -18,6 +18,21 @@ class Category extends Model
 //    public $ancestors = [];
 //    public $children = [];
 
+    public function parent()
+    {
+        return $this->belongsTo('Category', 'category_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('Category', 'category_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany('Product', 'category_id');
+    }
+
     public static function getProductsForLeafCategories(Category $category)
     {
         // Rekurzivno prolazi kroz sve podkategorije date kategorije
