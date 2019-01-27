@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return view('categories');
+        return "Nista";
     }
 
     public function show(Request $request, $id)
@@ -20,9 +20,10 @@ class CategoryController extends Controller
         if ($category)
         {
             // ako nije ajax onda se samo vrati view sa kategorijom
-            if(!$request->ajax()) return view('categories', compact('category'));
+            if(!$request->ajax())
+                return view('categories', compact('category'));
 
-            if(!$category->children)
+            if(!$category->children()->exists())
             {
                 // ako ima filtere
                 if(!empty($request->all())) {
@@ -30,25 +31,26 @@ class CategoryController extends Controller
                     return compact('products');
                 }
                 else {
-                    $products = Product::where('category.name', $category->name)->get();
+                    $products = $category->products;
+                    // ako nema dece onda se vracaju filteri po kojima mogu da se pretrazuju proizvodi
+                    $filters = Category::getFiltersAndCount($category);
+                    $filters = array_filter($filters, function($filter) {   // izbace se prazni
+                        return (!empty($filter));
+                    });
+
+                    // treba da vratim i sve prethodnike da bih prikazao path
+
+                    return compact('filters', 'category', 'products');
                 }
-                // ako nema dece onda se vracaju filteri po kojima mogu da se pretrazuju proizvodi
-                $filters = Category::getFiltersAndCount($category);
-                $filters = array_filter($filters, function($filter) {   // izbace se prazni
-                    return (!empty($filter));
-                });
-
-                // treba da vratim i sve prethodnike da bih prikazao path
-
-                return compact('filters', 'category', 'products');
             }
             else
             {
                 // ako ima dece onda treba rekurzivno da se prodje i pronadju
                 // "listovi" podkategorije koje direktno sadrze decu
                 $products = Category::getProductsForLeafCategories($category);
+                $subCategories = $category->children;
 
-                return compact('category', 'products');
+                return compact('category', 'subCategories', 'products');
             }
         }
         else

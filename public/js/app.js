@@ -1822,7 +1822,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/categories/' + this.currentCategory._id).then(function (response) {
         _this.currentCategory = response.data.category;
-        _this.hasChildren = _this.currentCategory.hasOwnProperty('children');
+        _this.hasChildren = response.data.hasOwnProperty('subCategories');
 
         if (_this.hasChildren) {
           _this.children = _this.currentCategory.children;
@@ -50997,8 +50997,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -56,7 +56,7 @@
                 axios.get('/categories/' + this.currentCategory._id)
                     .then(response => {
                         this.currentCategory = response.data.category;
-                        this.hasChildren = this.currentCategory.hasOwnProperty('children');
+                        this.hasChildren = response.data.hasOwnProperty('subCategories');
                         if(this.hasChildren) {
                             this.children = this.currentCategory.children;
                         } else {
