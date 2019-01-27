@@ -1,6 +1,6 @@
 <template>
     <!-- v-show da stavim u zavisnosti od toga da li ima children ili nema-->
-    <nav class="col-md-2 d-none d-md-block sidebar bg-white">
+    <nav class="d-none d-md-block sidebar bg-white" style="height: 100%">
         <div class="sidebar-sticky">
 
             <ul lass="list-group" v-show="hasChildren">
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+    import { mapState, mapMutations } from 'vuex'
+
     export default {
         name: "categories",
         props: ['category'],
@@ -45,6 +47,14 @@
             }
         },
         methods: {
+            ...mapMutations([
+                'CHANGE_PRODUCTS_FOR_SHOW'
+            ]),
+
+            loadProductsIntoStore(products) {
+                this.CHANGE_PRODUCTS_FOR_SHOW(products);
+            },
+
             showMoreLess(event) {
                 if(event.target.innerHTML.includes("Show more")) {
                     event.target.innerHTML = "Show less <i class=\"fas fa-angle-up\"></i>";
@@ -98,13 +108,20 @@
                     })
                     .then(response => {
                         console.log(response.data.products);
-                        // this.products = response.data.products;
+                        this.loadProductsIntoStore(response.data.products);
                     });
             }
         },
         mounted() {
             this.currentCategory = this.category;
             this.getData();
+            console.log(this.products);
+            axios.get('/categories/' + this.currentCategory._id, {
+                params : []
+            })
+                .then(response => {
+                    this.loadProductsIntoStore(response.data.products);
+                });
         }
     }
 </script>
@@ -112,11 +129,9 @@
 <style scoped>
 
     .sidebar {
-        position: fixed;
         top: 0;
         bottom: 0;
         left: 0;
-        z-index: 100; /* Behind the navbar */
         padding: 48px 0 0; /* Height of navbar */
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
     }
@@ -124,7 +139,7 @@
     .sidebar-sticky {
         position: relative;
         top: 0;
-        height: calc(100vh - 48px);
+        /*height: calc(80vh - 48px);*/
         padding-top: .5rem;
         overflow-x: hidden;
         overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */

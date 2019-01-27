@@ -28,6 +28,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('categories', require('./components/CategoriesComponent.vue').default);
 Vue.component('shopping-cart', require('./components/ShoppingCart.vue').default);
 Vue.component('wish-list', require('./components/WishList.vue').default);
+Vue.component('product', require('./components/Product.vue').default);
+Vue.component('products', require('./components/Products.vue').default);
 Vue.component('admin-panel', require('./components/admin-components/AdminPanel.vue').default);
 
 /**
