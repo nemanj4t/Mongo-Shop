@@ -1800,6 +1800,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "categories",
@@ -1809,7 +1814,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       currentCategory: {},
       hasChildren: false,
       // v-show na osnovu ovog atributa
-      products: [],
+      //products: [],
       filters: [],
       children: [],
       selectedFilters: []
@@ -1834,12 +1839,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.hasChildren = response.data.hasOwnProperty('subCategories');
 
         if (_this.hasChildren) {
-          _this.children = _this.currentCategory.children;
+          _this.children = response.data.subCategories;
         } else {
           _this.filters = response.data.filters;
+
+          _this.initSelectedFilters();
         }
 
-        _this.initSelectedFilters();
+        _this.loadProductsIntoStore(response.data.products);
       });
     },
     initSelectedFilters: function initSelectedFilters() {
@@ -1886,16 +1893,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   mounted: function mounted() {
-    var _this3 = this;
-
     this.currentCategory = this.category;
-    this.getData();
-    console.log(this.products);
-    axios.get('/categories/' + this.currentCategory._id, {
-      params: []
-    }).then(function (response) {
-      _this3.loadProductsIntoStore(response.data.products);
-    });
+    this.getData(); // prebacio sam da se ovde povlace products
   }
 });
 
@@ -37715,6 +37714,10 @@ var render = function() {
     },
     [
       _c("div", { staticClass: "sidebar-sticky" }, [
+        _c("li", { staticClass: "font-weight-bold" }, [
+          _vm._v(_vm._s(this.currentCategory.name))
+        ]),
+        _vm._v(" "),
         _c(
           "ul",
           {
@@ -37726,9 +37729,20 @@ var render = function() {
                 expression: "hasChildren"
               }
             ],
-            attrs: { lass: "list-group" }
+            staticClass: "nav flex-column"
           },
-          [_vm._m(0)]
+          _vm._l(this.children, function(item) {
+            return _c("li", [
+              _c("a", { attrs: { href: "/categories/" + item._id } }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(item.name) +
+                    "\n                "
+                )
+              ])
+            ])
+          }),
+          0
         ),
         _vm._v(" "),
         _c(
@@ -37827,16 +37841,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "nav-item" }, [
-      _c("label", [_vm._v("Test")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -51406,8 +51411,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

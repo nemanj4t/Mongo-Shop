@@ -11,7 +11,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return "Nista";
+        $c = Category::find("5c4f7dd2d0a5342d40003994");
+        return Category::getFullPath($c);
     }
 
     public function show(Request $request, $id)
@@ -27,17 +28,18 @@ class CategoryController extends Controller
             {
                 // ako ima filtere
                 if(!empty($request->all())) {
-                    $products = self::buildFilterQuery($request->all()); // filtrira
+                    $products = self::buildFilterQuery($request->all(), $id); // filtrira
                     return compact('products');
                 }
                 else {
                     $products = $category->products;
                     // ako nema dece onda se vracaju filteri po kojima mogu da se pretrazuju proizvodi
                     $filters = Category::getFiltersAndCount($category);
-                    $filters = array_filter($filters, function($filter) {   // izbace se prazni
-                        return (!empty($filter));
-                    });
-
+                    if(!empty($filters)) {
+                        $filters = array_filter($filters, function($filter) {   // izbace se prazni
+                            return (!empty($filter));
+                        });
+                    }
                     // treba da vratim i sve prethodnike da bih prikazao path
 
                     return compact('filters', 'category', 'products');
@@ -60,16 +62,27 @@ class CategoryController extends Controller
         }
     }
 
-    private static function buildFilterQuery($filters)
+    private static function buildFilterQuery($filters, $category_id)
     {
         // treba da dodam i da matchuje kategoriju prvo
-        $query = [['$match' => ['$or' => []]]]; // $query[0]['$match']['$or'] ovde ubacujem
+        $query = [[
+            '$match' => [
+                '$and' => [
+                    [
+                        'category_id' => $category_id
+                    ],
+                    [
+                        '$or' => []
+                    ]
+                ]
+            ]
+        ]]; // $query[0]['$match']['$and'][1]['$or'] ovde ubacujem
         foreach($filters as $key => $filter) {
             $filterArray = [$key => ['$in' => []]];  // $filterArray[$key]['$in']
             foreach($filter as $value) {
                 $filterArray[$key]['$in'][] = $value;
             }
-            $query[0]['$match']['$or'][] = $filterArray;
+            $query[0]['$match']['$and'][1]['$or'][] = $filterArray;
         }
         $result = Product::raw()->aggregate($query);
         $products = [];

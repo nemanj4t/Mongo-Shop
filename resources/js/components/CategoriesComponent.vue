@@ -3,8 +3,13 @@
     <nav class="d-none d-md-block sidebar bg-white" style="height: 100%">
         <div class="sidebar-sticky">
 
-            <ul lass="list-group" v-show="hasChildren">
-                <li class="nav-item"><label>Test</label></li>
+            <li class="font-weight-bold">{{ this.currentCategory.name }}</li>
+            <ul class="nav flex-column" v-show="hasChildren">
+                <li v-for="item in this.children">
+                    <a :href="'/categories/' + item._id">
+                        {{ item.name }}
+                    </a>
+                </li>
             </ul>
 
             <ul class="list-group" v-show="!hasChildren" >
@@ -40,7 +45,7 @@
             return {
                 currentCategory: {},
                 hasChildren: false, // v-show na osnovu ovog atributa
-                products: [],
+                //products: [],
                 filters: [],
                 children: [],
                 selectedFilters: []
@@ -68,11 +73,12 @@
                         this.currentCategory = response.data.category;
                         this.hasChildren = response.data.hasOwnProperty('subCategories');
                         if(this.hasChildren) {
-                            this.children = this.currentCategory.children;
+                            this.children = response.data.subCategories;
                         } else {
                             this.filters = response.data.filters;
+                            this.initSelectedFilters();
                         }
-                        this.initSelectedFilters();
+                        this.loadProductsIntoStore(response.data.products);
                     });
             },
             initSelectedFilters() {
@@ -114,14 +120,7 @@
         },
         mounted() {
             this.currentCategory = this.category;
-            this.getData();
-            console.log(this.products);
-            axios.get('/categories/' + this.currentCategory._id, {
-                params : []
-            })
-                .then(response => {
-                    this.loadProductsIntoStore(response.data.products);
-                });
+            this.getData(); // prebacio sam da se ovde povlace products
         }
     }
 </script>

@@ -27,6 +27,17 @@ class Category extends Model
         return $this->hasMany('App\Product', 'category_id');
     }
 
+    public static function getFullPath(Category $category)
+    {
+        $path = [];
+        $current = $category;
+        while($current != null) {
+            array_unshift($path, [$current->name => $current->id]);
+            $current = $current->parent;
+        }
+        return $path;
+    }
+
     public static function getProductsForLeafCategories(Category $category)
     {
         // Rekurzivno prolazi kroz sve podkategorije date kategorije
