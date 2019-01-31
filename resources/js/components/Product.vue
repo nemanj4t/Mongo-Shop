@@ -6,8 +6,8 @@
             </div>
             <div class="product-body">
                 <p class="product-category">{{category_name}}</p>
-                <h3 class="product-name"><a href="#">{{name}}</a></h3>
-                <h4 class="product-price">{{price}} <del class="product-old-price">$990.00</del></h4>
+                <h3 class="product-name"><a href="#">{{product.name}}</a></h3>
+                <h4 class="product-price">{{product.Cena}} <del class="product-old-price">$990.00</del></h4>
                 <div class="product-rating">
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
@@ -22,15 +22,27 @@
                 </div>
             </div>
             <div class="add-to-cart">
-                <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                <button @click="addToCart(product)" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
+    import { mapState, mapMutations } from 'vuex'
+
     export default {
-        props: ['name', 'price', 'category_name'],
+        props: ['product', 'category_name'],
+        methods: {
+            ...mapMutations([
+                'ADD_PRODUCT_TO_CART'
+            ]),
+
+            addToCart(product) {
+                this.ADD_PRODUCT_TO_CART(product);
+            }
+        },
         mounted() {
             console.log('Component mounted.')
         }
