@@ -24,6 +24,14 @@ export default {
         ADD_PRODUCT_TO_CART: (state, product) => {
             state.shopping_cart.products.push(product);
             state.shopping_cart.items += 1;
+            state.shopping_cart.price += parseFloat(product.Cena);
+        },
+
+        REMOVE_PRODUCT_FROM_CART: (state, product) => {
+            let index = state.shopping_cart.products.indexOf(product);
+            state.shopping_cart.products.splice(index, 1);
+            state.shopping_cart.items -= 1;
+            state.shopping_cart.price -= parseFloat(product.Cena);
         }
     },
     actions: {

@@ -2032,6 +2032,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2063,8 +2068,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['REMOVE_PRODUCT_FROM_CART']), {
+    removeProductFromCart: function removeProductFromCart(product) {
+      this.REMOVE_PRODUCT_FROM_CART(product);
+    }
+  }),
   computed: {
     shoppingCart: function shoppingCart() {
       return this.$store.getters.returnShoppingCart;
@@ -38107,13 +38117,13 @@ var render = function() {
     _c(
       "div",
       {
-        staticClass: "dropdown-menu p-4",
+        staticClass: "dropdown-menu p-2",
         attrs: { "aria-labelledby": "dropdownMenuLink" }
       },
       [
         _c(
           "div",
-          { staticClass: "cart-list" },
+          { staticClass: "cart-list p-2" },
           _vm._l(_vm.shoppingCart.products, function(product) {
             return _c("div", { staticClass: "product-widget" }, [
               _vm._m(0, true),
@@ -38126,12 +38136,22 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("h4", { staticClass: "product-price" }, [
-                  _c("span", { staticClass: "qty" }, [_vm._v("1x")]),
                   _vm._v("$" + _vm._s(product.Cena))
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(1, true)
+              _c(
+                "button",
+                {
+                  staticClass: "delete",
+                  on: {
+                    click: function($event) {
+                      _vm.removeProductFromCart(product)
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "fas fa-window-close" })]
+              )
             ])
           }),
           0
@@ -38142,10 +38162,10 @@ var render = function() {
             _vm._v(_vm._s(_vm.shoppingCart.items) + " Item(s) selected")
           ]),
           _vm._v(" "),
-          _c("h5", [_vm._v("SUBTOTAL: $2940.00")])
+          _c("h5", [_vm._v("SUBTOTAL: $" + _vm._s(_vm.shoppingCart.price))])
         ]),
         _vm._v(" "),
-        _vm._m(2)
+        _vm._m(1)
       ]
     )
   ])
@@ -38169,21 +38189,19 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "delete" }, [
-      _c("i", { staticClass: "fas fa-window-close" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "cart-btns" }, [
-      _c("a", { attrs: { href: "#" } }, [_vm._v("View Cart")]),
-      _vm._v(" "),
-      _c("a", { attrs: { href: "#" } }, [
-        _vm._v("Checkout  "),
-        _c("i", { staticClass: "fa fa-arrow-circle-right" })
-      ])
+    return _c("div", [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          staticStyle: { width: "100%" },
+          attrs: { href: "#" }
+        },
+        [
+          _vm._v("Checkout  "),
+          _c("i", { staticClass: "fa fa-arrow-circle-right" })
+        ]
+      )
     ])
   }
 ]
@@ -51436,6 +51454,13 @@ __webpack_require__.r(__webpack_exports__);
     ADD_PRODUCT_TO_CART: function ADD_PRODUCT_TO_CART(state, product) {
       state.shopping_cart.products.push(product);
       state.shopping_cart.items += 1;
+      state.shopping_cart.price += parseFloat(product.Cena);
+    },
+    REMOVE_PRODUCT_FROM_CART: function REMOVE_PRODUCT_FROM_CART(state, product) {
+      var index = state.shopping_cart.products.indexOf(product);
+      state.shopping_cart.products.splice(index, 1);
+      state.shopping_cart.items -= 1;
+      state.shopping_cart.price -= parseFloat(product.Cena);
     }
   },
   actions: {}
