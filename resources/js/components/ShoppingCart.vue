@@ -35,8 +35,13 @@
     export default {
         methods: {
             ...mapMutations([
-                'REMOVE_PRODUCT_FROM_CART'
+                'REMOVE_PRODUCT_FROM_CART',
+                'ADD_PRODUCT_TO_CART'
             ]),
+
+            addProductToCart(product) {
+                this.ADD_PRODUCT_TO_CART(product);
+            },
 
             removeProductFromCart(product) {
                 this.REMOVE_PRODUCT_FROM_CART(product);
@@ -50,7 +55,15 @@
         },
 
         mounted() {
-
+            console.log('Component mounted.');
+            axios.get('/shoppingcart/get')
+                .then(response => {
+                    if(response.data.hasOwnProperty('shoppingCart')) {
+                        response.data.shoppingCart.products.forEach(product => {
+                            this.addProductToCart(product);
+                        });
+                    }
+                });
         }
     }
 </script>

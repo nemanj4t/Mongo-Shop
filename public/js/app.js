@@ -1981,7 +1981,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   props: ['product', 'category_name'],
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['ADD_PRODUCT_TO_CART']), {
     addToCart: function addToCart(product) {
-      this.ADD_PRODUCT_TO_CART(product);
+      var _this = this;
+
+      axios.post('/shoppingcart/add', {
+        'newProduct': product
+      }).then(function (response) {
+        _this.ADD_PRODUCT_TO_CART(product);
+      });
     }
   }),
   mounted: function mounted() {
@@ -2069,7 +2075,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['REMOVE_PRODUCT_FROM_CART']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['REMOVE_PRODUCT_FROM_CART', 'ADD_PRODUCT_TO_CART']), {
+    addProductToCart: function addProductToCart(product) {
+      this.ADD_PRODUCT_TO_CART(product);
+    },
     removeProductFromCart: function removeProductFromCart(product) {
       this.REMOVE_PRODUCT_FROM_CART(product);
     }
@@ -2079,7 +2088,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.$store.getters.returnShoppingCart;
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    var _this = this;
+
+    console.log('Component mounted.');
+    axios.get('/shoppingcart/get').then(function (response) {
+      if (response.data.hasOwnProperty('shoppingCart')) {
+        response.data.shoppingCart.products.forEach(function (product) {
+          _this.addProductToCart(product);
+        });
+      }
+    });
+  }
 });
 
 /***/ }),
