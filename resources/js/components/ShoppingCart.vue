@@ -12,8 +12,13 @@
                         <img src="http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg" alt="">
                     </div>
                     <div class="product-body">
-                        <h3 class="product-name"><a href="#">{{product.name}}</a></h3>
-                        <h4 class="product-price">${{product.Cena}}</h4>
+                        <h3 class="product-name"><a href="#">{{product.product.name}}</a></h3>
+                        <h4 class="product-price">${{product.product.Cena}}</h4>
+                        <h4 class="product-quantity">{{product.quantity}}</h4>
+                        <div>
+                            <button @click="addProductToCart(product)">+</button>
+                            <button @click="decrementProductQuantity(product)">-</button>
+                        </div>
                     </div>
                     <button @click="removeProductFromCart(product)" class="delete"><i class="fas fa-window-close"></i></button>
                 </div>
@@ -36,15 +41,32 @@
         methods: {
             ...mapMutations([
                 'REMOVE_PRODUCT_FROM_CART',
-                'ADD_PRODUCT_TO_CART'
+                'ADD_PRODUCT_TO_CART',
+                'DECREMENT_PRODUCT_QUANTITY_IN_CART'
             ]),
 
-            addProductToCart(product) {
-                this.ADD_PRODUCT_TO_CART(product);
+            addProductToCart(cartItem) {
+                axios.post('/shoppingcart/add', {
+                    'newProduct': cartItem
+                }).then(response => {
+                    this.ADD_PRODUCT_TO_CART(cartItem);
+                });
             },
 
             removeProductFromCart(product) {
-                this.REMOVE_PRODUCT_FROM_CART(product);
+                axios.get('/shoppingcart/remove/' + product.product._id)
+                    .then(response => {
+                        this.REMOVE_PRODUCT_FROM_CART(product);
+                    });
+            },
+
+            decrementProductQuantity(product) {
+                if (product.quantity > 1) {
+                    axios.get('/shoppingcart/decrement/' + product.product._id)
+                        .then(response => {
+                            this.DECREMENT_PRODUCT_QUANTITY_IN_CART(product);
+                        });
+                }
             }
         },
 
@@ -58,9 +80,10 @@
             console.log('Component mounted.');
             axios.get('/shoppingcart/get')
                 .then(response => {
-                    if(response.data.hasOwnProperty('shoppingCart')) {
+                    console.log(response.data);
+                    if (response.data.hasOwnProperty('shoppingCart')) {
                         response.data.shoppingCart.products.forEach(product => {
-                            this.addProductToCart(product);
+                            this.ADD_PRODUCT_TO_CART(product);
                         });
                     }
                 });

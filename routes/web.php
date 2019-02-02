@@ -44,22 +44,8 @@ Route::post('/products', 'ProductController@store');
 Route::put('/products', 'ProductController@update');
 Route::delete('/products/{product}', 'ProductController@destroy');
 
-// Test za sesije
-Route::get('/shoppingcart/get', function(Request $request) {
-    if($request->session()->has('shoppingCart')) {
-        return response()->json(['shoppingCart' => $request->session()->get('shoppingCart')]);
-    } else {
-        return "Nije postavljen shopping cart.";
-    }
-});
-
-Route::post('/shoppingcart/add', function(Request $request) {
-     if($request->session()->has('shoppingCart')) {
-        $request->session()->push('shoppingCart.products', $request->newProduct);
-     } else {
-         $cart = new App\ShoppingCart;
-         $cart->products[] = $request->newProduct;
-         $request->session()->put('shoppingCart', $cart);
-     }
-});
-
+// Shopping cart sesije
+Route::get('/shoppingcart/get', 'ShoppingCartController@get');
+Route::post('/shoppingcart/add', 'ShoppingCartController@add');
+Route::get('/shoppingcart/remove/{item}', 'ShoppingCartController@remove');
+Route::get('/shoppingcart/decrement/{item}', 'ShoppingCartController@decrement');

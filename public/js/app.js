@@ -1984,10 +1984,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addToCart: function addToCart(product) {
       var _this = this;
 
+      var cartItem = {};
+      cartItem.product = product;
+      cartItem.quantity = 1;
       axios.post('/shoppingcart/add', {
-        'newProduct': product
+        'newProduct': cartItem
       }).then(function (response) {
-        _this.ADD_PRODUCT_TO_CART(product);
+        _this.ADD_PRODUCT_TO_CART(cartItem);
       });
     }
   }),
@@ -2074,14 +2077,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['REMOVE_PRODUCT_FROM_CART', 'ADD_PRODUCT_TO_CART']), {
-    addProductToCart: function addProductToCart(product) {
-      this.ADD_PRODUCT_TO_CART(product);
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['REMOVE_PRODUCT_FROM_CART', 'ADD_PRODUCT_TO_CART', 'DECREMENT_PRODUCT_QUANTITY_IN_CART']), {
+    addProductToCart: function addProductToCart(cartItem) {
+      var _this = this;
+
+      axios.post('/shoppingcart/add', {
+        'newProduct': cartItem
+      }).then(function (response) {
+        _this.ADD_PRODUCT_TO_CART(cartItem);
+      });
     },
     removeProductFromCart: function removeProductFromCart(product) {
-      this.REMOVE_PRODUCT_FROM_CART(product);
+      var _this2 = this;
+
+      axios.get('/shoppingcart/remove/' + product.product._id).then(function (response) {
+        _this2.REMOVE_PRODUCT_FROM_CART(product);
+      });
+    },
+    decrementProductQuantity: function decrementProductQuantity(product) {
+      var _this3 = this;
+
+      if (product.quantity > 1) {
+        axios.get('/shoppingcart/decrement/' + product.product._id).then(function (response) {
+          _this3.DECREMENT_PRODUCT_QUANTITY_IN_CART(product);
+        });
+      }
     }
   }),
   computed: {
@@ -2090,13 +2117,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this4 = this;
 
     console.log('Component mounted.');
     axios.get('/shoppingcart/get').then(function (response) {
+      console.log(response.data);
+
       if (response.data.hasOwnProperty('shoppingCart')) {
         response.data.shoppingCart.products.forEach(function (product) {
-          _this.addProductToCart(product);
+          _this4.ADD_PRODUCT_TO_CART(product);
         });
       }
     });
@@ -38149,12 +38178,42 @@ var render = function() {
               _c("div", { staticClass: "product-body" }, [
                 _c("h3", { staticClass: "product-name" }, [
                   _c("a", { attrs: { href: "#" } }, [
-                    _vm._v(_vm._s(product.name))
+                    _vm._v(_vm._s(product.product.name))
                   ])
                 ]),
                 _vm._v(" "),
                 _c("h4", { staticClass: "product-price" }, [
-                  _vm._v("$" + _vm._s(product.Cena))
+                  _vm._v("$" + _vm._s(product.product.Cena))
+                ]),
+                _vm._v(" "),
+                _c("h4", { staticClass: "product-quantity" }, [
+                  _vm._v(_vm._s(product.quantity))
+                ]),
+                _vm._v(" "),
+                _c("div", [
+                  _c(
+                    "button",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.addProductToCart(product)
+                        }
+                      }
+                    },
+                    [_vm._v("+")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.decrementProductQuantity(product)
+                        }
+                      }
+                    },
+                    [_vm._v("-")]
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -51218,14 +51277,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************!*\
   !*** ./resources/js/components/ShoppingCart.vue ***!
   \**************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ShoppingCart_vue_vue_type_template_id_c86466da___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShoppingCart.vue?vue&type=template&id=c86466da& */ "./resources/js/components/ShoppingCart.vue?vue&type=template&id=c86466da&");
 /* harmony import */ var _ShoppingCart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShoppingCart.vue?vue&type=script&lang=js& */ "./resources/js/components/ShoppingCart.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ShoppingCart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ShoppingCart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -51255,7 +51315,7 @@ component.options.__file = "resources/js/components/ShoppingCart.vue"
 /*!***************************************************************************!*\
   !*** ./resources/js/components/ShoppingCart.vue?vue&type=script&lang=js& ***!
   \***************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51470,15 +51530,37 @@ __webpack_require__.r(__webpack_exports__);
       state.products = products;
     },
     ADD_PRODUCT_TO_CART: function ADD_PRODUCT_TO_CART(state, product) {
-      state.shopping_cart.products.push(product);
-      state.shopping_cart.items += 1;
-      state.shopping_cart.price += parseFloat(product.Cena);
+      var item = state.shopping_cart.products.find(function (el) {
+        return el.product._id === product.product._id;
+      });
+
+      if (item) {
+        item.quantity++;
+        state.shopping_cart.price += parseFloat(item.product.Cena);
+        state.shopping_cart.items += 1;
+      } else {
+        state.shopping_cart.products.push(product);
+        state.shopping_cart.price += parseFloat(product.quantity * product.product.Cena);
+        state.shopping_cart.items += product.quantity;
+      }
     },
     REMOVE_PRODUCT_FROM_CART: function REMOVE_PRODUCT_FROM_CART(state, product) {
-      var index = state.shopping_cart.products.indexOf(product);
-      state.shopping_cart.products.splice(index, 1);
-      state.shopping_cart.items -= 1;
-      state.shopping_cart.price -= parseFloat(product.Cena);
+      var item = state.shopping_cart.products.find(function (el) {
+        return el.product._id === product.product._id;
+      });
+      state.shopping_cart.items -= item.quantity;
+      state.shopping_cart.price -= parseFloat(item.quantity * item.product.Cena);
+      state.shopping_cart.products.splice(state.shopping_cart.products.indexOf(item), 1);
+    },
+    DECREMENT_PRODUCT_QUANTITY_IN_CART: function DECREMENT_PRODUCT_QUANTITY_IN_CART(state, product) {
+      for (var ind in state.shopping_cart.products) {
+        if (state.shopping_cart.products[ind].product._id === product.product._id) {
+          state.shopping_cart.products[ind].quantity -= 1;
+          state.shopping_cart.items -= 1;
+          state.shopping_cart.price -= parseFloat(product.product.Cena);
+          break;
+        }
+      }
     }
   },
   actions: {}

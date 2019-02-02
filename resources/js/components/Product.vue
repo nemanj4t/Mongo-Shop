@@ -40,10 +40,13 @@
             ]),
 
             addToCart(product) {
+                let cartItem = {};
+                cartItem.product = product;
+                cartItem.quantity = 1;
                 axios.post('/shoppingcart/add', {
-                    'newProduct' : product
+                    'newProduct' : cartItem
                 }).then(response => {
-                    this.ADD_PRODUCT_TO_CART(product);
+                    this.ADD_PRODUCT_TO_CART(cartItem);
                 });
             }
         },

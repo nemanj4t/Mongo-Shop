@@ -11,6 +11,6 @@ namespace App;
 
 class ShoppingCart
 {
-    public $products;
-    public $price;
+    public $products = [];
+    public $price = 0;
 }
