@@ -1976,7 +1976,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['product', 'category_name'],
@@ -2080,9 +2079,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.$store.getters.returnShoppingCart;
     }
   },
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -38014,11 +38011,6 @@ var staticRenderFns = [
       _c("button", { staticClass: "add-to-wishlist" }, [
         _c("i", { staticClass: "fas fa-heart" }),
         _c("span", { staticClass: "tooltipp" }, [_vm._v("add to wishlist")])
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "add-to-compare" }, [
-        _c("i", { staticClass: "fa fa-exchange" }),
-        _c("span", { staticClass: "tooltipp" }, [_vm._v("add to compare")])
       ]),
       _vm._v(" "),
       _c("button", { staticClass: "quick-view" }, [
