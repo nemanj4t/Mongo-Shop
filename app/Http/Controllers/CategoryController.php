@@ -18,8 +18,9 @@ class CategoryController extends Controller
     public function show(Request $request, $id)
     {
         $category = Category::find($id);
+        $path = Category::getFullPath($category);
         // ako nije ajax onda se samo vrati view sa kategorijom
-        return view('categories', compact('category'));
+        return view('categories', compact('category', 'path'));
     }
 
     public function getData(Request $request, $id)

@@ -33,7 +33,7 @@ class Category extends Model
         $path = [];
         $current = $category;
         while($current != null) {
-            array_unshift($path, [$current->name => $current->id]);
+            array_unshift($path, ['name' => $current->name, 'id' => $current->id]);
             $current = $current->parent;
         }
         return $path;
