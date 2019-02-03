@@ -81,8 +81,8 @@
                 .then(response => {
                     console.log(response.data);
                     if (response.data.hasOwnProperty('shoppingCart')) {
-                        response.data.shoppingCart.products.forEach(product => {
-                            this.ADD_PRODUCT_TO_CART(product);
+                        response.data.shoppingCart.cartItems.forEach(item => {
+                            this.ADD_PRODUCT_TO_CART(item);
                         });
                     }
                 });

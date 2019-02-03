@@ -2122,8 +2122,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(response.data);
 
       if (response.data.hasOwnProperty('shoppingCart')) {
-        response.data.shoppingCart.products.forEach(function (product) {
-          _this4.ADD_PRODUCT_TO_CART(product);
+        response.data.shoppingCart.cartItems.forEach(function (item) {
+          _this4.ADD_PRODUCT_TO_CART(item);
         });
       }
     });
@@ -37991,7 +37991,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("h4", { staticClass: "product-price" }, [
-          _vm._v(_vm._s(_vm.product.Cena) + " "),
+          _vm._v(_vm._s(_vm.product.price) + " "),
           _c("del", { staticClass: "product-old-price" }, [_vm._v("$990.00")])
         ]),
         _vm._v(" "),
@@ -51530,11 +51530,11 @@ __webpack_require__.r(__webpack_exports__);
 
       if (item) {
         item.quantity++;
-        state.shopping_cart.price += parseFloat(item.product.Cena);
+        state.shopping_cart.price += parseFloat(item.product.price);
         state.shopping_cart.items += 1;
       } else {
         state.shopping_cart.products.push(product);
-        state.shopping_cart.price += parseFloat(product.quantity * product.product.Cena);
+        state.shopping_cart.price += parseFloat(product.quantity * product.product.price);
         state.shopping_cart.items += product.quantity;
       }
     },
@@ -51543,7 +51543,7 @@ __webpack_require__.r(__webpack_exports__);
         return el.product._id === product.product._id;
       });
       state.shopping_cart.items -= item.quantity;
-      state.shopping_cart.price -= parseFloat(item.quantity * item.product.Cena);
+      state.shopping_cart.price -= parseFloat(item.quantity * item.product.price);
       state.shopping_cart.products.splice(state.shopping_cart.products.indexOf(item), 1);
     },
     DECREMENT_PRODUCT_QUANTITY_IN_CART: function DECREMENT_PRODUCT_QUANTITY_IN_CART(state, product) {
@@ -51551,7 +51551,7 @@ __webpack_require__.r(__webpack_exports__);
         if (state.shopping_cart.products[ind].product._id === product.product._id) {
           state.shopping_cart.products[ind].quantity -= 1;
           state.shopping_cart.items -= 1;
-          state.shopping_cart.price -= parseFloat(product.product.Cena);
+          state.shopping_cart.price -= parseFloat(product.product.price);
           break;
         }
       }
@@ -51580,8 +51580,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

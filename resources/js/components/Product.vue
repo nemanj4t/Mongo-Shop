@@ -7,7 +7,7 @@
             <div class="product-body">
                 <p class="product-category">{{category_name}}</p>
                 <h3 class="product-name"><a href="#">{{product.name}}</a></h3>
-                <h4 class="product-price">{{product.Cena}} <del class="product-old-price">$990.00</del></h4>
+                <h4 class="product-price">{{product.price}} <del class="product-old-price">$990.00</del></h4>
                 <div class="product-rating">
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>

@@ -3,72 +3,102 @@
 namespace App\Http\Controllers;
 use App;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ShoppingCartController extends Controller
 {
     public function get(Request $request)
     {
-        if ($request->session()->has('shoppingCart')) {
-            return response()->json(['shoppingCart' => $request->session()->get('shoppingCart')]);
+        if(Auth::user()) {
+            // Ako je ulogovan onda se vadi iz baze
+            $user = $request->user();
+            $cart = $user->shoppingCart->transformToArray();
+            return response()->json(['shoppingCart' => $cart]);
         } else {
-            return "Nije postavljen shopping cart.";
+            if ($request->session()->has('shoppingCart')) {
+                return response()->json(['shoppingCart' => $request->session()->get('shoppingCart')]);
+            } else {
+                return "Nije postavljen shopping cart.";
+            }
         }
     }
 
     public function add(Request $request)
     {
-        if($request->session()->has('shoppingCart')) {
-            $shoppingCart = $request->session()->get('shoppingCart');
-            $exists = false;
-            foreach($shoppingCart->products as $key => $item) {
-                if($item['product']['_id'] == $request->newProduct['product']['_id']) {
-                    $shoppingCart->products[$key]['quantity'] += 1;
-                    //$shoppingCart->price += $item['product']['Cena']; // mozda ce nekad malim slovom da bude
-                    $exists = true;
-                    break;
-                }
-            }
-            if(!$exists) {
-                $shoppingCart->products[] = $request->newProduct;
-                //$shoppingCart->price += $request->newproduct['product']['Cena'];
-            }
-
-            $request->session()->put('shoppingCart', $shoppingCart);
+        if(Auth::user()) {
+            // Ako je ulogovan user
 
         } else {
-            $cart = new App\ShoppingCart;
-            $cart->products[] = $request->newProduct;
-            //$cart->price += $request->newproduct['product']['Cena'];
-            $request->session()->put('shoppingCart', $cart);
+            // Ako nije onda se koristi sesija
+            if($request->session()->has('shoppingCart')) {
+                $shoppingCart = $request->session()->get('shoppingCart');
+                $exists = false;
+                foreach($shoppingCart['cartItems'] as $key => $item) {
+                    if($item['product']['_id'] == $request->newProduct['product']['_id']) {
+                        $shoppingCart['cartItems'][$key]['quantity'] += 1;
+                        $shoppingCart['price'] += $item['product']['price']; // mozda ce nekad malim slovom da bude
+                        $exists = true;
+                        break;
+                    }
+                }
+                if(!$exists) {
+                    $item = [
+                        'product' => $request->newProduct['product'],
+                        'quantity' => $request->newProduct['quantity']
+                    ];
+                    array_push($shoppingCart['cartItems'], $item);
+                    $shoppingCart['price'] += $item['product']['price'];
+                }
+                $request->session()->put('shoppingCart', $shoppingCart);
+
+            } else {
+                $item = [
+                    'product' => $request->newProduct['product'],
+                    'quantity' => $request->newProduct['quantity']
+                ];
+                $items = [];
+                $items[] = $item;
+                $cart = [
+                    'cartItems' => $items,
+                    'price' => $item['product']['price']
+                ];
+                $request->session()->put('shoppingCart', $cart);
+            }
         }
     }
 
     public function remove(Request $request, $id) {
-        if($request->session()->has('shoppingCart')) {
-            $cart = $request->session()->get('shoppingCart');
-            foreach($cart->products as $key => $item) {
-                if($item['product']['_id'] == $id) {
-                    //$cart->price -= $item['quantity'] * $item['product']['Cena'];
-                    array_splice($cart->products, $key, 1);
-                    break;
-                }
-            }
-            $request->session()->put('shoppingCart', $cart);
-            return response()->json(['success' => 'success'], 200);
+        if(Auth::user()) {
+            // kad je ulogovan user
         } else {
-            return response()->json(['error' => 'invalid'], 401);
+            if($request->session()->has('shoppingCart')) {
+                $cart = $request->session()->get('shoppingCart');
+                foreach ($cart['cartItems'] as $key => $item) {
+                    if ($item['product']['_id'] == $id) {
+                        $cart['price'] -= $item['quantity'] * $item['product']['price'];
+                        array_splice($cart['cartItems'], $key, 1);
+                        break;
+                    }
+                }
+                $request->session()->put('shoppingCart', $cart);
+            }
         }
     }
 
-    public function decrement(Request $request, $id) {
-        if($request->session()->has('shoppingCart')) {
-            $cart = $request->session()->get('shoppingCart');
-            foreach($cart->products as $key => $item) {
-                if($item['product']['_id'] == $id) {
-                    //$cart->price -= $item['product']['Cena'];
-                    $cart->products[$key]['quantity'] -= 1;
-                    $request->session()->put('shoppingCart', $cart);
-                    break;
+    public function decrement(Request $request, $id)
+    {
+        if (Auth::user()) {
+            // kad je ulogovan user
+        } else {
+            if ($request->session()->has('shoppingCart')) {
+                $cart = $request->session()->get('shoppingCart');
+                foreach ($cart['cartItems'] as $key => $item) {
+                    if ($item['product']['_id'] == $id) {
+                        $cart['price'] -= $item['product']['price'];
+                        $cart['cartItems'][$key]['quantity'] -= 1;
+                        $request->session()->put('shoppingCart', $cart);
+                        break;
+                    }
                 }
             }
         }
