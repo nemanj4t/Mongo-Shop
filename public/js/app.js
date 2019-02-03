@@ -2080,7 +2080,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['REMOVE_PRODUCT_FROM_CART', 'ADD_PRODUCT_TO_CART', 'DECREMENT_PRODUCT_QUANTITY_IN_CART']), {
@@ -38177,17 +38176,18 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("h4", { staticClass: "product-price" }, [
-                  _vm._v("$" + _vm._s(product.product.Cena))
+                  _vm._v(
+                    _vm._s(product.quantity) +
+                      " x $" +
+                      _vm._s(product.product.Cena)
+                  )
                 ]),
                 _vm._v(" "),
-                _c("h4", { staticClass: "product-quantity" }, [
-                  _vm._v(_vm._s(product.quantity))
-                ]),
-                _vm._v(" "),
-                _c("div", [
+                _c("div", { staticClass: "mt-1" }, [
                   _c(
                     "button",
                     {
+                      staticClass: "btn btn-sm btn-dark",
                       on: {
                         click: function($event) {
                           _vm.addProductToCart(product)
@@ -38200,6 +38200,7 @@ var render = function() {
                   _c(
                     "button",
                     {
+                      staticClass: "btn btn-sm btn-dark",
                       on: {
                         click: function($event) {
                           _vm.decrementProductQuantity(product)
@@ -51271,15 +51272,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************!*\
   !*** ./resources/js/components/ShoppingCart.vue ***!
   \**************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ShoppingCart_vue_vue_type_template_id_c86466da___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShoppingCart.vue?vue&type=template&id=c86466da& */ "./resources/js/components/ShoppingCart.vue?vue&type=template&id=c86466da&");
 /* harmony import */ var _ShoppingCart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShoppingCart.vue?vue&type=script&lang=js& */ "./resources/js/components/ShoppingCart.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ShoppingCart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ShoppingCart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -51309,7 +51309,7 @@ component.options.__file = "resources/js/components/ShoppingCart.vue"
 /*!***************************************************************************!*\
   !*** ./resources/js/components/ShoppingCart.vue?vue&type=script&lang=js& ***!
   \***************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

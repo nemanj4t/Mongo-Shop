@@ -13,11 +13,10 @@
                     </div>
                     <div class="product-body">
                         <h3 class="product-name"><a href="#">{{product.product.name}}</a></h3>
-                        <h4 class="product-price">${{product.product.Cena}}</h4>
-                        <h4 class="product-quantity">{{product.quantity}}</h4>
-                        <div>
-                            <button @click="addProductToCart(product)">+</button>
-                            <button @click="decrementProductQuantity(product)">-</button>
+                        <h4 class="product-price">{{product.quantity}} x ${{product.product.Cena}}</h4>
+                        <div class="mt-1">
+                            <button class="btn btn-sm btn-dark" @click="addProductToCart(product)">+</button>
+                            <button class="btn btn-sm btn-dark" @click="decrementProductQuantity(product)">-</button>
                         </div>
                     </div>
                     <button @click="removeProductFromCart(product)" class="delete"><i class="fas fa-window-close"></i></button>

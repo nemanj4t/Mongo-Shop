@@ -114,21 +114,14 @@
                     <div class="col-md-3 clearfix">
                         <div class="header-ctn">
                             <!-- Wishlist -->
-                            <wish-list></wish-list>
+                            @auth()
+                                <wish-list></wish-list>
+                            @endauth
                             <!-- /Wishlist -->
 
                             <!-- Cart -->
                             <shopping-cart></shopping-cart>
                             <!-- /Cart -->
-
-                            <!-- Menu Toogle -->
-                            <div class="menu-toggle">
-                                <a href="#">
-                                    <i class="fa fa-bars"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </div>
-                            <!-- /Menu Toogle -->
                         </div>
                     </div>
                     <!-- /ACCOUNT -->
