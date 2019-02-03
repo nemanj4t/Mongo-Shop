@@ -1,10 +1,15 @@
 <template>
     <!-- v-show da stavim u zavisnosti od toga da li ima children ili nema-->
-    <nav class="col-md-2 d-none d-md-block sidebar bg-white">
+    <nav class="d-none d-md-block sidebar bg-white" style="height: 100%">
         <div class="sidebar-sticky">
 
-            <ul lass="list-group" v-show="hasChildren">
-                <li class="nav-item"><label>Test</label></li>
+            <li class="font-weight-bold">{{ this.currentCategory.name }}</li>
+            <ul class="nav flex-column" v-show="hasChildren">
+                <li v-for="item in this.children">
+                    <a :href="'/categories/' + item._id">
+                        {{ item.name }}
+                    </a>
+                </li>
             </ul>
 
             <ul class="list-group" v-show="!hasChildren" >
@@ -31,6 +36,8 @@
 </template>
 
 <script>
+    import { mapState, mapMutations } from 'vuex'
+
     export default {
         name: "categories",
         props: ['category'],
@@ -38,13 +45,21 @@
             return {
                 currentCategory: {},
                 hasChildren: false, // v-show na osnovu ovog atributa
-                products: [],
+                //products: [],
                 filters: [],
                 children: [],
                 selectedFilters: []
             }
         },
         methods: {
+            ...mapMutations([
+                'CHANGE_PRODUCTS_FOR_SHOW'
+            ]),
+
+            loadProductsIntoStore(products) {
+                this.CHANGE_PRODUCTS_FOR_SHOW(products);
+            },
+
             showMoreLess(event) {
                 if(event.target.innerHTML.includes("Show more")) {
                     event.target.innerHTML = "Show less <i class=\"fas fa-angle-up\"></i>";
@@ -56,13 +71,14 @@
                 axios.get('/categories/' + this.currentCategory._id)
                     .then(response => {
                         this.currentCategory = response.data.category;
-                        this.hasChildren = this.currentCategory.hasOwnProperty('children');
+                        this.hasChildren = response.data.hasOwnProperty('subCategories');
                         if(this.hasChildren) {
-                            this.children = this.currentCategory.children;
+                            this.children = response.data.subCategories;
                         } else {
                             this.filters = response.data.filters;
+                            this.initSelectedFilters();
                         }
-                        this.initSelectedFilters();
+                        this.loadProductsIntoStore(response.data.products);
                     });
             },
             initSelectedFilters() {
@@ -98,13 +114,13 @@
                     })
                     .then(response => {
                         console.log(response.data.products);
-                        // this.products = response.data.products;
+                        this.loadProductsIntoStore(response.data.products);
                     });
             }
         },
         mounted() {
             this.currentCategory = this.category;
-            this.getData();
+            this.getData(); // prebacio sam da se ovde povlace products
         }
     }
 </script>
@@ -112,11 +128,9 @@
 <style scoped>
 
     .sidebar {
-        position: fixed;
         top: 0;
         bottom: 0;
         left: 0;
-        z-index: 100; /* Behind the navbar */
         padding: 48px 0 0; /* Height of navbar */
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
     }
@@ -124,7 +138,7 @@
     .sidebar-sticky {
         position: relative;
         top: 0;
-        height: calc(100vh - 48px);
+        /*height: calc(80vh - 48px);*/
         padding-top: .5rem;
         overflow-x: hidden;
         overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */

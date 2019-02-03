@@ -13,12 +13,6 @@ class Category extends Model
     protected $connection = 'mongodb';
     protected $collection = 'categories';
 
-//    public $id;
-//    public $name;
-//    public $details;
-//    public $ancestors = [];
-//    public $children = [];
-
     public function parent()
     {
         return $this->belongsTo('App\Category', 'category_id');
@@ -34,16 +28,27 @@ class Category extends Model
         return $this->hasMany('App\Product', 'category_id');
     }
 
+    public static function getFullPath(Category $category)
+    {
+        $path = [];
+        $current = $category;
+        while($current != null) {
+            array_unshift($path, [$current->name => $current->id]);
+            $current = $current->parent;
+        }
+        return $path;
+    }
+
 
     public static function getProductsForLeafCategories(Category $category)
     {
         // Rekurzivno prolazi kroz sve podkategorije date kategorije
         // i vraca sve proizvode koji se nalaze u tom podstablu koje
         // krece od zadate kategorije
-        if(!$category->children)
+        if(!$category->children()->exists())    // !$category->children
         {
             // ako nema dece onda je ona leaf pa se traze proizvodi koji joj pripadaju
-            $products = Product::where('category.name', $category->name)->get();
+            $products = $category->products;
             return $products;
         }
         else
@@ -51,8 +56,7 @@ class Category extends Model
             $all = new Collection();
             foreach($category->children as $child)
             {
-                $realChild = Category::where('name', $child['name'])->first();
-                $products = self::getProductsForLeafCategories($realChild);
+                $products = self::getProductsForLeafCategories($child);
                 $all = $all->merge($products);
             }
             return $all;
@@ -63,7 +67,9 @@ class Category extends Model
     {
         $filterArray = [];  // za svaki atribut kategorije se izbaci broj proizvoda
 
-        if(!$category->details) return null;
+        if(!$category->details)
+            return null;
+
         foreach ($category->details as $detail) {
             // $details je zapravo: Tip | Kapacitet | Brzina | Broj jezgara itd.
             // mozda sve moze u jednom upitu da se resi, ali neka ga za sad ovako
@@ -71,7 +77,7 @@ class Category extends Model
             $allValues = Product::raw()->aggregate([
                 [
                     '$match' => [
-                        'category.name' => $category->name
+                        'category_id' => $category->id
                     ]
                 ],
                 [
@@ -143,7 +149,7 @@ class Category extends Model
         return $parents;
     }*/
 
-    private function test($id)
+    private function test($id)  // Ne koristi se
     {
         // Prvobitna funkcija koja radi slicno kao ova iznad
         // ali se uzima u obzir da kategorija sadrzi ponudjene
