@@ -62,6 +62,32 @@ class CategoryController extends Controller
         }
     }
 
+    public function create()
+    {
+        return view('category.create');
+    }
+
+    public function store(Request $request)
+    {
+        $category = new Category;
+        $category->name = $request->name;
+        $category->category_id = $request->category_id;
+        $category->details = $request->additionalFields;
+        $category->amount = 0;
+        $category->save();
+        return response()->json($category);
+    }
+
+    public function update(Request $request)
+    {
+        $category = Category::find($request->id);
+        $category->name = $request->name;
+        $category->category_id = $request->category_id;
+        $category->details = $request->additionalFields;
+        $category->save();
+        return response()->json($category);
+    }
+
     private static function buildFilterQuery($filters, $category_id)
     {
         // treba da dodam i da matchuje kategoriju prvo
@@ -91,4 +117,34 @@ class CategoryController extends Controller
         }
         return $products;
     }
+
+    public function getCategories()
+    {
+        $categories = Category::all();
+        $tree = Category::buildTree($categories, 0);
+
+        $response = ['tree' => $tree, 'categories' => $categories];
+
+        return response()->json($response);
+    }
+
+    public function getById(Request $request)
+    {
+        $category = Category::find($request->id);
+
+        return response()->json($category);
+    }
+
+    public function destroy(Request $request, $id)
+    {
+       // $result = [];
+        $category = Category::find($id);
+        $children =  Category::allChildren($category);
+        foreach($children as $child) {
+            $child->delete();
+        }
+        $category->delete();
+        return response()->json($children);
+    }
+
 }

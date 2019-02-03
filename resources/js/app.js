@@ -6,10 +6,18 @@
  */
 import Vuex from 'vuex';
 import StoreData from './store';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import routes from './routes';
+
+
+import categories from './components/CategoriesComponent';
+
 
 require('./bootstrap');
 
 window.Vue = require('vue');
+Vue.use(VueRouter);
 
 
 
@@ -31,6 +39,19 @@ Vue.component('wish-list', require('./components/WishList.vue').default);
 Vue.component('product', require('./components/Product.vue').default);
 Vue.component('products', require('./components/Products.vue').default);
 Vue.component('admin-panel', require('./components/admin-components/AdminPanel.vue').default);
+Vue.component('CategoryCreate', require('./components/admin-components/category/Create.vue').default);
+Vue.component('ProductCreate', require('./components/admin-components/product/Create.vue').default);
+Vue.component('CategoryManage', require('./components/admin-components/category/Manage.vue').default);
+Vue.component('CategoryEdit', require('./components/admin-components/category/Edit.vue').default);
+Vue.component('ProductManage', require('./components/admin-components/product/Manage.vue').default);
+Vue.component('ProductEdit', require('./components/admin-components/product/Edit.vue').default);
+Vue.component('UserManage', require('./components/admin-components/user/Manage.vue').default);
+
+const router = new VueRouter({
+    routes
+  }); 
+
+Vue.use(router);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -41,5 +62,6 @@ const store = new Vuex.Store(StoreData);
 
 const app = new Vue({
     el: '#app',
+    router,
     store
 });

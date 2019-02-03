@@ -1,11 +1,14 @@
 <template>
     <div style="height: 100%">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div class="main" style="height: 100%">
-            <aside style="height: 100%">
-                <div class="sidebar left">
+            <aside class="row" style="height: 100%">
+                <div class="sidebar left col-md-2">
                     <div class="user-panel">
                         <div class="float-left image">
-                            <img src="https://pngimage.net/wp-content/uploads/2018/05/admin-png-images-4.png" class="rounded-circle" alt="User Image">
+                            <img src="https://pngimage.net/wp-content/uploads/2018/05/admin-png-images-4.png" class="rounded-circle" alt="User Image" />
                         </div>
                         <div class="float-left info">
                             <p>Administrator</p>
@@ -13,45 +16,31 @@
                         </div>
                     </div>
                     <ul class="list-sidebar bg-defoult">
-                        <li> <a href="#" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Categories </span> <span class="fa fa-chevron-left pull-right"></span> </a>
+                        <li> <a href="" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Categories </span> <span class="fa fa-chevron-left pull-right"></span> </a>
                             <ul class="sub-menu collapse" id="dashboard">
-                                <li class="active"><a href="#">CSS3 Animation</a></li>
-                                <li><a href="#">General</a></li>
-                                <li><a href="#">Buttons</a></li>
-                                <li><a href="#">Tabs & Accordions</a></li>
-                                <li><a href="#">Typography</a></li>
-                                <li><a href="#">FontAwesome</a></li>
-                                <li><a href="#">Slider</a></li>
-                                <li><a href="#">Panels</a></li>
-                                <li><a href="#">Widgets</a></li>
-                                <li><a href="#">Bootstrap Model</a></li>
+                                <li><router-link to='/categories/create'>Create Category</router-link></li>
+                                <li><router-link to='/categories'>Manage Categories</router-link></li>
                             </ul>
                         </li>
-                        <li> <a href="#" data-toggle="collapse" data-target="#products" class="collapsed active" > <i class="fas fa-users"></i> <span class="nav-label">Users</span> <span class="fa fa-chevron-left pull-right"></span> </a>
+                        <li> <a href="#" data-toggle="collapse" data-target="#products" class="collapsed active" > <i class="fas fa-users"></i> <span class="nav-label">Products</span> <span class="fa fa-chevron-left pull-right"></span> </a>
                             <ul class="sub-menu collapse" id="products">
-                                <li class="active"><a href="#">CSS3 Animation</a></li>
-                                <li><a href="#">General</a></li>
-                                <li><a href="#">Buttons</a></li>
-                                <li><a href="#">Tabs & Accordions</a></li>
-                                <li><a href="#">Typography</a></li>
-                                <li><a href="#">FontAwesome</a></li>
-                                <li><a href="#">Slider</a></li>
-                                <li><a href="#">Panels</a></li>
-                                <li><a href="#">Widgets</a></li>
-                                <li><a href="#">Bootstrap Model</a></li>
+                                <li><router-link to='/products/create'>Create Product</router-link></li>
+                                <li><router-link to='/products'>Manage Products</router-link></li>
                             </ul>
                         </li>
                         <li> <a href="#" data-toggle="collapse" data-target="#e-commerce" class="collapsed active" ><i class="fa fa-shopping-cart"></i> <span class="nav-label">E-commerce</span><span class="fa fa-chevron-left pull-right"></span></a>
                             <ul  class="sub-menu collapse" id="e-commerce" >
-                                <li><a href="">Products list</a></li>
-                                <li><a href="">Product edit</a></li>
+                                <li><router-link to='/users'>Manage Users</router-link></li>
                             </ul>
                         </li>
 
                         <li> <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">Other Pages</span></a> </li>
                     </ul>
                 </div>
-            </aside>
+                <div class="col-md-6 offset-md-2">
+                    <router-view></router-view>
+                </div>
+            </aside>               
         </div>
     </div>
 </template>
@@ -59,8 +48,8 @@
 <script>
     export default {
         mounted() {
-            console.log('admin');
-        }
+           
+        }       
     }
 </script>
 

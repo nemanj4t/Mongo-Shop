@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 
 class Category extends Model
 {
+    protected $fillable = ['name'];
     protected $connection = 'mongodb';
     protected $collection = 'categories';
 
@@ -37,6 +38,7 @@ class Category extends Model
         }
         return $path;
     }
+
 
     public static function getProductsForLeafCategories(Category $category)
     {
@@ -103,6 +105,50 @@ class Category extends Model
         return $filterArray;
     }
 
+    public static function buildTree($elements, $parentId = 0) 
+    {
+        $branch = array();
+    
+        foreach ($elements as $element) {
+            if ($element->supercategory == $parentId) {
+                $children = Category::buildTree($elements, $element->id);
+                if ($children) {
+                    $element->children = $children;
+                }
+                $branch[$element->name] = $element;
+                unset($elements[$element->name]);
+            }
+        }
+        return $branch;
+    }
+
+    public static function allChildren(Category $branch) 
+    {
+        $collectionOfCategories = $branch->children;
+        $children = [];
+        foreach($collectionOfCategories as $category) {
+            $children[] = $category;
+        }
+        foreach($branch->children as $child) {
+            $children = array_merge($children, Category::allChildren($child));
+        }
+
+        return array_reverse($children);
+    }
+
+    /*public static function allParents(Categoory $node) 
+    {
+        $collectionOfParent = $node->parent;
+        $parents = [];
+        foreach($collectionOfParent as $parent) {
+            $parents[] = $parent;
+        }
+
+        $parents = array_merge($parents, Category::allParents($node->parent));
+        
+        return $parents;
+    }*/
+
     private function test($id)  // Ne koristi se
     {
         // Prvobitna funkcija koja radi slicno kao ova iznad
@@ -134,4 +180,6 @@ class Category extends Model
             }
         }
     }
+
+
 }
