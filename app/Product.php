@@ -18,4 +18,10 @@ class Product extends Eloquent
 //    public $price;
 //    public $categories;
 //    public $manufacturer_details; // manufacturer, model_number, release_date
+
+    public function category()
+    {
+        return $this->belongsTo('Category', 'category_id');
+    }
+
 }

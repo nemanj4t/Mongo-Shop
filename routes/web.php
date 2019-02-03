@@ -31,12 +31,18 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Kada se promeni kategorija onda se izbace
 // proizvodi koji spadaju tu kategoriju ???
+Route::get('/categories', 'CategoryController@index');
+Route::post('/categories', 'CategoryController@store');
+Route::delete('/categories/{category}', 'CategoryController@destroy');
+Route::put('/categories/{category}', 'CategoryController@update');
 Route::get('/categories/{category}', 'CategoryController@show');
 
 
-Route::get('/products/{product}', 'ProductController@show');
 Route::get('/products/create', 'ProductController@create');
 Route::get('/products/edit', 'ProductController@edit');
 Route::post('/products', 'ProductController@store');
-Route::put('/products', 'ProductController@update');
 Route::delete('/products/{product}', 'ProductController@destroy');
+Route::put('/products/{product}', 'ProductController@update');
+Route::get('/products/{product}', 'ProductController@show');
+
+Route::delete('/users/{user}', 'UserController@destroy');

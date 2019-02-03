@@ -1,42 +1,116 @@
 <template>
-    <div>
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <span data-feather="home"></span>
-                            Dashboard <span class="sr-only"></span>
-                        </a>
-                    </li>
-                </ul>
+    <!-- v-show da stavim u zavisnosti od toga da li ima children ili nema-->
+    <nav class="col-md-2 d-none d-md-block sidebar bg-white">
+        <div class="sidebar-sticky">
 
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Neki filteri npr</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Current month
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+            <ul lass="list-group" v-show="hasChildren">
+                <li class="nav-item"><label>Test</label></li>
+            </ul>
+
+            <ul class="list-group" v-show="!hasChildren" >
+                <!--Za svaki atribut-->
+                <li class="nav flex-column list-group-item" v-for="(filter, fkey) in filters" :key="fkey">
+                    <h5 class="nav-link font-weight-bold">{{ fkey }}</h5>
+                    <!--Za svaku vrednost-->
+                    <ul>
+                        <li v-bind:class="[index > 1 ? ['collapse', 'multi-collapse-' + fkey] : '', 'nav-item']" v-for="(item, ikey, index) in filter" :key="ikey">
+                            <a class="nav-link" href="#">
+                                <input class="form-check-inline" type="checkbox" v-on:change="getFilteredData(fkey, ikey)">{{ ikey }}
+                                <span class="font-weight-bold">({{ item }})</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <label style="width: 100px;cursor: pointer;" class="nav-link text-nowrap border-top"
+                           v-on:click.self="showMoreLess" data-toggle="collapse" :data-target="'.multi-collapse-' + fkey">
+                        Show more <i class="fas fa-angle-down"></i>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </template>
 
 <script>
     export default {
-        name: "categories"
+        name: "categories",
+        props: ['category'],
+        data() {
+            return {
+                currentCategory: {},
+                hasChildren: false, // v-show na osnovu ovog atributa
+                products: [],
+                filters: [],
+                children: [],
+                selectedFilters: []
+            }
+        },
+        methods: {
+            showMoreLess(event) {
+                if(event.target.innerHTML.includes("Show more")) {
+                    event.target.innerHTML = "Show less <i class=\"fas fa-angle-up\"></i>";
+                } else if(event.target.innerHTML.includes("Show less")) {
+                    event.target.innerHTML = "Show more <i class=\"fas fa-angle-down\"></i>";
+                }
+            },
+            getData() {
+                axios.get('/categories/' + this.currentCategory._id)
+                    .then(response => {
+                        this.currentCategory = response.data.category;
+                        this.hasChildren = this.currentCategory.hasOwnProperty('children');
+                        if(this.hasChildren) {
+                            this.children = this.currentCategory.children;
+                        } else {
+                            this.filters = response.data.filters;
+                        }
+                        this.initSelectedFilters();
+                    });
+            },
+            initSelectedFilters() {
+                // Za svaku vrednost svakog filtera cuva da li je checked
+                for (let filter in this.filters) {
+                    if (this.filters.hasOwnProperty(filter)) {
+                        this.selectedFilters[filter] = [];
+                        for(let value in this.filters[filter]) {
+                            if(this.filters[filter].hasOwnProperty(value)) {
+                                this.selectedFilters[filter][value] = false;
+                            }
+                        }
+                    }
+                }
+            },
+            getFilteredData(filter, value) {
+                this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
+                let paramFilters = {};
+                // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
+                for(let f in this.selectedFilters) {
+                    let values = [];
+                    for(let val in this.selectedFilters[f]) {
+                        if(this.selectedFilters[f][val] === true) {
+                            values.push(val);
+                        }
+                    }
+                    if(values.length !== 0) {
+                        paramFilters[f] = values;
+                    }
+                }
+                axios.get('/categories/' + this.currentCategory._id, {
+                        params : paramFilters
+                    })
+                    .then(response => {
+                        console.log(response.data.products);
+                        // this.products = response.data.products;
+                    });
+            }
+        },
+        mounted() {
+            this.currentCategory = this.category;
+            this.getData();
+        }
     }
 </script>
 
 <style scoped>
+
     .sidebar {
         position: fixed;
         top: 0;
@@ -86,6 +160,4 @@
         font-size: .75rem;
         text-transform: uppercase;
     }
-
-
 </style>
