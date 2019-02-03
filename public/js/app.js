@@ -38179,7 +38179,7 @@ var render = function() {
                   _vm._v(
                     _vm._s(product.quantity) +
                       " x $" +
-                      _vm._s(product.product.Cena)
+                      _vm._s(product.product.price)
                   )
                 ]),
                 _vm._v(" "),

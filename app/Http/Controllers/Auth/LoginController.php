@@ -45,6 +45,7 @@ class LoginController extends Controller
         if($request->session()->has('shoppingCart')) {
             $cart = $request->session()->get('shoppingCart');
             $user->shoppingCart->mergeWithSessionCart($cart);
+            $request->session()->forget('shoppingCart'); // izbrise se podatak iz sesije
         }
     }
 }

@@ -27,13 +27,43 @@ class ShoppingCart extends Eloquent
 
     public function addItem($cartItem)
     {
-        $product = Product::find($cartItem['product']['_id']);
-        if($product) {
-            $newCartItem = new CartItem;
-            $newCartItem->product_id = $product->id;
-            $newCartItem->shoppingCart_id = $this->id;
-            $newCartItem->quantity = $cartItem['quantity'];
-            $newCartItem->save();
+        $item = CartItem::where('shoppingCart_id', '=', $this->id)
+            ->where('product_id', '=', $cartItem['product']['_id'])->first();
+        if($item != null) {
+            // Postoji vec u korpi takav proizvod pa se inkrementira
+            $item->quantity += $item->quantity;
+            $item->save();
+        } else {
+            // Ne postoji u korpi pa se doda novi
+            $product = Product::find($cartItem['product']['_id']);
+            if($product) {
+                $newCartItem = new CartItem;
+                $newCartItem->product_id = $product->id;
+                $newCartItem->shoppingCart_id = $this->id;
+                $newCartItem->quantity = $cartItem['quantity'];
+                $newCartItem->save();
+            }
+        }
+    }
+
+    public function removeItem($id)
+    {
+        $item = CartItem::where('shoppingCart_id', '=', $this->id)
+            ->where('product_id', '=', $id)->first();
+
+        if($item != null) {
+            $item->delete();
+        }
+    }
+
+    public function decrementItemQuantity($id)
+    {
+        $item = CartItem::where('shoppingCart_id', '=', $this->id)
+            ->where('product_id', '=', $id)->first();
+
+        if($item != null) {
+            $item->quantity -= 1;
+            $item->save();
         }
     }
 

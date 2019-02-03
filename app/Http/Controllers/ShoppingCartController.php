@@ -27,7 +27,8 @@ class ShoppingCartController extends Controller
     {
         if(Auth::user()) {
             // Ako je ulogovan user
-
+            $user = $request->user();
+            $user->shoppingCart->addItem($request->newProduct);
         } else {
             // Ako nije onda se koristi sesija
             if($request->session()->has('shoppingCart')) {
@@ -36,7 +37,7 @@ class ShoppingCartController extends Controller
                 foreach($shoppingCart['cartItems'] as $key => $item) {
                     if($item['product']['_id'] == $request->newProduct['product']['_id']) {
                         $shoppingCart['cartItems'][$key]['quantity'] += 1;
-                        $shoppingCart['price'] += $item['product']['price']; // mozda ce nekad malim slovom da bude
+                        $shoppingCart['price'] += $item['product']['price'];
                         $exists = true;
                         break;
                     }
@@ -69,7 +70,8 @@ class ShoppingCartController extends Controller
 
     public function remove(Request $request, $id) {
         if(Auth::user()) {
-            // kad je ulogovan user
+            $user = $request->user();
+            $user->shoppingCart->removeItem($id);
         } else {
             if($request->session()->has('shoppingCart')) {
                 $cart = $request->session()->get('shoppingCart');
@@ -88,7 +90,8 @@ class ShoppingCartController extends Controller
     public function decrement(Request $request, $id)
     {
         if (Auth::user()) {
-            // kad je ulogovan user
+            $user = $request->user();
+            $user->shoppingCart->decrementItemQuantity($id);
         } else {
             if ($request->session()->has('shoppingCart')) {
                 $cart = $request->session()->get('shoppingCart');
