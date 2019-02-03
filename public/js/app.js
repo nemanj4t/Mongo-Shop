@@ -1834,7 +1834,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getData: function getData() {
       var _this = this;
 
-      axios.get('/categories/' + this.currentCategory._id).then(function (response) {
+      axios.get('/api/categories/data/' + this.currentCategory._id).then(function (response) {
         _this.currentCategory = response.data.category;
         _this.hasChildren = response.data.hasOwnProperty('subCategories');
 
@@ -1883,7 +1883,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
 
-      axios.get('/categories/' + this.currentCategory._id, {
+      axios.get('/api/categories/data/' + this.currentCategory._id, {
         params: paramFilters
       }).then(function (response) {
         console.log(response.data.products);

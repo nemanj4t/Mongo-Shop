@@ -18,47 +18,42 @@ class CategoryController extends Controller
     public function show(Request $request, $id)
     {
         $category = Category::find($id);
-        if ($category)
+        // ako nije ajax onda se samo vrati view sa kategorijom
+        return view('categories', compact('category'));
+    }
+
+    public function getData(Request $request, $id)
+    {
+        $category = Category::find($id);
+        if(!$category->children()->exists())
         {
-            // ako nije ajax onda se samo vrati view sa kategorijom
-            if(!$request->ajax())
-                return view('categories', compact('category'));
-
-            if(!$category->children()->exists())
-            {
-                // ako ima filtere
-                if(!empty($request->all())) {
-                    $products = self::buildFilterQuery($request->all(), $id); // filtrira
-                    return compact('products');
-                }
-                else {
-                    $products = $category->products;
-                    // ako nema dece onda se vracaju filteri po kojima mogu da se pretrazuju proizvodi
-                    $filters = Category::getFiltersAndCount($category);
-                    if(!empty($filters)) {
-                        $filters = array_filter($filters, function($filter) {   // izbace se prazni
-                            return (!empty($filter));
-                        });
-                    }
-                    // treba da vratim i sve prethodnike da bih prikazao path
-
-                    return compact('filters', 'category', 'products');
-                }
+            // ako ima filtere
+            if(!empty($request->all())) {
+                $products = self::buildFilterQuery($request->all(), $id); // filtrira
+                return compact('products');
             }
-            else
-            {
-                // ako ima dece onda treba rekurzivno da se prodje i pronadju
-                // "listovi" podkategorije koje direktno sadrze decu
-                $products = Category::getProductsForLeafCategories($category);
-                $subCategories = $category->children;
+            else {
+                $products = $category->products;
+                // ako nema dece onda se vracaju filteri po kojima mogu da se pretrazuju proizvodi
+                $filters = Category::getFiltersAndCount($category);
+                if(!empty($filters)) {
+                    $filters = array_filter($filters, function($filter) {   // izbace se prazni
+                        return (!empty($filter));
+                    });
+                }
+                // treba da vratim i sve prethodnike da bih prikazao path
 
-                return compact('category', 'subCategories', 'products');
+                return compact('filters', 'category', 'products');
             }
         }
         else
         {
-            // ovde neki redirect da se odradi
-            return view('categories');
+            // ako ima dece onda treba rekurzivno da se prodje i pronadju
+            // "listovi" podkategorije koje direktno sadrze decu
+            $products = Category::getProductsForLeafCategories($category);
+            $subCategories = $category->children;
+
+            return compact('category', 'subCategories', 'products');
         }
     }
 
