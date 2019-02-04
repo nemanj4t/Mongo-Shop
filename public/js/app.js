@@ -39554,29 +39554,31 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-md-4", staticStyle: { "margin-top": "20px" } },
-        [
-          _c("div", { staticClass: "container" }, [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "cart-summary" }, [
-                _c("p", [
-                  _vm._v(
-                    _vm._s(_vm.getShoppingCart.items) + " Item(s) selected"
-                  )
-                ]),
-                _vm._v(" "),
-                _c("h5", [
-                  _vm._v("SUBTOTAL: $" + _vm._s(_vm.getShoppingCart.price))
+      _vm.getShoppingCart.products.length !== 0
+        ? _c(
+            "div",
+            { staticClass: "col-md-4", staticStyle: { "margin-top": "20px" } },
+            [
+              _c("div", { staticClass: "container" }, [
+                _c("div", { staticClass: "card" }, [
+                  _c("div", { staticClass: "cart-summary" }, [
+                    _c("p", [
+                      _vm._v(
+                        _vm._s(_vm.getShoppingCart.items) + " Item(s) selected"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("h5", [
+                      _vm._v("SUBTOTAL: $" + _vm._s(_vm.getShoppingCart.price))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(0)
                 ])
-              ]),
-              _vm._v(" "),
-              _vm._m(0)
-            ])
-          ])
-        ]
-      )
+              ])
+            ]
+          )
+        : _vm._e()
     ]),
     _vm._v(" "),
     _vm.getShoppingCart.products.length === 0

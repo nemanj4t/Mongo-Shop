@@ -5,7 +5,7 @@
                 <cart-item :cartItem="cartItem" v-for="cartItem in getShoppingCart.products"></cart-item>
             </div>
 
-            <div class="col-md-4" style="margin-top: 20px">
+            <div v-if="getShoppingCart.products.length !== 0" class="col-md-4" style="margin-top: 20px">
                 <div class="container">
                     <div class="card">
                         <div class="cart-summary">
