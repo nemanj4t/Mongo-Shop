@@ -54,6 +54,7 @@ Vue.component('card-element', require('./components/checkout-components/CardElem
 Vue.component('payment-form', require('./components/checkout-components/PaymentForm.vue').default);
 
 
+
 const router = new VueRouter({
     routes
   });
