@@ -88,6 +88,7 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
+ 
     private static function buildFilterQuery($filters, $category_id)
     {
         // treba da dodam i da matchuje kategoriju prvo

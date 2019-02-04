@@ -46,6 +46,8 @@ Vue.component('CategoryEdit', require('./components/admin-components/category/Ed
 Vue.component('ProductManage', require('./components/admin-components/product/Manage.vue').default);
 Vue.component('ProductEdit', require('./components/admin-components/product/Edit.vue').default);
 Vue.component('UserManage', require('./components/admin-components/user/Manage.vue').default);
+Vue.component('card-element', require('./components/checkout-components/CardElement.vue').default);
+Vue.component('payment-form', require('./components/checkout-components/PaymentForm.vue').default);
 
 const router = new VueRouter({
     routes

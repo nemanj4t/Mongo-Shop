@@ -68,7 +68,7 @@
                 }
             },
             getData() {
-                axios.get('/categories/' + this.currentCategory._id)
+                axios.get('/api/categories/data/' + this.currentCategory._id)
                     .then(response => {
                         this.currentCategory = response.data.category;
                         this.hasChildren = response.data.hasOwnProperty('subCategories');
@@ -109,7 +109,7 @@
                         paramFilters[f] = values;
                     }
                 }
-                axios.get('/categories/' + this.currentCategory._id, {
+                axios.get('/api/categories/data/' + this.currentCategory._id, {
                         params : paramFilters
                     })
                     .then(response => {

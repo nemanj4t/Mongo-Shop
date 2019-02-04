@@ -54,3 +54,7 @@ Route::get('/shoppingcart/get', 'ShoppingCartController@get');
 Route::post('/shoppingcart/add', 'ShoppingCartController@add');
 Route::get('/shoppingcart/remove/{item}', 'ShoppingCartController@remove');
 Route::get('/shoppingcart/decrement/{item}', 'ShoppingCartController@decrement');
+
+
+Route::get('/checkout', 'CheckoutController@index');
+Route::post('/checkout', 'CheckoutController@payment');
