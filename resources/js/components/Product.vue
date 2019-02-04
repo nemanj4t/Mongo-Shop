@@ -73,7 +73,7 @@
         },
 
         mounted() {
-            console.log(this.$store.getters.returnWishes);
+            console.log(this.product);
         }
     }
 </script>

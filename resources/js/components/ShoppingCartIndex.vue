@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <cart-item :cartItem="cartItem" v-for="cartItem in getShoppingCart.products"></cart-item>
+                <cart-item :cartItem="cartItem" :key="cartItem._id" v-for="cartItem in getShoppingCart.products"></cart-item>
             </div>
 
             <div v-if="getShoppingCart.products.length !== 0" class="col-md-4" style="margin-top: 20px">

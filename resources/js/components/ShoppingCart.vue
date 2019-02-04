@@ -5,7 +5,7 @@
             <span>Your Cart</span>
             <div v-if="shoppingCart.items > 0" class="qty">{{shoppingCart.items}}</div>
         </a>
-        <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuLink">
+        <div class="dropdown-menu p-2" style="width: 19em" aria-labelledby="dropdownMenuLink">
             <div class="cart-list p-2">
                 <div v-for="product in shoppingCart.products" class="product-widget">
                     <div class="product-img">

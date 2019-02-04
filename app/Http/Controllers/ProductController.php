@@ -8,12 +8,15 @@ use App\Product;
 class ProductController extends Controller
 {
 
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        $product = Product::find($id);
-        //$product = Product::where('name', '=', $product)->first();
+        $product = Product::findOrFail($id);
 
-        return $product->toJson();
+        if(!$product) {
+            return abort(404);
+        }
+
+        return view('products.show', compact('product'));
     }
 
     public function store(Request $request)
@@ -25,7 +28,7 @@ class ProductController extends Controller
         $product->details = $request->additionalFields;
         $product->amount = $request->amount;
         $product->save();
-        
+
         return response()->json($product);
     }
 
@@ -38,7 +41,7 @@ class ProductController extends Controller
         $product->details = $request->additionalFields;
         $product->amount = $request->amount;
         $product->save();
-        
+
         return response()->json($product);
     }
 
