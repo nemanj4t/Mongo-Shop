@@ -28,6 +28,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function(){
     });
 });
 
+Route::group(['middleware' => 'auth'], function() {   
+    Route::get('/checkout', 'CheckoutController@index');
+    Route::post('/checkout', 'CheckoutController@payment');
+});
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 

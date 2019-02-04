@@ -20,8 +20,12 @@
                     <input class="form-control" name="image" placeholder="Image" v-model = "request.image">
                 </div>
                 <div class="form-group">
-                    <label>Amount:</label>
-                    <input class="form-control" name="amount" placeholder="Amount" v-model = "request.amount">
+                    <label>Price:</label>
+                    <input class="form-control" name="price" placeholder="Price" v-model = "request.price">
+                </div>
+                <div class="form-group">
+                    <label>Stock:</label>
+                    <input class="form-control" name="stock" placeholder="Amount of products on stock" v-model = "request.stock">
                 </div>
                 <div class="form-group">
                     <label>Additional fields:</label>
@@ -46,7 +50,8 @@ export default {
                 name: "",
                 image: "",
                 category: "",
-                amount: "",
+                stock: "",
+                price: "",
                 additionalFields : {}
             }
         }
@@ -85,7 +90,11 @@ export default {
 
         createProduct() {
             axios.post('/products', this.request)
-            .then(response => console.log(response))
+            .then(response => 
+            {
+                console.log(response);
+                this.$router.push('/products');
+            })
             .catch(error => console.log(error));
         }
     },

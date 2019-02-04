@@ -57,7 +57,7 @@ export default {
 
         createComponent() {
             axios.post('/categories', this.request)
-            .then(response =>{console.log(response); this.request.name = ""; this.request.category_id = "", this.request.additionalFields = [];})
+            .then(response =>{console.log(response); this.request.name = ""; this.request.category_id = "", this.request.additionalFields = []; this.$router.push('/categories')})
             .catch(error => console.log(error));
         }
     },

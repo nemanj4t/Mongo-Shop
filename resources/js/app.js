@@ -9,6 +9,7 @@ import StoreData from './store';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes';
+import VueSession from 'vue-session'
 
 
 import categories from './components/CategoriesComponent';
@@ -18,7 +19,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 Vue.use(VueRouter);
-
+Vue.use(VueSession);
 
 
 /**
@@ -51,6 +52,9 @@ Vue.component('CategoryEdit', require('./components/admin-components/category/Ed
 Vue.component('ProductManage', require('./components/admin-components/product/Manage.vue').default);
 Vue.component('ProductEdit', require('./components/admin-components/product/Edit.vue').default);
 Vue.component('UserManage', require('./components/admin-components/user/Manage.vue').default);
+Vue.component('card-element', require('./components/checkout-components/CardElement.vue').default);
+Vue.component('payment-form', require('./components/checkout-components/PaymentForm.vue').default);
+
 
 
 const router = new VueRouter({
