@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ShoppingCartController extends Controller
 {
+    public function shoppingCart()
+    {
+        return view('shopping-cart');
+    }
+
     public function get(Request $request)
     {
         if(Auth::user()) {
