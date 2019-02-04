@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container" id="app">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-12 col-md-offset-3">
             <h1>Payment Form</h1>
             <div class="spacer"></div>
 

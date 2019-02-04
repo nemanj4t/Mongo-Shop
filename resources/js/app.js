@@ -9,6 +9,7 @@ import StoreData from './store';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes';
+import VueSession from 'vue-session'
 
 
 import categories from './components/CategoriesComponent';
@@ -18,7 +19,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 Vue.use(VueRouter);
-
+Vue.use(VueSession);
 
 
 /**

@@ -27,7 +27,7 @@
                 <h5>SUBTOTAL: ${{shoppingCart.price}}</h5>
             </div>
             <div>
-                <button class="btn btn-danger" style="width: 100%" href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></button>
+                <a class="btn btn-danger" style="width: 100%" href="/checkout">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>

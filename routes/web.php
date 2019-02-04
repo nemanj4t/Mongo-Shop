@@ -28,6 +28,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function(){
     });
 });
 
+Route::group(['middleware' => 'auth'], function() {   
+    Route::get('/checkout', 'CheckoutController@index');
+    Route::post('/checkout', 'CheckoutController@payment');
+});
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 
@@ -56,8 +61,6 @@ Route::get('/shoppingcart/remove/{item}', 'ShoppingCartController@remove');
 Route::get('/shoppingcart/decrement/{item}', 'ShoppingCartController@decrement');
 
 
-Route::get('/checkout', 'CheckoutController@index');
-Route::post('/checkout', 'CheckoutController@payment');
 Route::get('/wishlist', 'UserController@wishList');
 
 Route::get('/wishes', 'UserController@getWishes');
