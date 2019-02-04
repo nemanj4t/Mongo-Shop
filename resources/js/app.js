@@ -36,6 +36,8 @@ Vue.use(Vuex);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('categories', require('./components/CategoriesComponent.vue').default);
 Vue.component('shopping-cart', require('./components/ShoppingCart.vue').default);
+Vue.component('shopping-cart-index', require('./components/ShoppingCartIndex').default);
+Vue.component('cart-item', require('./components/CartItem.vue').default);
 Vue.component('wish-list', require('./components/WishList.vue').default);
 Vue.component('wish-list-index', require('./components/WishListIndex.vue').default);
 Vue.component('product', require('./components/Product.vue').default);
@@ -50,6 +52,7 @@ Vue.component('ProductEdit', require('./components/admin-components/product/Edit
 Vue.component('UserManage', require('./components/admin-components/user/Manage.vue').default);
 Vue.component('card-element', require('./components/checkout-components/CardElement.vue').default);
 Vue.component('payment-form', require('./components/checkout-components/PaymentForm.vue').default);
+
 
 const router = new VueRouter({
     routes
