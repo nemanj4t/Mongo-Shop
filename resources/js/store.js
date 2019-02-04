@@ -35,11 +35,11 @@ export default {
             });
             if(item) {
                 item.quantity++;
-                state.shopping_cart.price += parseFloat(item.product.Cena);
+                state.shopping_cart.price += parseFloat(item.product.price);
                 state.shopping_cart.items += 1;
             } else {
                 state.shopping_cart.products.push(product);
-                state.shopping_cart.price += parseFloat(product.quantity * product.product.Cena);
+                state.shopping_cart.price += parseFloat(product.quantity * product.product.price);
                 state.shopping_cart.items += product.quantity;
             }
         },
@@ -49,7 +49,7 @@ export default {
                 return el.product._id === product.product._id;
             });
             state.shopping_cart.items -= item.quantity;
-            state.shopping_cart.price -= parseFloat(item.quantity * item.product.Cena);
+            state.shopping_cart.price -= parseFloat(item.quantity * item.product.price);
             state.shopping_cart.products.splice(state.shopping_cart.products.indexOf(item), 1);
         },
 
@@ -58,7 +58,7 @@ export default {
                 if (state.shopping_cart.products[ind].product._id === product.product._id) {
                     state.shopping_cart.products[ind].quantity -= 1;
                     state.shopping_cart.items -= 1;
-                    state.shopping_cart.price -= parseFloat(product.product.Cena);
+                    state.shopping_cart.price -= parseFloat(product.product.price);
                     break;
                 }
             }

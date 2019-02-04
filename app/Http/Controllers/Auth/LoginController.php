@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -35,5 +36,16 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        // Kada se korisnik uloguje, proverava se da li ima nesto u
+        // korpi u sesiji i ako ima onda se merguje sa korpom u bazi
+        if($request->session()->has('shoppingCart')) {
+            $cart = $request->session()->get('shoppingCart');
+            $user->shoppingCart->mergeWithSessionCart($cart);
+            $request->session()->forget('shoppingCart'); // izbrise se podatak iz sesije
+        }
     }
 }

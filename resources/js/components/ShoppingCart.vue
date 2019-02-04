@@ -13,7 +13,7 @@
                     </div>
                     <div class="product-body">
                         <h3 class="product-name"><a href="#">{{product.product.name}}</a></h3>
-                        <h4 class="product-price">{{product.quantity}} x ${{product.product.Cena}}</h4>
+                        <h4 class="product-price">{{product.quantity}} x ${{product.product.price}}</h4>
                         <div class="mt-1">
                             <button class="btn btn-sm btn-dark" @click="addProductToCart(product)">+</button>
                             <button class="btn btn-sm btn-dark" @click="decrementProductQuantity(product)">-</button>
@@ -81,8 +81,8 @@
                 .then(response => {
                     console.log(response.data);
                     if (response.data.hasOwnProperty('shoppingCart')) {
-                        response.data.shoppingCart.products.forEach(product => {
-                            this.ADD_PRODUCT_TO_CART(product);
+                        response.data.shoppingCart.cartItems.forEach(item => {
+                            this.ADD_PRODUCT_TO_CART(item);
                         });
                     }
                 });

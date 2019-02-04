@@ -19,8 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/categories', 'CategoryController@getCategories');
 Route::get('/categories/{id}', 'CategoryController@getById');
+Route::get('/categories/data/{category}', 'CategoryController@getData');
 
 Route::get('/products', 'ProductController@getProducts');
 Route::get('/products/{id}', 'ProductController@getById');
 
 Route::get('/users', 'UserController@getUsers');
+
