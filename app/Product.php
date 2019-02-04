@@ -24,4 +24,8 @@ class Product extends Eloquent
         return $this->belongsTo('App\Category', 'category_id');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany('App\User', null, 'product_ids', 'user_ids');
+    }
 }

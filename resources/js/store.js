@@ -1,6 +1,10 @@
 export default {
     state: {
         products: [],
+        wishes: {
+            number: 0,
+            products: []
+        },
         shopping_cart: {
             items: 0,
             products: [],
@@ -14,6 +18,10 @@ export default {
 
         returnShoppingCart(state){
             return state.shopping_cart;
+        },
+
+        returnWishes(state){
+            return state.wishes;
         }
     },
     mutations: {
@@ -54,6 +62,27 @@ export default {
                     break;
                 }
             }
+        },
+
+        INIT_NUMBER_OF_WISHES: (state, number) => {
+            state.wishes.number = number;
+        },
+
+        INIT_WISHED_PRODUCTS: (state, products) => {
+            state.wishes.products = products;
+        },
+
+        ADD_PRODUCT_TO_WISH_LIST: (state, product) => {
+            state.wishes.products.push(product);
+            state.wishes.number += 1;
+        },
+
+        REMOVE_PRODUCT_FROM_WISH_LIST: (state, product) => {
+            let item = state.wishes.products.find(el => {
+                return el._id === product._id;
+            });
+            state.wishes.number -= 1;
+            state.wishes.products.splice(state.wishes.products.indexOf(item), 1);
         }
     },
     actions: {

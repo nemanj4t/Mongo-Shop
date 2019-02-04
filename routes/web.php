@@ -54,3 +54,9 @@ Route::get('/shoppingcart/get', 'ShoppingCartController@get');
 Route::post('/shoppingcart/add', 'ShoppingCartController@add');
 Route::get('/shoppingcart/remove/{item}', 'ShoppingCartController@remove');
 Route::get('/shoppingcart/decrement/{item}', 'ShoppingCartController@decrement');
+
+Route::get('/wishlist', 'UserController@wishList');
+
+Route::get('/wishes', 'UserController@getWishes');
+Route::post('/wishes', 'UserController@addWishes');
+Route::post('/wishes/remove', 'UserController@deleteWish');
