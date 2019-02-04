@@ -31,7 +31,7 @@ class ShoppingCart extends Eloquent
             ->where('product_id', '=', $cartItem['product']['_id'])->first();
         if($item != null) {
             // Postoji vec u korpi takav proizvod pa se inkrementira
-            $item->quantity += $item->quantity;
+            $item->quantity += 1;
             $item->save();
         } else {
             // Ne postoji u korpi pa se doda novi

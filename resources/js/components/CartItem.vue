@@ -11,7 +11,7 @@
                             <h4 class="cart-item-price"><span style="color:black;">Price:</span> {{cartItem.product.price}} $</h4>
                             <h4 class="cart-item-price"><span style="color:black;">Quantity:</span> {{cartItem.quantity}}</h4>
                             <div class="cart-item-btns">
-                                <button @click="addToCart(cartItem)"><i class="fas fa-plus fa-1x"></i><span class="tooltipp">increase quantity</span></button>
+                                <button @click="addProductToCart(cartItem)"><i class="fas fa-plus fa-1x"></i><span class="tooltipp">increase quantity</span></button>
                                 <button @click="decrementProductQuantity(cartItem)"><i class="fas fa-minus fa-1x"></i><span class="tooltipp">decrease quantity</span></button>
                             </div>
                         </div>
@@ -20,24 +20,18 @@
                     <div class="col-md-2">
                         <div class="row justify-content-start">
                             <div class="cart-item-btns">
-                                <button @click="addToWishList(product)" class="add-to-wishlist"><i class="fas fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+                                <button @click="addToWishList(cartItem.product)" class="add-to-wishlist"><i class="fas fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
                                 <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
                             </div>
                         </div>
 
                         <div class="row justify-content-center">
                             <div class="cart-item-btns">
-                                <button><i class="fa fa-trash"></i><span class="tooltipp">remove from cart</span></button>
+                                <button @click="removeProductFromCart(cartItem)"><i class="fa fa-trash"></i><span class="tooltipp">remove from cart</span></button>
                             </div>
                         </div>
                     </div>
-
             </div>
-            <!--<div class="add-to-cart">-->
-                <!--<label>Quantity: {{cartItem.quantity}}</label>-->
-                <!--<button style="width: 100%" class="btn btn-lg btn-danger mb-4">Remove from cart</button>-->
-                <!--<button @click="addToCart(product)" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
-            <!--</div>-->
         </div>
 </template>
 
@@ -52,18 +46,33 @@
         methods: {
             ...mapMutations([
                 'ADD_PRODUCT_TO_CART',
+                'REMOVE_PRODUCT_FROM_CART',
+                'DECREMENT_PRODUCT_QUANTITY_IN_CART',
                 'ADD_PRODUCT_TO_WISH_LIST'
             ]),
 
-            addToCart(product) {
-                let cartItem = {};
-                cartItem.product = product;
-                cartItem.quantity = 1;
+            addProductToCart(cartItem) {
                 axios.post('/shoppingcart/add', {
-                    'newProduct' : cartItem
+                    'newProduct': cartItem
                 }).then(response => {
                     this.ADD_PRODUCT_TO_CART(cartItem);
                 });
+            },
+
+            removeProductFromCart(product) {
+                axios.get('/shoppingcart/remove/' + product.product._id)
+                    .then(response => {
+                        this.REMOVE_PRODUCT_FROM_CART(product);
+                    });
+            },
+
+            decrementProductQuantity(product) {
+                if (product.quantity > 1) {
+                    axios.get('/shoppingcart/decrement/' + product.product._id)
+                        .then(response => {
+                            this.DECREMENT_PRODUCT_QUANTITY_IN_CART(product);
+                        });
+                }
             },
 
             addToWishList(product) {

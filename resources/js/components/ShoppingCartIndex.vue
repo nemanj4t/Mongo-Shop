@@ -5,8 +5,18 @@
                 <cart-item :cartItem="cartItem" v-for="cartItem in getShoppingCart.products"></cart-item>
             </div>
 
-            <div class="col-md-4">
-                Korpa cena itd
+            <div class="col-md-4" style="margin-top: 20px">
+                <div class="container">
+                    <div class="card">
+                        <div class="cart-summary">
+                            <p>{{getShoppingCart.items}} Item(s) selected</p>
+                            <h5>SUBTOTAL: ${{getShoppingCart.price}}</h5>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" style="width: 100%" href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -26,11 +36,7 @@
 
     export default {
         methods: {
-            ...mapMutations([
-                'ADD_PRODUCT_TO_CART',
-                'REMOVE_PRODUCT_FROM_CART',
-                'DECREMENT_PRODUCT_QUANTITY_IN_CART'
-            ])
+
         },
 
         computed: {
@@ -46,5 +52,7 @@
 </script>
 
 <style scoped>
-
+    .cart {
+        margin-top: 15px;
+    }
 </style>
