@@ -28,6 +28,12 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Product', null, 'user_ids', 'product_ids');
+    }
+
     public function shoppingCart()
     {
         return $this->hasOne('App\ShoppingCart', 'user_id');

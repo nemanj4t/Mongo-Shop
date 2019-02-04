@@ -16,7 +16,7 @@
                     <i class="fa fa-star"></i>
                 </div>
                 <div class="product-btns">
-                    <button class="add-to-wishlist"><i class="fas fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+                    <button @click="addToWishList(product)" class="add-to-wishlist"><i class="fas fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
                     <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
                 </div>
             </div>
@@ -33,9 +33,15 @@
 
     export default {
         props: ['product', 'category_name'],
+        computed: {
+            getWishes() {
+                return this.$store.getters.returnWishes;
+            }
+        },
         methods: {
             ...mapMutations([
-                'ADD_PRODUCT_TO_CART'
+                'ADD_PRODUCT_TO_CART',
+                'ADD_PRODUCT_TO_WISH_LIST'
             ]),
 
             addToCart(product) {
@@ -47,11 +53,27 @@
                 }).then(response => {
                     this.ADD_PRODUCT_TO_CART(cartItem);
                 });
+            },
+
+            addToWishList(product) {
+                let index = -1;
+                this.getWishes.products.forEach(element => {
+                    if(element._id === product._id) {
+                        index = 0;
+                    }
+                });
+
+                if(!(index > -1)) {
+                    this.ADD_PRODUCT_TO_WISH_LIST(product);
+                    axios.post('/wishes', {
+                        'product_id' : product._id,
+                    });
+                }
             }
         },
 
         mounted() {
-            console.log('Component mounted.')
+            console.log(this.$store.getters.returnWishes);
         }
     }
 </script>

@@ -58,3 +58,8 @@ Route::get('/shoppingcart/decrement/{item}', 'ShoppingCartController@decrement')
 
 Route::get('/checkout', 'CheckoutController@index');
 Route::post('/checkout', 'CheckoutController@payment');
+Route::get('/wishlist', 'UserController@wishList');
+
+Route::get('/wishes', 'UserController@getWishes');
+Route::post('/wishes', 'UserController@addWishes');
+Route::post('/wishes/remove', 'UserController@deleteWish');

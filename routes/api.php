@@ -25,5 +25,3 @@ Route::get('/products', 'ProductController@getProducts');
 Route::get('/products/{id}', 'ProductController@getById');
 
 Route::get('/users', 'UserController@getUsers');
-
-

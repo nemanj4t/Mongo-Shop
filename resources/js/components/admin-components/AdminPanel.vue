@@ -40,7 +40,7 @@
                 <div class="col-md-6 offset-md-2">
                     <router-view></router-view>
                 </div>
-            </aside>               
+            </aside>
         </div>
     </div>
 </template>
@@ -48,8 +48,8 @@
 <script>
     export default {
         mounted() {
-           
-        }       
+
+        }
     }
 </script>
 

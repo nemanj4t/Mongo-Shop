@@ -188,6 +188,24 @@
         <!-- /container -->
     </nav>
 
+    {{--Putanja do kategorije/proizvoda--}}
+    {{--Treba jos jedan if da se ispita da li je proizvod ili kategorija--}}
+    @if(isset($path))
+    <nav class="navbar-expand-md navbar-laravel border-bottom">
+        <ul class="nav navbar-nav">
+            <li><a class="nav-link" href="/">Home</a></li>
+            @foreach($path as $item)
+                <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
+                @if($category->name == $item['name'])
+                    <li><a class="nav-link font-weight-bold" href="#">{{ $item['name'] }}</a></li>
+                @else
+                    <li><a class="nav-link" href="/categories/{{ $item['id'] }}">{{ $item['name'] }}</a></li>
+                @endif
+            @endforeach
+        </ul>
+    </nav>
+    @endif
+
     <main>
         @yield('content')
     </main>
