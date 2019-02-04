@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Cartalyst\Stripe\Exception\CardErrorException;
+use Illuminate\Support\Facades\Auth;
+use App\Product;
+use App\CartItem;
+use App\User;
+
 
 class CheckoutController extends Controller 
 {
@@ -16,7 +21,12 @@ class CheckoutController extends Controller
 
     public function payment(Request $request)
     {
-        $shoppingCart = ($request->session()->get('shoppingCart'));
+        $shoppingCart = Auth::user()->shoppingCart;
+        $cartItems = $shoppingCart->cartItems;
+        $price = 0;
+        foreach($cartItems as $item) {
+            $price = $price + $item->product['price'];
+        }
 
         if ($shoppingCart != null)
         {
@@ -26,7 +36,7 @@ class CheckoutController extends Controller
             }
             try {
                 $charge = Stripe::charges()->create([
-                    'amount' => $shoppingCart['price'],
+                    'amount' => $price,
                     'currency' => 'RSD',
                     'source' => $request->stripeToken,
                     'description' => 'Your order',
@@ -39,7 +49,12 @@ class CheckoutController extends Controller
                 ]);
                 // save this info to your database
                 // SUCCESSFUL
+                //foreach($)
                 $request->session()->forget('shoppingCart');
+                foreach($cartItems as $item) {
+                    Product::reduceStock($item->product_id, $item->quantity);
+                    $item->delete();
+                }
                 return back()->with('success_message', 'Thank you! Your payment has been accepted.');
             } catch (CardErrorException $e) {
                 // save info to database for failed

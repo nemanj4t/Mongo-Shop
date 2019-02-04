@@ -28,4 +28,11 @@ class Product extends Eloquent
     {
         return $this->belongsToMany('App\User', null, 'product_ids', 'user_ids');
     }
+
+    public static function reduceStock($id, $amount)
+    {
+        $product = Product::find($id);
+        $product->stock = $product->stock - $amount;
+        $product->save();
+    }
 }
