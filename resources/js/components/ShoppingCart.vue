@@ -79,7 +79,6 @@
             console.log('Component mounted.');
             axios.get('/shoppingcart/get')
                 .then(response => {
-                    console.log(response.data);
                     if (response.data.hasOwnProperty('shoppingCart')) {
                         response.data.shoppingCart.cartItems.forEach(item => {
                             this.ADD_PRODUCT_TO_CART(item);

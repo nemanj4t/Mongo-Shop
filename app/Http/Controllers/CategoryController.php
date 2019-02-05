@@ -19,42 +19,28 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $path = Category::getFullPath($category);
-        // ako nije ajax onda se samo vrati view sa kategorijom
-        return view('categories', compact('category', 'path'));
-    }
-
-    public function getData(Request $request, $id)
-    {
-        $category = Category::find($id);
-        if(!$category->children()->exists())
-        {
-            // ako ima filtere
-            if(!empty($request->all())) {
-                $products = self::buildFilterQuery($request->all(), $id); // filtrira
-                return compact('products');
-            }
-            else {
-                $products = $category->products;
-                // ako nema dece onda se vracaju filteri po kojima mogu da se pretrazuju proizvodi
-                $filters = Category::getFiltersAndCount($category);
-                if(!empty($filters)) {
-                    $filters = array_filter($filters, function($filter) {   // izbace se prazni
-                        return (!empty($filter));
-                    });
-                }
-                // treba da vratim i sve prethodnike da bih prikazao path
-
-                return compact('filters', 'category', 'products');
+        $products = Category::getProductsForLeafCategories($category);
+        $maxPrice = $products->max('price');
+        if($category->children()->exists()) {
+            $subCategories = $category->children;
+        } else {
+            $filters = Category::getFiltersAndCount($category);
+            if(!empty($filters)) {
+                $filters = array_filter($filters, function($filter) {   // izbace se prazni
+                    return (!empty($filter));
+                });
             }
         }
-        else
-        {
-            // ako ima dece onda treba rekurzivno da se prodje i pronadju
-            // "listovi" podkategorije koje direktno sadrze decu
-            $products = Category::getProductsForLeafCategories($category);
-            $subCategories = $category->children;
 
-            return compact('category', 'subCategories', 'products');
+        return view('categories',
+            compact('category', 'path', 'products', 'subCategories', 'maxPrice', 'filters'));
+    }
+
+    public function getFilteredData(Request $request, $id)
+    {
+        if(!empty($request->all())) {
+            $products = self::buildFilterQuery($request->all(), $id); // filtrira
+            return compact('products');
         }
     }
 

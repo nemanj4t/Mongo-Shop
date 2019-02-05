@@ -70,8 +70,17 @@ Route::post('/wishes/remove', 'UserController@deleteWish');
 Route::post('/product/{product}/comments', 'UserController@addComment');
 
 Route::get('/search', function(Request $request) {
+    // Search bar
    if(isset($request['keyword'])) {
        $products = App\Product::where('name', 'like', '%'.$request['keyword'].'%')->get();
        return response()->json($products);
+   }
+
+   // Price slider
+   if(isset($request['category']) && isset($request['price'])) {
+       $category = App\Category::find($request['category']);
+       $products = App\Category::getProductsForLeafCategories($category)
+           ->where('price', '<=', floatval($request['price']));
+       return $products;
    }
 });
