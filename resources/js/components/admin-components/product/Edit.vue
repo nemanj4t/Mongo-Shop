@@ -20,8 +20,12 @@
                     <input class="form-control" name="image" placeholder="Image" v-model = "request.image">
                 </div>
                 <div class="form-group">
-                    <label>Amount:</label>
-                    <input class="form-control" name="amount" placeholder="Amount" v-model = "request.amount">
+                    <label>Stock:</label>
+                    <input class="form-control" name="stock" placeholder="Products on stock" v-model = "request.stock">
+                </div>
+                <div class="form-group">
+                    <label>Price:</label>
+                    <input class="form-control" name="stock" placeholder="Price" v-model = "request.price">
                 </div>
                 <div class="form-group">
                     <label>Additional fields:</label>
@@ -41,6 +45,7 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            updated_at: "",
             categories: "",
             original: {
                 category: "",
@@ -50,7 +55,8 @@ export default {
                 name: "",
                 image: "",
                 category: "",
-                amount: "",
+                stock: "",
+                price: "",
                 additionalFields : {}
             }
         }
@@ -66,7 +72,7 @@ export default {
             }
             else {
                 this.request.additionalFields = {};
-                parent = this.findParent(this.request.category.category_id);
+                parent = this.findCategory(this.request.category.category_id);
 
                 this.request.category.details.forEach(detail => {
                     this.request.additionalFields[detail] = "";
@@ -77,12 +83,12 @@ export default {
                         this.request.additionalFields[detail] = "";
                     });
 
-                    parent = this.findParent(parent.category_id);
+                    parent = this.findCategory(parent.category_id);
                 }
             }
         },
 
-        findParent(id) {
+        findCategory(id) {
             parent = "";
             this.categories.forEach(category => {
                 if (category._id == id){
@@ -96,30 +102,40 @@ export default {
             axios.put('/products/' + this.$route.params.id, this.request)
             .then(response => {console.log(response); this.$router.push('/products');})
             .catch(error => console.log(error));
-        }
+        },
+
     },
 
     mounted() {
+        axios.get('/api/categories')
+            .then(response => {this.categories = response.data.categories; console.log(this.categories);})
+            .catch(error => console.log(error));
+
         axios.get('/api/products/' + this.$route.params.id)
             .then(response =>
              {
                  this.request.name = response.data.name;
                  this.request.image = response.data.image;
-                 this.request.category = response.data.category;
-                 this.request.amount = response.data.amount;
-                 this.request.name = response.data.name;
-                 Object.keys(response.data.details).forEach((key, value) => {
-                     this.request.additionalFields[key] = response.data.details[key];
+                 this.request.category = this.findCategory(response.data.category_id);
+                 this.request.price = response.data.price;
+                 this.request.stock = response.data.stock;
+                 
+                 Object.keys(response.data).forEach((key, value) => {
+                     if (key == 'updated_at')
+                        this.updated_at = value;
+                 });
+                 Object.keys(response.data).forEach((key, value) => {
+                     if (value >5 && value < this.updated_at){
+                         this.request.additionalFields[key] = response.data[key];
+                     }
                  });
 
-                 this.original.category = response.data.category;
+                 this.original.category = this.findCategory(response.data.category_id);
                  this.original.additionalFields = this.request.additionalFields;
+                 console.log(this.request, this.original);
             })
             .catch(error => console.log(error));
-
-            axios.get('/api/categories')
-            .then(response => {this.categories = response.data.categories; console.log(this.categories);})
-            .catch(error => console.log(error));
+           
     }
 }
 </script>

@@ -3046,10 +3046,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      updated_at: "",
       categories: "",
       original: {
         category: "",
@@ -3059,7 +3064,8 @@ __webpack_require__.r(__webpack_exports__);
         name: "",
         image: "",
         category: "",
-        amount: "",
+        stock: "",
+        price: "",
         additionalFields: {}
       }
     };
@@ -3075,7 +3081,7 @@ __webpack_require__.r(__webpack_exports__);
         this.request.additionalFields = this.original.additionalFields;
       } else {
         this.request.additionalFields = {};
-        parent = this.findParent(this.request.category.category_id);
+        parent = this.findCategory(this.request.category.category_id);
         this.request.category.details.forEach(function (detail) {
           _this.request.additionalFields[detail] = "";
         });
@@ -3084,11 +3090,11 @@ __webpack_require__.r(__webpack_exports__);
           parent.details.forEach(function (detail) {
             _this.request.additionalFields[detail] = "";
           });
-          parent = this.findParent(parent.category_id);
+          parent = this.findCategory(parent.category_id);
         }
       }
     },
-    findParent: function findParent(id) {
+    findCategory: function findCategory(id) {
       parent = "";
       this.categories.forEach(function (category) {
         if (category._id == id) {
@@ -3112,23 +3118,29 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this3 = this;
 
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/products/' + this.$route.params.id).then(function (response) {
-      _this3.request.name = response.data.name;
-      _this3.request.image = response.data.image;
-      _this3.request.category = response.data.category;
-      _this3.request.amount = response.data.amount;
-      _this3.request.name = response.data.name;
-      Object.keys(response.data.details).forEach(function (key, value) {
-        _this3.request.additionalFields[key] = response.data.details[key];
-      });
-      _this3.original.category = response.data.category;
-      _this3.original.additionalFields = _this3.request.additionalFields;
-    }).catch(function (error) {
-      return console.log(error);
-    });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/categories').then(function (response) {
       _this3.categories = response.data.categories;
       console.log(_this3.categories);
+    }).catch(function (error) {
+      return console.log(error);
+    });
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/products/' + this.$route.params.id).then(function (response) {
+      _this3.request.name = response.data.name;
+      _this3.request.image = response.data.image;
+      _this3.request.category = _this3.findCategory(response.data.category_id);
+      _this3.request.price = response.data.price;
+      _this3.request.stock = response.data.stock;
+      Object.keys(response.data).forEach(function (key, value) {
+        if (key == 'updated_at') _this3.updated_at = value;
+      });
+      Object.keys(response.data).forEach(function (key, value) {
+        if (value > 5 && value < _this3.updated_at) {
+          _this3.request.additionalFields[key] = response.data[key];
+        }
+      });
+      _this3.original.category = _this3.findCategory(response.data.category_id);
+      _this3.original.additionalFields = _this3.request.additionalFields;
+      console.log(_this3.request, _this3.original);
     }).catch(function (error) {
       return console.log(error);
     });
@@ -3300,8 +3312,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-stripe-elements-plus */ "./node_modules/vue-stripe-elements-plus/dist/index.js");
-/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-stripe-elements-plus */ "./node_modules/vue-stripe-elements-plus/dist/index.js");
+/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -3317,7 +3329,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Card: vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1__["Card"]
+    Card: vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__["Card"]
   },
   data: function data() {
     return {
@@ -3352,7 +3364,7 @@ __webpack_require__.r(__webpack_exports__);
       // See https://stripe.com/docs/api#tokens for the token object.
       // See https://stripe.com/docs/api#errors for the error object.
       // More general https://stripe.com/docs/stripe.js#stripe-create-token.
-      Object(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1__["createToken"])().then(function (data) {
+      Object(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__["createToken"])().then(function (data) {
         return console.log(data.token);
       });
     },
@@ -3378,8 +3390,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-stripe-elements-plus */ "./node_modules/vue-stripe-elements-plus/dist/index.js");
-/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-stripe-elements-plus */ "./node_modules/vue-stripe-elements-plus/dist/index.js");
+/* harmony import */ var vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -3495,7 +3507,7 @@ __webpack_require__.r(__webpack_exports__);
       var options = {
         name: this.name_on_card
       };
-      Object(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_1__["createToken"])(options).then(function (result) {
+      Object(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__["createToken"])(options).then(function (result) {
         var form = document.getElementById('payment-form');
         var hiddenInput = document.createElement('input');
         hiddenInput.setAttribute('type', 'hidden');
@@ -41326,26 +41338,52 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Amount:")]),
+          _c("label", [_vm._v("Stock:")]),
           _vm._v(" "),
           _c("input", {
             directives: [
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.request.amount,
-                expression: "request.amount"
+                value: _vm.request.stock,
+                expression: "request.stock"
               }
             ],
             staticClass: "form-control",
-            attrs: { name: "amount", placeholder: "Amount" },
-            domProps: { value: _vm.request.amount },
+            attrs: { name: "stock", placeholder: "Products on stock" },
+            domProps: { value: _vm.request.stock },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.request, "amount", $event.target.value)
+                _vm.$set(_vm.request, "stock", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Price:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.request.price,
+                expression: "request.price"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { name: "stock", placeholder: "Price" },
+            domProps: { value: _vm.request.price },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.request, "price", $event.target.value)
               }
             }
           })
@@ -56965,8 +57003,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
-/* harmony import */ var vue_session__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-session */ "./node_modules/vue-session/index.js");
-/* harmony import */ var vue_session__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_session__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var vue_session__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-session */ "./node_modules/vue-session/index.js");
+/* harmony import */ var vue_session__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_session__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _components_CategoriesComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/CategoriesComponent */ "./resources/js/components/CategoriesComponent.vue");
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -56985,7 +57023,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 vue__WEBPACK_IMPORTED_MODULE_2___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_2___default.a.use(vue_session__WEBPACK_IMPORTED_MODULE_7___default.a);
+vue__WEBPACK_IMPORTED_MODULE_2___default.a.use(vue_session__WEBPACK_IMPORTED_MODULE_5___default.a);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -58820,8 +58858,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\wamp64\www\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\wamp64\www\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
