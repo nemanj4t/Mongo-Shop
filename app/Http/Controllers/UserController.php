@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Product;
+use App\Comment;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
 
 class UserController extends Controller
@@ -94,5 +95,28 @@ class UserController extends Controller
 
         $user->save();
         $product->save();
+    }
+
+    public function addComment(Request $request, $id)
+    {
+        $request->validate([
+            'rating' => 'required',
+            'comment_content' => 'required'
+        ]);
+        $p = Product::find($id);
+
+        $comment = new Comment;
+        $comment->product_id = $id;
+        $comment->user_id = auth()->user()->id;
+        $comment->content = $request->comment_content;
+        $comment->rating = $request->rating;
+
+        $grade = (floatval($p->grade) * sizeof($p->comments) + intval($comment->rating))/(sizeof($p->comments) + 1);
+        $p->grade = round($grade, 2);
+
+        $p->save();
+        $comment->save();
+
+        return redirect()->back();
     }
 }

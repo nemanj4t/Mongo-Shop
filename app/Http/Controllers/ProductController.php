@@ -20,7 +20,29 @@ class ProductController extends Controller
             return abort(404);
         }
 
-        return view('products.show', compact('product'));
+        $s1 = 0;
+        $s2 = 0;
+        $s3 = 0;
+        $s4 = 0;
+        $s5 = 0;
+
+        foreach($product->comments as $comment)
+        {
+            switch($comment->rating) {
+                case "1": $s1++;
+                break;
+                case "2": $s2++;
+                break;
+                case "3": $s3++;
+                break;
+                case "4": $s4++;
+                break;
+                case "5": $s5++;
+                break;
+            }
+        }
+
+        return view('products.show', compact('product', 's1', 's2', 's3', 's4', 's5'));
     }
 
     public function store(Request $request)
@@ -34,7 +56,7 @@ class ProductController extends Controller
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
-             
+
         $product->save();
         $product = Product::orderBy('created_at', 'desc')->first();
         $users = User::all();
