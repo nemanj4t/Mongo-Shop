@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\NewProduct;
+use App\User;
 use App\Product;
+use Notification;
 
 class ProductController extends Controller
 {
@@ -21,7 +25,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request);
         $product = new Product;
         $product->name = $request->name;
         $product->image = $request->image;
@@ -33,6 +36,9 @@ class ProductController extends Controller
         }
              
         $product->save();
+        $product = Product::orderBy('created_at', 'desc')->first();
+        $users = User::all();
+        Notification::send($users, new NewProduct($product));
 
         return response()->json($product);
     }
