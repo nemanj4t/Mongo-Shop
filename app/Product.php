@@ -29,6 +29,11 @@ class Product extends Eloquent
         return $this->belongsToMany('App\User', null, 'product_ids', 'user_ids');
     }
 
+    public function comments()
+    {
+        return $this->hasMany('App\Comment', 'product_id');
+    }
+
     public static function reduceStock($id, $amount)
     {
         $product = Product::find($id);

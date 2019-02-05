@@ -28,7 +28,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function(){
     });
 });
 
-Route::group(['middleware' => 'auth'], function() {   
+Route::group(['middleware' => 'auth'], function() {
     Route::get('/checkout', 'CheckoutController@index');
     Route::post('/checkout', 'CheckoutController@payment');
 });
@@ -66,3 +66,5 @@ Route::get('/wishlist', 'UserController@wishList');
 Route::get('/wishes', 'UserController@getWishes');
 Route::post('/wishes', 'UserController@addWishes');
 Route::post('/wishes/remove', 'UserController@deleteWish');
+
+Route::post('/product/{product}/comments', 'UserController@addComment');

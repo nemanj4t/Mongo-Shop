@@ -27,17 +27,26 @@
                         <h2 class="product-name">{{$product->name}}</h2>
                         <div>
                             <div class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
+                                @if($product->grade)
+                                    @for($i=0; $i < round(floatval($product->grade)); $i++)
+                                        <i class="fa fa-star"></i>
+                                    @endfor
+                                @else
+                                    <i class="fa fa-star"></i> - no rating yet!
+                                @endif
                             </div>
-                            <a class="review-link" href="#">10 Review(s) | Add your review</a>
+                            <a class="review-link" href="#">{{sizeof($product->comments)}} Review(s) | Add your review</a>
                         </div>
                         <div>
                             <h3 class="product-price">${{$product->price}}</h3>
-                            <span class="product-available">In Stock</span>
+                            <span class="product-available">
+                                @if(intval($product->stock) > 0)
+                                    In
+                                @else
+                                    Out of
+                                @endif
+                                    Stock
+                            </span>
                         </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
@@ -47,7 +56,7 @@
                         </div>
                         <ul class="product-links">
                             <li>Category:</li>
-                            <li><a class="navitemlink" href="#">{{$product->category->name}}</a></li>
+                            <li><a class="navitemlink" href="/categories/{{$product->category->id}}">{{$product->category->name}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -71,13 +80,15 @@
                                     <div class="col-md-3">
                                         <div id="rating">
                                             <div class="rating-avg">
-                                                <span>4.5</span>
+                                                <span>{{$product->grade}}</span>
                                                 <div class="rating-stars">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
+                                                    @if($product->grade)
+                                                        @for($i=0; $i < round(floatval($product->grade)); $i++)
+                                                        <i class="fa fa-star"></i>
+                                                        @endfor
+                                                    @else
+                                                        <i class="fa fa-star"></i> - no rating yet
+                                                    @endif
                                                 </div>
                                             </div>
                                             <ul class="rating">
@@ -90,9 +101,11 @@
                                                         <i class="fa fa-star"></i>
                                                     </div>
                                                     <div class="rating-progress">
-                                                        <div style="width: 80%;"></div>
+                                                        @if($s5 > 0)
+                                                            <div style="width: {{$s5/sizeof($product->comments)*100}}%;"></div>
+                                                        @endif
                                                     </div>
-                                                    <span class="sum">3</span>
+                                                    <span class="sum">{{$s5}}</span>
                                                 </li>
                                                 <li>
                                                     <div class="rating-stars">
@@ -103,9 +116,11 @@
                                                         <i class="fa fa-star-o"></i>
                                                     </div>
                                                     <div class="rating-progress">
-                                                        <div style="width: 60%;"></div>
+                                                        @if($s4 > 0)
+                                                            <div style="width: {{$s4/sizeof($product->comments)*100}}%;"></div>
+                                                        @endif
                                                     </div>
-                                                    <span class="sum">2</span>
+                                                    <span class="sum">{{$s4}}</span>
                                                 </li>
                                                 <li>
                                                     <div class="rating-stars">
@@ -116,9 +131,11 @@
                                                         <i class="fa fa-star-o"></i>
                                                     </div>
                                                     <div class="rating-progress">
-                                                        <div></div>
+                                                        @if($s3 > 0)
+                                                            <div style="width: {{$s3/sizeof($product->comments)*100}}%;"></div>
+                                                        @endif
                                                     </div>
-                                                    <span class="sum">0</span>
+                                                    <span class="sum">{{$s3}}</span>
                                                 </li>
                                                 <li>
                                                     <div class="rating-stars">
@@ -129,9 +146,11 @@
                                                         <i class="fa fa-star-o"></i>
                                                     </div>
                                                     <div class="rating-progress">
-                                                        <div></div>
+                                                        @if($s2 > 0)
+                                                            <div style="width: {{$s2/sizeof($product->comments)*100}}%;"></div>
+                                                        @endif
                                                     </div>
-                                                    <span class="sum">0</span>
+                                                    <span class="sum">{{$s2}}</span>
                                                 </li>
                                                 <li>
                                                     <div class="rating-stars">
@@ -142,67 +161,42 @@
                                                         <i class="fa fa-star-o"></i>
                                                     </div>
                                                     <div class="rating-progress">
-                                                        <div></div>
+                                                        @if($s1 > 0)
+                                                            <div style="width: {{$s1/sizeof($product->comments)*100}}%;"></div>
+                                                        @endif
                                                     </div>
-                                                    <span class="sum">0</span>
+                                                    <span class="sum">{{$s1}}</span>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <!-- /Rating -->
 
-                                    <!-- Reviews -->
                                     <div class="col-md-6">
                                         <div id="reviews">
                                             <ul class="reviews">
-                                                <li>
-                                                    <div class="review-heading">
-                                                        <h5 class="name">John</h5>
-                                                        <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                        <div class="review-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o empty"></i>
+                                                @if(sizeof($product->comments) === 0)
+                                                <div class="jumbotron text-center" style="height: 100%">
+                                                    <p class="lead">This product still does not have reviews, yet</p>
+                                                    <hr class="my-4">
+                                                    <p>Be first!</p>
+                                                </div>
+                                                @endif
+                                                @foreach($product->comments as $comment)
+                                                    <li>
+                                                        <div class="review-heading">
+                                                            <h5 class="name">{{$comment->user->name}}</h5>
+                                                            <p class="date">{{$comment->created_at}}</p>
+                                                            <div class="review-rating">
+                                                                @for($i = 0; $i < intval($comment->rating); $i++)
+                                                                    <i class="fa fa-star"></i>
+                                                                @endfor
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="review-body">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="review-heading">
-                                                        <h5 class="name">John</h5>
-                                                        <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                        <div class="review-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o empty"></i>
+                                                        <div class="review-body">
+                                                            <p>{{$comment->content}}</p>
                                                         </div>
-                                                    </div>
-                                                    <div class="review-body">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="review-heading">
-                                                        <h5 class="name">John</h5>
-                                                        <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                        <div class="review-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o empty"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="review-body">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                    </div>
-                                                </li>
+                                                    </li>
+                                                @endforeach
                                             </ul>
                                         </div>
                                     </div>
@@ -211,10 +205,10 @@
                                     <!-- Review Form -->
                                     <div class="col-md-3">
                                         <div id="review-form">
-                                            <form class="review-form">
-                                                <input class="input" type="text" placeholder="Your Name">
-                                                <input class="input" type="email" placeholder="Your Email">
-                                                <textarea class="input" placeholder="Your Review"></textarea>
+                                            @auth()
+                                            <form class="review-form" action="/product/{{$product->id}}/comments" method="POST">
+                                                @csrf
+                                                <textarea class="input" name="comment_content" placeholder="Your Review"></textarea>
                                                 <div class="input-rating">
                                                     <span>Your Rating: </span>
                                                     <div class="stars">
@@ -225,8 +219,19 @@
                                                         <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
                                                     </div>
                                                 </div>
-                                                <button class="primary-btn">Submit</button>
+                                                <button type="submit" class="primary-btn">Submit</button>
                                             </form>
+                                            @else
+                                                <div class="jumbotron text-center">
+                                                    <h4 >Hello, customer!</h4>
+                                                    <p class="lead">Please login or register to give review.</p>
+                                                    <hr class="my-4">
+                                                    <p class="lead">
+                                                        <a class="btn btn-danger" href="/login" role="button">Login</a>
+                                                        <a class="btn btn-primary ml-2" href="/register" role="button">Register</a>
+                                                    </p>
+                                                </div>
+                                            @endauth
                                         </div>
                                     </div>
                                     <!-- /Review Form -->
