@@ -177,6 +177,8 @@ return [
 
         Jenssegers\Mongodb\MongodbServiceProvider::class,
 
+        App\Providers\ViewMainCategoriesServiceProvider::class,
+
     ],
 
     /*

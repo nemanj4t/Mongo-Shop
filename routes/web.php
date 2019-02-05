@@ -66,3 +66,11 @@ Route::get('/wishlist', 'UserController@wishList');
 Route::get('/wishes', 'UserController@getWishes');
 Route::post('/wishes', 'UserController@addWishes');
 Route::post('/wishes/remove', 'UserController@deleteWish');
+
+// Search
+Route::get('/search', function(Request $request) {
+   if(isset($request['keyword'])) {
+       $products = App\Product::where('name', 'like', '%'.$request['keyword'].'%')->get();
+       return response()->json($products);
+   }
+});
