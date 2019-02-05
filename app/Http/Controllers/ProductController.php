@@ -54,7 +54,6 @@ class ProductController extends Controller
             $product[$key] = $value;
         }
 
-
         $product->save();
 
         return response()->json($product);
@@ -65,9 +64,12 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->name = $request->name;
         $product->image = $request->image;
-        $product->category = $request->category;
-        $product->details = $request->additionalFields;
-        $product->amount = $request->amount;
+        $product->category_id = $request->category["_id"];
+        $product->stock = $request->stock;
+        $product->price = $request->price;
+        foreach($request->additionalFields as $key => $value) {
+            $product[$key] = $value;
+        }
         $product->save();
 
         return response()->json($product);

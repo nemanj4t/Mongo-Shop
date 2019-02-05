@@ -136,6 +136,16 @@ class Category extends Model
         return array_reverse($children);
     }
 
+    public static function getMainCategories()
+    {
+        $mainCategories = self::whereRaw(['category_id' => ['$exists' => false]])->get();
+        if(count($mainCategories) === 1) {
+            return $mainCategories->first()->children;
+        } else {
+            return $mainCategories;
+        }
+    }
+
     /*public static function allParents(Categoory $node) 
     {
         $collectionOfParent = $node->parent;

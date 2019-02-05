@@ -128,19 +128,7 @@
                     <!-- /LOGO -->
 
                     <!-- SEARCH BAR -->
-                    <div class="col-md-6">
-                        <div class="header-search">
-                            <form>
-                                <select class="input-select">
-                                    <option value="0">All Categories</option>
-                                    <option value="1">Category 01</option>
-                                    <option value="1">Category 02</option>
-                                </select>
-                                <input class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
-                        </div>
-                    </div>
+                    <search-bar></search-bar>
                     <!-- /SEARCH BAR -->
 
                     <!-- ACCOUNT -->
@@ -173,13 +161,15 @@
             <div id="responsive-nav">
                 <!-- NAV -->
                 <ul class="main-nav nav navbar-nav">
-                    <li class="active nav-item nav-link"><a class="navitemlink" href="#">Home</a></li>
-                    <li class="nav-item nav-link"><a class="navitemlink" href="#">Hot Deals</a></li>
-                    <li class="nav-item nav-link"><a class="navitemlink" href="#">Categories</a></li>
-                    <li class="nav-item nav-link"><a class="navitemlink" href="#">Laptops</a></li>
-                    <li class="nav-item nav-link"><a class="navitemlink" href="#">Smartphones</a></li>
-                    <li class="nav-item nav-link"><a class="navitemlink" href="#">Cameras</a></li>
-                    <li class="nav-item nav-link"><a class="navitemlink" href="#">Accessories</a></li>
+                    <li class="active nav-item nav-link"><a class="navitemlink" href="/">Home</a></li>
+                    <li class="nav-item nav-link dropdown">
+                        <a class="navitemlink" id="dropdownMenuLink" data-toggle="dropdown" href="#" >Categories</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @foreach($mainCategories as $c)
+                                <a class="dropdown-item" href="/categories/{{ $c->id }}">{{ $c->name }}</a>
+                            @endforeach
+                        </div>
+                    </li>
                 </ul>
                 <!-- /NAV -->
             </div>
@@ -196,7 +186,7 @@
             <li><a class="nav-link" href="/">Home</a></li>
             @foreach($path as $item)
                 <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
-                @if($category->name == $item['name'])
+                @if($category->id === $item['id'])
                     <li><a class="nav-link font-weight-bold" href="#">{{ $item['name'] }}</a></li>
                 @else
                     <li><a class="nav-link" href="/categories/{{ $item['id'] }}">{{ $item['name'] }}</a></li>

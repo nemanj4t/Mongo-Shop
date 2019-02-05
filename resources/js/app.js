@@ -54,6 +54,7 @@ Vue.component('ProductEdit', require('./components/admin-components/product/Edit
 Vue.component('UserManage', require('./components/admin-components/user/Manage.vue').default);
 Vue.component('card-element', require('./components/checkout-components/CardElement.vue').default);
 Vue.component('payment-form', require('./components/checkout-components/PaymentForm.vue').default);
+Vue.component('search-bar', require('./components/SearchBar').default);
 
 
 
