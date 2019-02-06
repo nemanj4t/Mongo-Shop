@@ -3,16 +3,30 @@
     <nav class="d-none d-md-block sidebar bg-white" style="height: 100%">
         <div class="sidebar-sticky">
 
-            <li class="font-weight-bold">{{ this.currentCategory.name }}</li>
-            <ul class="nav flex-column" v-show="hasChildren">
-                <li v-for="item in this.children">
+            <!--Slider za cenu-->
+            <li class="nav flex-column list-group-item">
+                <h5 class="nav-link font-weight-bold text-center">Cena:</h5>
+                <vue-slider v-on:drag-end="filterByPrice()" v-model="priceFilter"
+                                :max="this.getRoundedMaxPrice" :interval="100" :bgStyle="{'background-color': 'red'}"
+                            :sliderStyle="{'background-color': 'black'}" :processStyle="{'background-color': 'red'}"
+                            :tooltipStyle="{'background-color': 'white', 'color': 'black', 'font-weight': 'bold'}">
+                </vue-slider>
+            </li>
+
+            <!--Kategorija-->
+            <li class="font-weight-bold">{{ this.category.name }}</li>
+
+            <!--Podkategorije-->
+            <ul class="nav flex-column" v-if="typeof this.subCategories !== 'undefined'">
+                <li v-for="item in this.subCategories">
                     <a :href="'/categories/' + item._id">
                         {{ item.name }}
                     </a>
                 </li>
             </ul>
 
-            <ul class="list-group" v-show="!hasChildren" >
+            <!--Filteri-->
+            <ul class="list-group" v-if="typeof this.filters !== 'undefined'" >
                 <!--Za svaki atribut-->
                 <li class="nav flex-column list-group-item" v-for="(filter, fkey) in filters" :key="fkey">
                     <h5 class="nav-link font-weight-bold">{{ fkey }}</h5>
@@ -36,25 +50,36 @@
 </template>
 
 <script>
-    import { mapState, mapMutations } from 'vuex'
+    import { mapState, mapMutations } from 'vuex';
+    import vueSlider from 'vue-slider-component'
 
     export default {
+        components: {
+          vueSlider
+        },
         name: "categories",
-        props: ['category'],
+        props: ['category', 'maxPrice', 'subCategories', 'products', 'filters'],
         data() {
             return {
-                currentCategory: {},
-                hasChildren: false, // v-show na osnovu ovog atributa
-                //products: [],
-                filters: [],
-                children: [],
-                selectedFilters: []
+                selectedFilters: [],
+                priceFilter: 0, // vueSlider
             }
         },
         methods: {
             ...mapMutations([
                 'CHANGE_PRODUCTS_FOR_SHOW'
             ]),
+
+            filterByPrice() {
+                axios.get('/search', {
+                    params: {
+                        'category': this.category._id,
+                        'price' : this.priceFilter
+                    }
+                }).then(response => {
+                   this.loadProductsIntoStore(response.data);
+                });
+            },
 
             loadProductsIntoStore(products) {
                 this.CHANGE_PRODUCTS_FOR_SHOW(products);
@@ -67,20 +92,7 @@
                     event.target.innerHTML = "Show more <i class=\"fas fa-angle-down\"></i>";
                 }
             },
-            getData() {
-                axios.get('/api/categories/data/' + this.currentCategory._id)
-                    .then(response => {
-                        this.currentCategory = response.data.category;
-                        this.hasChildren = response.data.hasOwnProperty('subCategories');
-                        if(this.hasChildren) {
-                            this.children = response.data.subCategories;
-                        } else {
-                            this.filters = response.data.filters;
-                            this.initSelectedFilters();
-                        }
-                        this.loadProductsIntoStore(response.data.products);
-                    });
-            },
+
             initSelectedFilters() {
                 // Za svaku vrednost svakog filtera cuva da li je checked
                 for (let filter in this.filters) {
@@ -109,18 +121,27 @@
                         paramFilters[f] = values;
                     }
                 }
-                axios.get('/api/categories/data/' + this.currentCategory._id, {
+                axios.get('/api/categories/filter/' + this.category._id, {
                         params : paramFilters
                     })
                     .then(response => {
-                        console.log(response.data.products);
                         this.loadProductsIntoStore(response.data.products);
                     });
             }
         },
+
+        computed: {
+          getRoundedMaxPrice() {
+              return Math.ceil(this.maxPrice/100)*100; // round na najblizu narednu 100
+          }
+        },
+
         mounted() {
-            this.currentCategory = this.category;
-            this.getData(); // prebacio sam da se ovde povlace products
+            if(typeof this.filters !== 'undefined') {
+                this.initSelectedFilters();
+            }
+            this.loadProductsIntoStore(this.products);
+            this.priceFilter = this.getRoundedMaxPrice;
         }
     }
 </script>

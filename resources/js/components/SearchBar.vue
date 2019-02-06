@@ -35,7 +35,6 @@
                         'keyword': this.keyword
                     }
                 }).then(response => {
-                    console.log(response.data);
                     this.CHANGE_PRODUCTS_FOR_SHOW(response.data);
                 })
             }
