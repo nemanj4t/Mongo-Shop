@@ -6,18 +6,16 @@
             </div>
             <div class="product-body">
                 <p class="product-category">{{category_name}}</p>
-                <h3 class="product-name"><a href="#">{{product.name}}</a></h3>
-                <h4 class="product-price">{{product.price}} <del class="product-old-price">$990.00</del></h4>
-                <div class="product-rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
+                <h3 class="product-name"><a :href="'/products/' + product._id">{{product.name}}</a></h3>
+                <h4 class="product-price">${{product.price}}</h4>
+                <div v-if="'grade' in product" class="product-rating">
+                    <i v-for="n in Math.round(product.grade)" class="fa fa-star ml-1"></i>
+                </div>
+                <div v-else class="product-rating">
                 </div>
                 <div class="product-btns">
-                    <button @click="addToWishList(product)" class="add-to-wishlist"><i class="fas fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
-                    <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                    <button v-if="user === 'auth'" @click="addToWishList(product)" class="add-to-wishlist"><i class="fas fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+                    <button @click="goToPage" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
                 </div>
             </div>
             <div class="add-to-cart">
@@ -32,7 +30,7 @@
     import { mapState, mapMutations } from 'vuex'
 
     export default {
-        props: ['product', 'category_name'],
+        props: ['product', 'category_name', 'user'],
         computed: {
             getWishes() {
                 return this.$store.getters.returnWishes;
@@ -69,6 +67,10 @@
                         'product_id' : product._id,
                     });
                 }
+            },
+
+            goToPage() {
+                window.location.href='/products/' + this.product._id;
             }
         },
 

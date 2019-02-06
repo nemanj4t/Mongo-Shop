@@ -17,7 +17,11 @@
 
         </div>
         <div class="col-10">
-            <products category_name="{{$category->name}}"></products>
+            @auth
+                <products user="auth" category_name="{{$category->name}}"></products>
+            @else
+                <products user="guest" category_name="{{$category->name}}"></products>
+            @endauth
         </div>
     </div>
 @endsection
