@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Product;
 use App\CartItem;
 use App\User;
+use App\Order;
 
 
 class CheckoutController extends Controller 
@@ -47,17 +48,19 @@ class CheckoutController extends Controller
                         'data3' => 'metadata 3',
                     ],
                 ]);
-                // save this info to your database
-                // SUCCESSFUL
-                //foreach($)
+
                 $request->session()->forget('shoppingCart');
+                $order = new Order;
+                $order->user_id = Auth::user()->_id;
+                $order->products = [];
                 foreach($cartItems as $item) {
+                    $order->products = array_merge($order->products, [$item->product_id => $item->quantity]);
                     Product::reduceStock($item->product_id, $item->quantity);
                     $item->delete();
                 }
+                $order->save();
                 return back()->with('success_message', 'Thank you! Your payment has been accepted.');
             } catch (CardErrorException $e) {
-                // save info to database for failed
                 return back()->withErrors('Error! ' . $e->getMessage());
             }
         }

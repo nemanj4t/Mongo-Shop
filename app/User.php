@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Notifications\NewProduct;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use App\Order;
 
 class User extends Authenticatable
 {
@@ -38,5 +39,10 @@ class User extends Authenticatable
     public function shoppingCart()
     {
         return $this->hasOne('App\ShoppingCart', 'user_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany('App\Order', 'user_id');
     }
 }
