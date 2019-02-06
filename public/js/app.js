@@ -2095,11 +2095,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['product', 'category_name'],
+  props: ['product', 'category_name', 'user'],
   computed: {
     getWishes: function getWishes() {
       return this.$store.getters.returnWishes;
@@ -2132,6 +2130,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           'product_id': product._id
         });
       }
+    },
+    goToPage: function goToPage() {
+      window.location.href = '/products/' + this.product._id;
     }
   }),
   mounted: function mounted() {
@@ -2161,7 +2162,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['category_name'],
+  props: ['category_name', 'user'],
   computed: {
     products: function products() {
       return this.$store.getters.returnProducts;
@@ -39739,36 +39740,55 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("h3", { staticClass: "product-name" }, [
-          _c("a", { attrs: { href: "#" } }, [_vm._v(_vm._s(_vm.product.name))])
+          _c("a", { attrs: { href: "/products/" + _vm.product._id } }, [
+            _vm._v(_vm._s(_vm.product.name))
+          ])
         ]),
         _vm._v(" "),
         _c("h4", { staticClass: "product-price" }, [
-          _vm._v(_vm._s(_vm.product.price) + " "),
-          _c("del", { staticClass: "product-old-price" }, [_vm._v("$990.00")])
+          _vm._v("$" + _vm._s(_vm.product.price))
         ]),
         _vm._v(" "),
-        _vm._m(1),
+        "grade" in _vm.product
+          ? _c(
+              "div",
+              { staticClass: "product-rating" },
+              _vm._l(Math.round(_vm.product.grade), function(n) {
+                return _c("i", { staticClass: "fa fa-star ml-1" })
+              }),
+              0
+            )
+          : _c("div", { staticClass: "product-rating" }),
         _vm._v(" "),
         _c("div", { staticClass: "product-btns" }, [
+          _vm.user === "auth"
+            ? _c(
+                "button",
+                {
+                  staticClass: "add-to-wishlist",
+                  on: {
+                    click: function($event) {
+                      _vm.addToWishList(_vm.product)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-heart" }),
+                  _c("span", { staticClass: "tooltipp" }, [
+                    _vm._v("add to wishlist")
+                  ])
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c(
             "button",
-            {
-              staticClass: "add-to-wishlist",
-              on: {
-                click: function($event) {
-                  _vm.addToWishList(_vm.product)
-                }
-              }
-            },
+            { staticClass: "quick-view", on: { click: _vm.goToPage } },
             [
-              _c("i", { staticClass: "fas fa-heart" }),
-              _c("span", { staticClass: "tooltipp" }, [
-                _vm._v("add to wishlist")
-              ])
+              _c("i", { staticClass: "fa fa-eye" }),
+              _c("span", { staticClass: "tooltipp" }, [_vm._v("quick view")])
             ]
-          ),
-          _vm._v(" "),
-          _vm._m(2)
+          )
         ])
       ]),
       _vm._v(" "),
@@ -39806,31 +39826,6 @@ var staticRenderFns = [
         }
       })
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "product-rating" }, [
-      _c("i", { staticClass: "fa fa-star" }),
-      _vm._v(" "),
-      _c("i", { staticClass: "fa fa-star" }),
-      _vm._v(" "),
-      _c("i", { staticClass: "fa fa-star" }),
-      _vm._v(" "),
-      _c("i", { staticClass: "fa fa-star" }),
-      _vm._v(" "),
-      _c("i", { staticClass: "fa fa-star" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "quick-view" }, [
-      _c("i", { staticClass: "fa fa-eye" }),
-      _c("span", { staticClass: "tooltipp" }, [_vm._v("quick view")])
-    ])
   }
 ]
 render._withStripped = true
@@ -39863,7 +39858,11 @@ var render = function() {
         { staticClass: "col-md-3 mr-4" },
         [
           _c("product", {
-            attrs: { category_name: _vm.category_name, product: product }
+            attrs: {
+              user: _vm.user,
+              category_name: _vm.category_name,
+              product: product
+            }
           })
         ],
         1
