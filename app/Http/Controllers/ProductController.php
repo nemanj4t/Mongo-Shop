@@ -53,9 +53,12 @@ class ProductController extends Controller
         $product->category_id = $request->category["_id"];
         $product->stock = $request->stock;
         $product->price = $request->price;
+        
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
+        $product->product_properties = $request->productFields;
+        $product->recommendation = false;
 
         $product->save();
         $product = Product::orderBy('created_at', 'desc')->first();
@@ -73,9 +76,19 @@ class ProductController extends Controller
         $product->category_id = $request->category["_id"];
         $product->stock = $request->stock;
         $product->price = $request->price;
+
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
+        $product->product_properties = $request->productFields;
+        $product->recommendation = $request->recommendation;
+
+        if ($request->fieldsToDelete != null) {
+            foreach($request->fieldsToDelete as $key => $field) {
+                $product->unset($key);
+            }
+        }
+
         $product->save();
 
         return response()->json($product);
