@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container col-md-8">
+    <div class="container col-md-8 mt-4 mb-4">
             <table class="table table-striped">
                     <thead class="thead-dark">
                       <tr>
@@ -15,8 +15,8 @@
                         @foreach($orders as $order)
                             <tr>
                                 <th scope="row">{{ $order->id }} </th>
-                                <td>{{ $order->price }}</td>
                                 <td>{{ $order->items }}</td>
+                                <td>{{ $order->price }}</td>
                                 <td>{{ $order->created_at }}</td>
                             </tr>
                         @endforeach

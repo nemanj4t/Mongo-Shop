@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="product">
-            <div class="product-img">
+            <div class="product-img text-center">
                 <img :src="product.image" alt="" />
             </div>
             <div class="product-body">
                 <p class="product-category">{{category_name}}</p>
-                <h3 class="product-name"><a :href="'/products/' + product._id">{{product.name}}</a></h3>
+                <h3 class="product-name" style="height: 50px"><a :href="'/products/' + product._id">{{product.name}}</a></h3>
                 <h4 class="product-price">${{product.price}}</h4>
                 <div v-if="'grade' in product" class="product-rating">
                     <i v-for="n in Math.round(product.grade)" class="fa fa-star ml-1"></i>

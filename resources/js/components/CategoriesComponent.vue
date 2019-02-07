@@ -25,14 +25,11 @@
                 </div> -->
             </li>
 
-            <!--Kategorija-->
-            <li class="font-weight-bold">{{ this.category.name }}</li>
-
             <!--Podkategorije-->
             <ul class="nav flex-column" v-if="typeof this.subCategories !== 'undefined'">
-                <li v-for="item in this.subCategories">
-                    <a :href="'/categories/' + item._id">
-                        {{ item.name }}
+                <li v-for="item in this.subCategories" class="mb-4 mt-4 ml-4">
+                    <a class="navitemlink" :href="'/categories/' + item._id">
+                        <strong>{{ item.name }}</strong>
                     </a>
                 </li>
             </ul>
@@ -92,7 +89,7 @@
                     }
                 }).then(response => {
                    this.loadProductsIntoStore(response.data);
-                }); 
+                });
                 } else {
                     this.getFilteredData('price', this.priceFilter);
                 }
@@ -128,7 +125,7 @@
                 if(filter !== 'price') {
                     // Ako je neki od checkboxovanih filtera firovao event prvo se promeni vrednost
                     this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
-                } 
+                }
                 // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
                 for(let f in this.selectedFilters) {
                     let values = [];
