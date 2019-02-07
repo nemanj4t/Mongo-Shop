@@ -163,12 +163,20 @@
             <li><a class="nav-link navitemlink" href="/">Home</a></li>
             @foreach($path as $item)
                 <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
-                @if($category->id === $item['id'])
-                    <li><a class="nav-link font-weight-bold navitemlink" href="#">{{ $item['name'] }}</a></li>
-                @else
-                    <li><a class="nav-link navitemlink" href="/categories/{{ $item['id'] }}">{{ $item['name'] }}</a></li>
-                @endif
+                <li><a class="nav-link navitemlink" href="/categories/{{ $item['id'] }}">{{ $item['name'] }}</a></li>
             @endforeach
+            
+            @if(isset($product))
+                {{-- Ako je show za proizvod --}}
+                <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
+                <li><a class="nav-link navitemlink" href="/categories/{{ $product->category->id }}">{{ $product->category->name }}</a></li>
+                <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
+                <li><a class="nav-link font-weight-bold navitemlink" href="#">{{ $product->name }}</a></li>
+            @elseif(isset($category))
+                {{-- Ako je show za kategoriju --}}
+                <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
+                <li><a class="nav-link font-weight-bold navitemlink" href="#">{{ $category->name }}</a></li>         
+            @endif
         </ul>
     </nav>
     @endif

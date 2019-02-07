@@ -39588,14 +39588,21 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "product" }, [
     _c("div", { staticClass: "row" }, [
-      _vm._m(0),
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("img", {
+          staticStyle: { width: "100%" },
+          attrs: { src: _vm.cartItem.product.image, alt: "" }
+        })
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-6 px-3" }, [
         _c("div", { staticClass: "card-block px-3" }, [
           _c("h3", { staticClass: "cart-item-name card-title" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _vm._v(_vm._s(_vm.cartItem.product.name))
-            ])
+            _c(
+              "a",
+              { attrs: { href: "/products/" + _vm.cartItem.product._id } },
+              [_vm._v(_vm._s(_vm.cartItem.product.name))]
+            )
           ]),
           _vm._v(" "),
           _c("h4", { staticClass: "cart-item-price" }, [
@@ -39669,7 +39676,7 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm._m(1)
+            _vm._m(0)
           ])
         ]),
         _vm._v(" "),
@@ -39698,21 +39705,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4" }, [
-      _c("img", {
-        staticStyle: { width: "100%" },
-        attrs: {
-          src:
-            "http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg",
-          alt: ""
-        }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -40437,7 +40429,9 @@ var render = function() {
           { staticClass: "cart-list p-2" },
           _vm._l(_vm.shoppingCart.products, function(product) {
             return _c("div", { staticClass: "product-widget" }, [
-              _vm._m(0, true),
+              _c("div", { staticClass: "product-img" }, [
+                _c("img", { attrs: { src: product.product.image, alt: "" } })
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "product-body" }, [
                 _c("h3", { staticClass: "product-name" }, [
@@ -40508,26 +40502,12 @@ var render = function() {
           _c("h5", [_vm._v("SUBTOTAL: $" + _vm._s(_vm.shoppingCart.price))])
         ]),
         _vm._v(" "),
-        _vm._m(1)
+        _vm._m(0)
       ]
     )
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "product-img" }, [
-      _c("img", {
-        attrs: {
-          src:
-            "http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg",
-          alt: ""
-        }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -59992,8 +59972,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

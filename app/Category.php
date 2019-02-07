@@ -30,8 +30,9 @@ class Category extends Model
 
     public static function getFullPath(Category $category)
     {
+        // Vraca sve putanju do te kategorije(ne vraca samu sebe)
         $path = [];
-        $current = $category;
+        $current = $category->parent;
         while($current != null) {
             array_unshift($path, ['name' => $current->name, 'id' => $current->id]);
             $current = $current->parent;
