@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\NewProduct;
 use App\User;
+use App\Category;
 use App\Product;
 use Notification;
 
@@ -41,8 +42,10 @@ class ProductController extends Controller
                 break;
             }
         }
+        
+        $path = Category::getFullPath(Category::find($product->category->id));
 
-        return view('products.show', compact('product', 's1', 's2', 's3', 's4', 's5', 'attr'));
+        return view('products.show', compact('path', 'product', 's1', 's2', 's3', 's4', 's5', 'attr'));
     }
 
     public function store(Request $request)

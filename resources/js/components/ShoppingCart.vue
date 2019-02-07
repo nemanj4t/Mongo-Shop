@@ -9,7 +9,7 @@
             <div class="cart-list p-2">
                 <div v-for="product in shoppingCart.products" class="product-widget">
                     <div class="product-img">
-                        <img src="http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg" alt="">
+                        <img :src="product.product.image" alt="">
                     </div>
                     <div class="product-body">
                         <h3 class="product-name"><a href="#">{{product.product.name}}</a></h3>

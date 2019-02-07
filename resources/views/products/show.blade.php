@@ -64,7 +64,7 @@
                             @if(!is_array($value))
                                 @if($key != '_id' && $key != 'category_id' && $key != 'image' && $key != 'recommendation' && $key != 'created_at' && $key != 'updated_at')
                                 <tr>
-                                    <td>{{$key}}</td>
+                                    <td>{{ ucfirst($key) }}</td>
                                     <td>{{$value}}</td>
                                 </tr>
                                 @endif
