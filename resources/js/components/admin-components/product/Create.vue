@@ -29,10 +29,23 @@
                 </div>
                 <div class="form-group">
                     <label>Additional fields:</label>
+                    <button v-if="!this.addFieldButton" class="btn btn-secondary" @click='changeButtonState'>+</button>
+                    <div class="row">
+                        <button v-if="this.addFieldButton" class="btn btn-secondary" @click="addProductField">Save field name</button>
+                        <div v-if="this.addFieldButton" class="col md-4">
+                            <input v-if="this.addFieldButton" v-model="productFieldName" class="form-control" placeholder="Product field name">
+                        </div>
+                    </div>
+                    
                     <div class="row" v-for="(field, index) in request.additionalFields">
-                        <label>{{index}}:</label>
+                        <label class="col-md-12 mt-2">{{index}}:</label>
                         <input class="col-md-12 form-control" v-model="request.additionalFields[index]"/>
-                    </div>            
+                    </div>
+                    <div class="row" v-for="(field, index) in request.productFields">
+                        <label class="col-md-12 mt-2">{{index}}:</label>                         
+                        <input class="col-md-11 form-control" v-model="request.productFields[index]"/>                         
+                        <button class="col-md-1 btn btn-sm btn-danger" :value="index" @click="deleteField(index)">X</button>                      
+                    </div>               
                 </div>
                 <button type="submit" class="btn btn-primary" @click="createProduct">Submit</button>
             </div>
@@ -45,6 +58,8 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            addFieldButton: "",
+            productFieldName: "",
             categories: "",
             request: {
                 name: "",
@@ -52,7 +67,8 @@ export default {
                 category: "",
                 stock: "",
                 price: "",
-                additionalFields : {}
+                additionalFields : {},
+                productFields: {}
             }
         }
     },
@@ -96,12 +112,35 @@ export default {
                 this.$router.push('/products');
             })
             .catch(error => console.log(error));
-        }
+        },
+
+        changeButtonState() {
+            this.addFieldButton = !this.addFieldButton;
+        },
+
+        addProductField() {
+            if (this.request.productFieldName != null || this.request.productFieldName != '') {
+                this.request.productFields[this.productFieldName] = "";
+            }
+            this.changeButtonState();
+            this.productFieldName = "";
+            console.log(this.request.productFields);
+        },
+
+        deleteField(index) {
+            //delete this.request.productFields[index];
+            Vue.delete(this.request.productFields, index);
+            console.log(this.request.productFields);
+        },
     },
 
     mounted() {
         axios.get('/api/categories')
-            .then(response => {this.categories = response.data.categories; console.log(this.categories);})
+            .then(response => 
+            {
+                this.categories = response.data.categories;
+                this.addFieldButton = false;
+            })
             .catch(error => console.log(error));
     }
 }

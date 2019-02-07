@@ -65,7 +65,6 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->category_id = $request->category_id;
         $category->details = $request->additionalFields;
-        $category->amount = 0;
         $category->save();
         return response()->json($category);
     }
