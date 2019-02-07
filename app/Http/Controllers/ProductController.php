@@ -15,7 +15,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-
+        $attr = $product->getAttributes();
         if(!$product) {
             return abort(404);
         }
@@ -42,7 +42,7 @@ class ProductController extends Controller
             }
         }
 
-        return view('products.show', compact('product', 's1', 's2', 's3', 's4', 's5'));
+        return view('products.show', compact('product', 's1', 's2', 's3', 's4', 's5', 'attr'));
     }
 
     public function store(Request $request)
