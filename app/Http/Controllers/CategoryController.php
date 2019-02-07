@@ -63,7 +63,9 @@ class CategoryController extends Controller
     {
         $category = new Category;
         $category->name = $request->name;
-        $category->category_id = $request->category_id;
+        if ($request->category_id != null) {
+            $category->category_id = $request->category_id;
+        }
         $category->details = $request->additionalFields;
         $category->save();
         return response()->json($category);
@@ -73,7 +75,9 @@ class CategoryController extends Controller
     {
         $category = Category::find($request->id);
         $category->name = $request->name;
-        $category->category_id = $request->category_id;
+        if ($request->category_id != null) {
+            $category->category_id = $request->category_id;
+        }
         $category->details = $request->additionalFields;
         $category->save();
         return response()->json($category);

@@ -42,7 +42,7 @@ class ProductController extends Controller
                 break;
             }
         }
-        
+
         $path = Category::getFullPath(Category::find($product->category->id));
 
         return view('products.show', compact('path', 'product', 's1', 's2', 's3', 's4', 's5', 'attr'));
@@ -76,10 +76,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->image = $request->image;
         $product->category_id = $request->category["_id"];
-
         $product->stock = intval($request->stock);
         $product->price = floatval($request->price);
-
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
@@ -133,7 +131,7 @@ class ProductController extends Controller
     public function getGoodPrice()
     {
         $products = [];
-        $productsmongo = Product::where('grade', '>=', 2.5)->take(8)->get();
+        $productsmongo = Product::where('grade', '>=', 2.5)->orderBy('grade', 'desc')->take(8)->get();
 
         foreach ($productsmongo as $product) {
             $product->category_name = $product->category->name;

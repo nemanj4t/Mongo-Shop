@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-4 mb-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Admin Login') }}</div>
+                    <div class="card-header bg-dark text-white">{{ __('Admin Login') }}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('admin.login') }}">
@@ -51,7 +51,7 @@
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-danger">
                                         {{ __('Login') }}
                                     </button>
 

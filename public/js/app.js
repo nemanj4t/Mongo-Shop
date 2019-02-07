@@ -42658,7 +42658,12 @@ var render = function() {
         _vm._v(" "),
         _vm._l(_vm.shoppingCart.products, function(product) {
           return _c("div", { staticClass: "product-widget" }, [
-            _vm._m(3, true),
+            _c("div", [
+              _c("img", {
+                staticClass: "product-img-large",
+                attrs: { src: product.product.image, alt: "" }
+              })
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "product-body" }, [
               _c("p", { staticClass: "product-name" }, [
@@ -42674,7 +42679,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(4, true)
+            _vm._m(3, true)
           ])
         })
       ],
@@ -42774,21 +42779,6 @@ var staticRenderFns = [
           })
         ])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("img", {
-        staticClass: "product-img-large",
-        attrs: {
-          src:
-            "http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg",
-          alt: ""
-        }
-      })
     ])
   },
   function() {

@@ -70,10 +70,12 @@
                                 @endif
                             @else
                                 @foreach($value as $key => $attribute)
-                                    <tr>
-                                        <td>{{$key}}</td>
-                                        <td>{{$attribute}}</td>
-                                    </tr>
+                                    @if(!($value != 'user_ids'))
+                                        <tr>
+                                            <td>{{$key}}</td>
+                                            <td>{{$attribute}}</td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             @endif
                         @endforeach
