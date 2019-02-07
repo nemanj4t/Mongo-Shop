@@ -21,7 +21,7 @@
                         <div class="row justify-content-start">
                             <div class="cart-item-btns">
                                 <button @click="addToWishList(cartItem.product)" class="add-to-wishlist"><i class="fas fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
-                                <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                                <button @click="goToPage" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
                             </div>
                         </div>
 
@@ -42,7 +42,11 @@
     export default {
         props: ['cartItem'],
         computed: {
+            getWishes() {
+                return this.$store.getters.returnWishes;
+            }
         },
+        
         methods: {
             ...mapMutations([
                 'ADD_PRODUCT_TO_CART',
@@ -89,6 +93,10 @@
                         'product_id' : product._id,
                     });
                 }
+            },
+
+            goToPage() {
+                window.location.href='/products/' + this.cartItem.product._id;
             }
         },
 

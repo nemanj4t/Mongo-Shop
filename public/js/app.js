@@ -1808,7 +1808,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['cartItem'],
-  computed: {},
+  computed: {
+    getWishes: function getWishes() {
+      return this.$store.getters.returnWishes;
+    }
+  },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(['ADD_PRODUCT_TO_CART', 'REMOVE_PRODUCT_FROM_CART', 'DECREMENT_PRODUCT_QUANTITY_IN_CART', 'ADD_PRODUCT_TO_WISH_LIST']), {
     addProductToCart: function addProductToCart(cartItem) {
       var _this = this;
@@ -1849,6 +1853,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           'product_id': product._id
         });
       }
+    },
+    goToPage: function goToPage() {
+      window.location.href = '/products/' + this.cartItem.product._id;
     }
   }),
   mounted: function mounted() {
@@ -2551,6 +2558,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39673,7 +39685,14 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm._m(0)
+            _c(
+              "button",
+              { staticClass: "quick-view", on: { click: _vm.goToPage } },
+              [
+                _c("i", { staticClass: "fa fa-eye" }),
+                _c("span", { staticClass: "tooltipp" }, [_vm._v("quick view")])
+              ]
+            )
           ])
         ]),
         _vm._v(" "),
@@ -39701,17 +39720,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "quick-view" }, [
-      _c("i", { staticClass: "fa fa-eye" }),
-      _c("span", { staticClass: "tooltipp" }, [_vm._v("quick view")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -40584,46 +40593,43 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col-md-8" },
-        _vm._l(_vm.getShoppingCart.products, function(cartItem) {
-          return _c("cart-item", {
-            key: cartItem._id,
-            attrs: { cartItem: cartItem }
-          })
-        }),
-        1
-      ),
-      _vm._v(" "),
-      _vm.getShoppingCart.products.length !== 0
-        ? _c(
-            "div",
-            { staticClass: "col-md-4", staticStyle: { "margin-top": "20px" } },
-            [
-              _c("div", { staticClass: "container" }, [
-                _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "cart-summary" }, [
-                    _c("p", [
-                      _vm._v(
-                        _vm._s(_vm.getShoppingCart.items) + " Item(s) selected"
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("h5", [
-                      _vm._v("SUBTOTAL: $" + _vm._s(_vm.getShoppingCart.price))
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(0)
+  return _c("div", { staticClass: "row justify-content-center" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "col-md-7", attrs: { "offset-md-1": "" } },
+      _vm._l(_vm.getShoppingCart.products, function(cartItem) {
+        return _c("cart-item", {
+          key: cartItem._id,
+          staticStyle: { "margin-top": "0px" },
+          attrs: { cartItem: cartItem }
+        })
+      }),
+      1
+    ),
+    _vm._v(" "),
+    _vm.getShoppingCart.products.length !== 0
+      ? _c("div", { staticClass: "col-md-3" }, [
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "cart-summary text-center" }, [
+                _c("p", { staticClass: "font-weight-bold" }, [
+                  _vm._v(
+                    _vm._s(_vm.getShoppingCart.items) + " Item(s) selected"
+                  )
+                ]),
+                _vm._v(" "),
+                _c("h5", { staticClass: "font-weight-bolder" }, [
+                  _vm._v("SUBTOTAL: $" + _vm._s(_vm.getShoppingCart.price))
                 ])
-              ])
-            ]
-          )
-        : _vm._e()
-    ]),
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          ])
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _vm.getShoppingCart.products.length === 0
       ? _c("div", { staticClass: "jumbotron container text-center" }, [
@@ -40637,7 +40643,7 @@ var render = function() {
           _vm._v(" "),
           _c("hr", { staticClass: "my-4" }),
           _vm._v(" "),
-          _vm._m(1)
+          _vm._m(2)
         ])
       : _vm._e()
   ])
@@ -40647,13 +40653,38 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-12" }, [
+      _c(
+        "div",
+        { staticStyle: { "margin-top": "0px" }, attrs: { id: "product-tab" } },
+        [
+          _c("ul", { staticClass: "tab-nav" }, [
+            _c("li", [
+              _c(
+                "a",
+                {
+                  staticClass: "navitemlink",
+                  staticStyle: { border: "solid 1px", padding: "1rem" }
+                },
+                [_vm._v("Shopping Cart")]
+              )
+            ])
+          ])
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", [
       _c(
-        "button",
+        "a",
         {
           staticClass: "btn btn-danger",
           staticStyle: { width: "100%" },
-          attrs: { href: "#" }
+          attrs: { href: "/checkout" }
         },
         [
           _vm._v("Checkout  "),
