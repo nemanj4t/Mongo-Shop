@@ -10,7 +10,7 @@
                 <div class="col-md-5 col-md-push-2">
                     <div id="product-main-img">
                         <div class="product-preview">
-                            <img src="http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg" alt="">
+                            <img src="{{$product->image}}" alt="">
                         </div>
                     </div>
                 </div>
@@ -59,6 +59,25 @@
                             <li><a class="navitemlink" href="/categories/{{$product->category->id}}">{{$product->category->name}}</a></li>
                         </ul>
                     </div>
+                    <table class="table">
+                        @foreach($attr as $key => $value)
+                            @if(!is_array($value))
+                                @if($key != '_id' && $key != 'category_id' && $key != 'image' && $key != 'recommendation' && $key != 'created_at' && $key != 'updated_at')
+                                <tr>
+                                    <td>{{ ucfirst($key) }}</td>
+                                    <td>{{$value}}</td>
+                                </tr>
+                                @endif
+                            @else
+                                @foreach($value as $key => $attribute)
+                                    <tr>
+                                        <td>{{$key}}</td>
+                                        <td>{{$attribute}}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        @endforeach
+                    </table>
                 </div>
                 <!-- /Product details -->
 
