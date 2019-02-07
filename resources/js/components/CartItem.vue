@@ -2,12 +2,12 @@
         <div class="product">
             <div class="row">
                     <div class="col-md-4">
-                        <img style="width:100%;" src="http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg" alt="" />
+                        <img style="width:100%;" :src="cartItem.product.image" alt="" />
                     </div>
 
                     <div class="col-md-6 px-3">
                         <div class="card-block px-3">
-                            <h3 class="cart-item-name card-title"><a href="#">{{cartItem.product.name}}</a></h3>
+                            <h3 class="cart-item-name card-title"><a :href="'/products/' + cartItem.product._id">{{cartItem.product.name}}</a></h3>
                             <h4 class="cart-item-price"><span style="color:black;">Price:</span> {{cartItem.product.price}} $</h4>
                             <h4 class="cart-item-price"><span style="color:black;">Quantity:</span> {{cartItem.quantity}}</h4>
                             <div class="cart-item-btns">

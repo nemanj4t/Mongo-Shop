@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <shopping-cart-index></shopping-cart-index>
+    <div class="mt-4">
+        <shopping-cart-index></shopping-cart-index>
+    </div>
 @endsection
