@@ -2,7 +2,7 @@
     <div>
         <card class='stripe-card'
           :class='{ complete }'
-          stripe='pk_test_aAJMy7Q6NBT7c4dBX2B5ebEY'
+          stripe='pk_test_uxiEItQYVoIPt2muxy7IbGAT'
           :options='stripeOptions'
           @change='change($event)'
         />

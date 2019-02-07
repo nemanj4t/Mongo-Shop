@@ -59,6 +59,14 @@
                                         @csrf
                                     </form>
                                 @else
+                                    <a class="dropdown-item" href="/shoppingcart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        {{ __('Shopping Cart') }}
+                                    </a>
+                                    <a class="dropdown-item" href="/orders">
+                                            <i class="far fa-list-alt"></i>
+                                            {{ __('Orders') }}
+                                        </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
@@ -130,7 +138,7 @@
             <div id="responsive-nav">
                 <!-- NAV -->
                 <ul class="main-nav nav navbar-nav">
-                    <li class="active nav-item nav-link"><a class="navitemlink" href="/">Home</a></li>
+                    <li class="nav-item nav-link"><a class="navitemlink" href="/">Home</a></li>
                     <li class="nav-item nav-link dropdown">
                         <a class="navitemlink" id="dropdownMenuLink" data-toggle="dropdown" href="#" >Categories</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -152,13 +160,13 @@
     @if(isset($path))
     <nav class="navbar-expand-md navbar-laravel border-bottom">
         <ul class="nav navbar-nav">
-            <li><a class="nav-link" href="/">Home</a></li>
+            <li><a class="nav-link navitemlink" href="/">Home</a></li>
             @foreach($path as $item)
                 <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
                 @if($category->id === $item['id'])
-                    <li><a class="nav-link font-weight-bold" href="#">{{ $item['name'] }}</a></li>
+                    <li><a class="nav-link font-weight-bold navitemlink" href="#">{{ $item['name'] }}</a></li>
                 @else
-                    <li><a class="nav-link" href="/categories/{{ $item['id'] }}">{{ $item['name'] }}</a></li>
+                    <li><a class="nav-link navitemlink" href="/categories/{{ $item['id'] }}">{{ $item['name'] }}</a></li>
                 @endif
             @endforeach
         </ul>
@@ -168,28 +176,6 @@
     <main>
         @yield('content')
     </main>
-
-    <!-- NEWSLETTER -->
-    <div id="newsletter" class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="newsletter">
-                        <p>Sign Up for the <strong>NEWSLETTER</strong></p>
-                        <form>
-                            <input class="input" type="email" placeholder="Enter Your Email">
-                            <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /NEWSLETTER -->
 
     <!-- FOOTER -->
     <footer id="footer">

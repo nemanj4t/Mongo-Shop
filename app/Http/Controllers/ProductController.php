@@ -15,7 +15,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-
+        $attr = $product->getAttributes();
         if(!$product) {
             return abort(404);
         }
@@ -42,7 +42,7 @@ class ProductController extends Controller
             }
         }
 
-        return view('products.show', compact('product', 's1', 's2', 's3', 's4', 's5'));
+        return view('products.show', compact('product', 's1', 's2', 's3', 's4', 's5', 'attr'));
     }
 
     public function store(Request $request)
@@ -51,9 +51,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->image = $request->image;
         $product->category_id = $request->category["_id"];
-        $product->stock = $request->stock;
-        $product->price = (double) $request->price;
-        
+        $product->stock = intval($request->stock);
+        $product->price = floatval($request->price);
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
@@ -74,9 +73,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->image = $request->image;
         $product->category_id = $request->category["_id"];
-        $product->stock = $request->stock;
-        $product->price = (double) $request->price;
-
+        $product->stock = intval($request->stock);
+        $product->price = floatval($request->price);
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
@@ -116,4 +114,40 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
+    public function getRecommendations()
+    {
+        $products = [];
+        $productsmongo = Product::where('recommendation', true)->take(8)->get();
+        foreach ($productsmongo as $product) {
+            $product->category_name = $product->category->name;
+            $products[] = $product;
+        }
+        return $products;
+    }
+
+    public function getGoodPrice()
+    {
+        $products = [];
+        $productsmongo = Product::where('grade', '>=', 2.5)->take(8)->get();
+
+        foreach ($productsmongo as $product) {
+            $product->category_name = $product->category->name;
+            $products[] = $product;
+        }
+
+        return $products;
+    }
+
+    public function getNewProducts()
+    {
+        $products = [];
+        $productsmongo = Product::orderBy('created_at', 'desc')->take(8)->get();
+
+        foreach ($productsmongo as $product) {
+            $product->category_name = $product->category->name;
+            $products[] = $product;
+        }
+
+        return $products;
+    }
 }
