@@ -40592,6 +40592,7 @@ var render = function() {
         _vm._l(_vm.getShoppingCart.products, function(cartItem) {
           return _c("cart-item", {
             key: cartItem._id,
+            staticClass: "p-4",
             attrs: { cartItem: cartItem }
           })
         }),
@@ -40605,7 +40606,7 @@ var render = function() {
             [
               _c("div", { staticClass: "container" }, [
                 _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "cart-summary" }, [
+                  _c("div", { staticClass: "cart-summary p-4" }, [
                     _c("p", [
                       _vm._v(
                         _vm._s(_vm.getShoppingCart.items) + " Item(s) selected"
@@ -42627,7 +42628,12 @@ var render = function() {
         _vm._v(" "),
         _vm._l(_vm.shoppingCart.products, function(product) {
           return _c("div", { staticClass: "product-widget" }, [
-            _vm._m(3, true),
+            _c("div", [
+              _c("img", {
+                staticClass: "product-img-large",
+                attrs: { src: product.product.image, alt: "" }
+              })
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "product-body" }, [
               _c("p", { staticClass: "product-name" }, [
@@ -42643,7 +42649,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(4, true)
+            _vm._m(3, true)
           ])
         })
       ],
@@ -42743,21 +42749,6 @@ var staticRenderFns = [
           })
         ])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("img", {
-        staticClass: "product-img-large",
-        attrs: {
-          src:
-            "http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg",
-          alt: ""
-        }
-      })
     ])
   },
   function() {
@@ -59970,8 +59961,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\wamp64\www\mongo-shop\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\wamp64\www\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

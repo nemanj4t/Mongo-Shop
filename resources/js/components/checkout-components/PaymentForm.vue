@@ -83,7 +83,7 @@
             </div>
             <div v-for="product in shoppingCart.products" class="product-widget">
                 <div>
-                    <img class="product-img-large" src="http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg" alt="">
+                    <img class="product-img-large" :src="product.product.image" alt="">
                 </div>
                 <div class="product-body">
                     <p class="product-name"><a href="#">{{product.product.name}} - {{product.quantity}} x ${{product.product.price}}</a></p>
@@ -137,7 +137,7 @@
       computed: {
             shoppingCart() {
                 console.log(this.$store.getters.returnShoppingCart);
-                return this.$store.getters.returnShoppingCart;             
+                return this.$store.getters.returnShoppingCart;
             }
         },
 
