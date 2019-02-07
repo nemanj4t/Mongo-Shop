@@ -1868,8 +1868,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vue_slider_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-slider-component */ "./node_modules/vue-slider-component/dist/index.js");
-/* harmony import */ var vue_slider_component__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_slider_component__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue_slider_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-slider-component */ "./node_modules/vue-slider-component/dist/index.js");
+/* harmony import */ var vue_slider_component__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_slider_component__WEBPACK_IMPORTED_MODULE_1__);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1925,11 +1925,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    vueSlider: vue_slider_component__WEBPACK_IMPORTED_MODULE_2___default.a
+    vueSlider: vue_slider_component__WEBPACK_IMPORTED_MODULE_1___default.a
   },
   name: "categories",
   props: ['category', 'maxPrice', 'subCategories', 'products', 'filters'],
@@ -1944,14 +1956,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     filterByPrice: function filterByPrice() {
       var _this = this;
 
-      axios.get('/search', {
-        params: {
-          'category': this.category._id,
-          'price': this.priceFilter
-        }
-      }).then(function (response) {
-        _this.loadProductsIntoStore(response.data);
-      });
+      if (typeof this.filters === 'undefined') {
+        // ako nema drugih filtera
+        axios.get('/search', {
+          params: {
+            'category': this.category._id,
+            'price': this.priceFilter
+          }
+        }).then(function (response) {
+          _this.loadProductsIntoStore(response.data);
+        });
+      } else {
+        this.getFilteredData('price', this.priceFilter);
+      }
     },
     loadProductsIntoStore: function loadProductsIntoStore(products) {
       this.CHANGE_PRODUCTS_FOR_SHOW(products);
@@ -1980,8 +1997,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getFilteredData: function getFilteredData(filter, value) {
       var _this2 = this;
 
-      this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
-      var paramFilters = {}; // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
+      var paramFilters = {};
+
+      if (filter !== 'price') {
+        // Ako je neki od checkboxovanih filtera firovao event prvo se promeni vrednost
+        this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
+      } // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
+
 
       for (var f in this.selectedFilters) {
         var values = [];
@@ -1995,8 +2017,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (values.length !== 0) {
           paramFilters[f] = values;
         }
-      }
+      } // price filter se dodaje uvek
 
+
+      paramFilters['price'] = this.priceFilter;
       axios.get('/api/categories/filter/' + this.category._id, {
         params: paramFilters
       }).then(function (response) {
@@ -39516,13 +39540,14 @@ var render = function() {
           { staticClass: "nav flex-column list-group-item" },
           [
             _c("h5", { staticClass: "nav-link font-weight-bold text-center" }, [
-              _vm._v("Cena:")
+              _vm._v("Price:")
             ]),
             _vm._v(" "),
             _c("vue-slider", {
               attrs: {
+                width: 150,
                 max: this.getRoundedMaxPrice,
-                interval: 100,
+                interval: 10,
                 bgStyle: { "background-color": "red" },
                 sliderStyle: { "background-color": "black" },
                 processStyle: { "background-color": "red" },
@@ -41824,7 +41849,7 @@ var render = function() {
         staticClass: "stripe-card",
         class: { complete: _vm.complete },
         attrs: {
-          stripe: "pk_test_aAJMy7Q6NBT7c4dBX2B5ebEY",
+          stripe: "pk_test_uxiEItQYVoIPt2muxy7IbGAT",
           options: _vm.stripeOptions
         },
         on: {
@@ -59095,8 +59120,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

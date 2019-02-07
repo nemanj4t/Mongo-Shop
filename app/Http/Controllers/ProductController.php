@@ -51,8 +51,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->image = $request->image;
         $product->category_id = $request->category["_id"];
-        $product->stock = $request->stock;
-        $product->price = $request->price;
+        $product->stock = intval($request->stock);
+        $product->price = floatval($request->price);
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
@@ -71,8 +71,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->image = $request->image;
         $product->category_id = $request->category["_id"];
-        $product->stock = $request->stock;
-        $product->price = $request->price;
+        $product->stock = intval($request->stock);
+        $product->price = floatval($request->price);
         foreach($request->additionalFields as $key => $value) {
             $product[$key] = $value;
         }
