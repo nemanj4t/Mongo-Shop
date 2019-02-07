@@ -20,6 +20,13 @@
                     <input class="form-control" name="image" placeholder="Image" v-model = "request.image">
                 </div>
                 <div class="form-group">
+                    <label>Recommendation:</label>
+                    <select class="form-control" name="recommendation" v-model = "request.recommendation">
+                        <option :value='true'>True</option>
+                        <option :value='false'>False</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Stock:</label>
                     <input class="form-control" name="stock" placeholder="Products on stock" v-model = "request.stock">
                 </div>
@@ -29,10 +36,22 @@
                 </div>
                 <div class="form-group">
                     <label>Additional fields:</label>
+                    <button v-if="!this.addFieldButton" class="btn btn-secondary" @click='changeButtonState'>+</button>
+                    <div class="row">
+                        <button v-if="this.addFieldButton" class="btn btn-secondary" @click="addProductField">Save field name</button>
+                        <div v-if="this.addFieldButton" class="col md-4">
+                            <input v-if="this.addFieldButton" v-model="productFieldName" class="form-control" placeholder="Product field name">
+                        </div>
+                    </div>
                     <div class="row" v-for="(field, index) in request.additionalFields">
-                        <label>{{index}}:</label>
+                        <label class="col-md-12 mt-2">{{index}}:</label>
                         <input class="col-md-12 form-control" v-model="request.additionalFields[index]"/>
-                    </div>            
+                    </div>
+                    <div class="row" v-for="(field, index) in request.productFields">
+                        <label class="col-md-12 mt-2">{{index}}:</label>                         
+                        <input class="col-md-11 form-control" v-model="request.productFields[index]"/>                         
+                        <button class="col-md-1 btn btn-sm btn-danger" :value="index" @click="deleteField(index)">X</button>                      
+                    </div>          
                 </div>
                 <button type="submit" class="btn btn-primary" @click="editProduct">Submit</button>
             </div>
@@ -45,7 +64,9 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            updated_at: "",
+            addFieldButton: "",
+            productFieldName: "",
+            product_properties: "",
             categories: "",
             original: {
                 category: "",
@@ -57,7 +78,10 @@ export default {
                 category: "",
                 stock: "",
                 price: "",
-                additionalFields : {}
+                recommendation: "",
+                fieldsToDelete: null,
+                additionalFields : {},
+                productFields: {}
             }
         }
     },
@@ -99,9 +123,31 @@ export default {
         },
 
         editProduct() {
+            if (this.original.category != this.request.category) {
+                this.request.fieldsToDelete = this.original.additionalFields;
+            }
             axios.put('/products/' + this.$route.params.id, this.request)
             .then(response => {console.log(response); this.$router.push('/products');})
             .catch(error => console.log(error));
+        },
+
+        changeButtonState() {
+            this.addFieldButton = !this.addFieldButton;
+        },
+
+        addProductField() {
+            if (this.request.productFieldName != null || this.request.productFieldName != '') {
+                this.request.productFields[this.productFieldName] = "";
+            }
+            this.changeButtonState();
+            this.productFieldName = "";
+            console.log(this.request.productFields);
+        },
+
+        deleteField(index) {
+            //delete this.request.productFields[index];
+            Vue.delete(this.request.productFields, index);
+            console.log(this.request.productFields);
         },
 
     },
@@ -119,13 +165,16 @@ export default {
                  this.request.category = this.findCategory(response.data.category_id);
                  this.request.price = response.data.price;
                  this.request.stock = response.data.stock;
+                 this.request.recommendation = response.data.recommendation;
+                 this.request.productFields = response.data.product_properties;
+                 this.addFieldButton = false;
                  
                  Object.keys(response.data).forEach((key, value) => {
-                     if (key == 'updated_at')
-                        this.updated_at = value;
+                     if (key == 'product_properties')
+                        this.product_properties = value;
                  });
                  Object.keys(response.data).forEach((key, value) => {
-                     if (value >5 && value < this.updated_at){
+                     if (value >5 && value < this.product_properties){
                          this.request.additionalFields[key] = response.data[key];
                      }
                  });

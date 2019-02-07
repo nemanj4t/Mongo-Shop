@@ -59,6 +59,14 @@
                                         @csrf
                                     </form>
                                 @else
+                                    <a class="dropdown-item" href="/shoppingcart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        {{ __('Shopping Cart') }}
+                                    </a>
+                                    <a class="dropdown-item" href="/orders">
+                                            <i class="far fa-list-alt"></i>
+                                            {{ __('Orders') }}
+                                        </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">

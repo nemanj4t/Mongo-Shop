@@ -138,7 +138,8 @@ class Category extends Model
 
     public static function getMainCategories()
     {
-        $mainCategories = self::whereRaw(['category_id' => ['$exists' => false]])->get();
+        //$mainCategories = self::whereRaw(['category_id' => ['$exists' => false]])->get();
+        $mainCategories = self::where('category_id', null)->get();
         if(count($mainCategories) === 1) {
             return $mainCategories->first()->children;
         } else {

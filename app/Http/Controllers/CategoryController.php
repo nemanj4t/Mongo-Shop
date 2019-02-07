@@ -21,6 +21,8 @@ class CategoryController extends Controller
         $path = Category::getFullPath($category);
         $products = Category::getProductsForLeafCategories($category);
         $maxPrice = $products->max('price');
+        if($maxPrice == null) // kada nema proizvoda
+            $maxPrice = 0;
         if($category->children()->exists()) {
             $subCategories = $category->children;
         } else {
@@ -33,13 +35,21 @@ class CategoryController extends Controller
         }
 
         return view('categories',
-            compact('category', 'path', 'products', 'subCategories', 'maxPrice', 'filters'));
+           compact('category', 'path', 'products', 'subCategories', 'maxPrice', 'filters'));
     }
 
     public function getFilteredData(Request $request, $id)
     {
         if(!empty($request->all())) {
-            $products = self::buildFilterQuery($request->all(), $id); // filtrira
+            if(count($request->all()) === 1 && isset($request['price'])) {
+                // Ako je samo price onda se filtrira posebno, jer u query-ju ispod
+                // mora da ima elemenata u okviru $or niza, a ovako nece biti
+                $category = Category::find($id);
+                $products = Category::getProductsForLeafCategories($category)
+                    ->where('price', '<=', floatval($request['price']));
+            } else {
+                $products = self::buildFilterQuery($request->all(), $id); // filtrira
+            }
             return compact('products');
         }
     }
@@ -55,7 +65,6 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->category_id = $request->category_id;
         $category->details = $request->additionalFields;
-        $category->amount = 0;
         $category->save();
         return response()->json($category);
     }
@@ -81,17 +90,24 @@ class CategoryController extends Controller
                         'category_id' => $category_id
                     ],
                     [
+                        'price' => [
+                                '$lte' => floatval($filters['price'])
+                            ]   // uvek filtrira po ceni
+                    ],
+                    [
                         '$or' => []
                     ]
                 ]
             ]
-        ]]; // $query[0]['$match']['$and'][1]['$or'] ovde ubacujem
+        ]];
+         // $query[0]['$match']['$and'][1]['$or'] ovde ubacujem
         foreach($filters as $key => $filter) {
+            if($key === 'price') continue; // preskoci jer je vec dodato iznad
             $filterArray = [$key => ['$in' => []]];  // $filterArray[$key]['$in']
             foreach($filter as $value) {
                 $filterArray[$key]['$in'][] = $value;
-            }
-            $query[0]['$match']['$and'][1]['$or'][] = $filterArray;
+            }            
+            $query[0]['$match']['$and'][2]['$or'][] = $filterArray;
         }
         $result = Product::raw()->aggregate($query);
         $products = [];

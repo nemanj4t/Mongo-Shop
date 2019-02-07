@@ -1925,6 +1925,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1944,14 +1956,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     filterByPrice: function filterByPrice() {
       var _this = this;
 
-      axios.get('/search', {
-        params: {
-          'category': this.category._id,
-          'price': this.priceFilter
-        }
-      }).then(function (response) {
-        _this.loadProductsIntoStore(response.data);
-      });
+      if (typeof this.filters === 'undefined') {
+        // ako nema drugih filtera
+        axios.get('/search', {
+          params: {
+            'category': this.category._id,
+            'price': this.priceFilter
+          }
+        }).then(function (response) {
+          _this.loadProductsIntoStore(response.data);
+        });
+      } else {
+        this.getFilteredData('price', this.priceFilter);
+      }
     },
     loadProductsIntoStore: function loadProductsIntoStore(products) {
       this.CHANGE_PRODUCTS_FOR_SHOW(products);
@@ -1980,8 +1997,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getFilteredData: function getFilteredData(filter, value) {
       var _this2 = this;
 
-      this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
-      var paramFilters = {}; // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
+      var paramFilters = {};
+
+      if (filter !== 'price') {
+        // Ako je neki od checkboxovanih filtera firovao event prvo se promeni vrednost
+        this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
+      } // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
+
 
       for (var f in this.selectedFilters) {
         var values = [];
@@ -1995,8 +2017,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (values.length !== 0) {
           paramFilters[f] = values;
         }
-      }
+      } // price filter se dodaje uvek
 
+
+      paramFilters['price'] = this.priceFilter;
       axios.get('/api/categories/filter/' + this.category._id, {
         params: paramFilters
       }).then(function (response) {
@@ -3132,10 +3156,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      addFieldButton: "",
+      productFieldName: "",
       categories: "",
       request: {
         name: "",
@@ -3143,7 +3182,8 @@ __webpack_require__.r(__webpack_exports__);
         category: "",
         stock: "",
         price: "",
-        additionalFields: {}
+        additionalFields: {},
+        productFields: {}
       }
     };
   },
@@ -3187,6 +3227,23 @@ __webpack_require__.r(__webpack_exports__);
       }).catch(function (error) {
         return console.log(error);
       });
+    },
+    changeButtonState: function changeButtonState() {
+      this.addFieldButton = !this.addFieldButton;
+    },
+    addProductField: function addProductField() {
+      if (this.request.productFieldName != null || this.request.productFieldName != '') {
+        this.request.productFields[this.productFieldName] = "";
+      }
+
+      this.changeButtonState();
+      this.productFieldName = "";
+      console.log(this.request.productFields);
+    },
+    deleteField: function deleteField(index) {
+      //delete this.request.productFields[index];
+      Vue.delete(this.request.productFields, index);
+      console.log(this.request.productFields);
     }
   },
   mounted: function mounted() {
@@ -3194,7 +3251,7 @@ __webpack_require__.r(__webpack_exports__);
 
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/categories').then(function (response) {
       _this3.categories = response.data.categories;
-      console.log(_this3.categories);
+      _this3.addFieldButton = false;
     }).catch(function (error) {
       return console.log(error);
     });
@@ -3256,11 +3313,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      updated_at: "",
+      addFieldButton: "",
+      productFieldName: "",
+      product_properties: "",
       categories: "",
       original: {
         category: "",
@@ -3272,7 +3350,10 @@ __webpack_require__.r(__webpack_exports__);
         category: "",
         stock: "",
         price: "",
-        additionalFields: {}
+        recommendation: "",
+        fieldsToDelete: null,
+        additionalFields: {},
+        productFields: {}
       }
     };
   },
@@ -3312,6 +3393,10 @@ __webpack_require__.r(__webpack_exports__);
     editProduct: function editProduct() {
       var _this2 = this;
 
+      if (this.original.category != this.request.category) {
+        this.request.fieldsToDelete = this.original.additionalFields;
+      }
+
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/products/' + this.$route.params.id, this.request).then(function (response) {
         console.log(response);
 
@@ -3319,6 +3404,23 @@ __webpack_require__.r(__webpack_exports__);
       }).catch(function (error) {
         return console.log(error);
       });
+    },
+    changeButtonState: function changeButtonState() {
+      this.addFieldButton = !this.addFieldButton;
+    },
+    addProductField: function addProductField() {
+      if (this.request.productFieldName != null || this.request.productFieldName != '') {
+        this.request.productFields[this.productFieldName] = "";
+      }
+
+      this.changeButtonState();
+      this.productFieldName = "";
+      console.log(this.request.productFields);
+    },
+    deleteField: function deleteField(index) {
+      //delete this.request.productFields[index];
+      Vue.delete(this.request.productFields, index);
+      console.log(this.request.productFields);
     }
   },
   mounted: function mounted() {
@@ -3336,11 +3438,14 @@ __webpack_require__.r(__webpack_exports__);
       _this3.request.category = _this3.findCategory(response.data.category_id);
       _this3.request.price = response.data.price;
       _this3.request.stock = response.data.stock;
+      _this3.request.recommendation = response.data.recommendation;
+      _this3.request.productFields = response.data.product_properties;
+      _this3.addFieldButton = false;
       Object.keys(response.data).forEach(function (key, value) {
-        if (key == 'updated_at') _this3.updated_at = value;
+        if (key == 'product_properties') _this3.product_properties = value;
       });
       Object.keys(response.data).forEach(function (key, value) {
-        if (value > 5 && value < _this3.updated_at) {
+        if (value > 5 && value < _this3.product_properties) {
           _this3.request.additionalFields[key] = response.data[key];
         }
       });
@@ -39652,13 +39757,14 @@ var render = function() {
           { staticClass: "nav flex-column list-group-item" },
           [
             _c("h5", { staticClass: "nav-link font-weight-bold text-center" }, [
-              _vm._v("Cena:")
+              _vm._v("Price:")
             ]),
             _vm._v(" "),
             _c("vue-slider", {
               attrs: {
+                width: 150,
                 max: this.getRoundedMaxPrice,
-                interval: 100,
+                interval: 10,
                 bgStyle: { "background-color": "red" },
                 sliderStyle: { "background-color": "black" },
                 processStyle: { "background-color": "red" },
@@ -41656,9 +41762,63 @@ var render = function() {
           [
             _c("label", [_vm._v("Additional fields:")]),
             _vm._v(" "),
+            !this.addFieldButton
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: { click: _vm.changeButtonState }
+                  },
+                  [_vm._v("+")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              this.addFieldButton
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      on: { click: _vm.addProductField }
+                    },
+                    [_vm._v("Save field name")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              this.addFieldButton
+                ? _c("div", { staticClass: "col md-4" }, [
+                    this.addFieldButton
+                      ? _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.productFieldName,
+                              expression: "productFieldName"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { placeholder: "Product field name" },
+                          domProps: { value: _vm.productFieldName },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.productFieldName = $event.target.value
+                            }
+                          }
+                        })
+                      : _vm._e()
+                  ])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
             _vm._l(_vm.request.additionalFields, function(field, index) {
               return _c("div", { staticClass: "row" }, [
-                _c("label", [_vm._v(_vm._s(index) + ":")]),
+                _c("label", { staticClass: "col-md-12 mt-2" }, [
+                  _vm._v(_vm._s(index) + ":")
+                ]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -41684,6 +41844,53 @@ var render = function() {
                     }
                   }
                 })
+              ])
+            }),
+            _vm._v(" "),
+            _vm._l(_vm.request.productFields, function(field, index) {
+              return _c("div", { staticClass: "row" }, [
+                _c("label", { staticClass: "col-md-12 mt-2" }, [
+                  _vm._v(_vm._s(index) + ":")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.request.productFields[index],
+                      expression: "request.productFields[index]"
+                    }
+                  ],
+                  staticClass: "col-md-11 form-control",
+                  domProps: { value: _vm.request.productFields[index] },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.request.productFields,
+                        index,
+                        $event.target.value
+                      )
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "col-md-1 btn btn-sm btn-danger",
+                    attrs: { value: index },
+                    on: {
+                      click: function($event) {
+                        _vm.deleteField(index)
+                      }
+                    }
+                  },
+                  [_vm._v("X")]
+                )
               ])
             })
           ],
@@ -41831,6 +42038,48 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Recommendation:")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.request.recommendation,
+                  expression: "request.recommendation"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { name: "recommendation" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.request,
+                    "recommendation",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
+                }
+              }
+            },
+            [
+              _c("option", { domProps: { value: true } }, [_vm._v("True")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: false } }, [_vm._v("False")])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
           _c("label", [_vm._v("Stock:")]),
           _vm._v(" "),
           _c("input", {
@@ -41888,9 +42137,63 @@ var render = function() {
           [
             _c("label", [_vm._v("Additional fields:")]),
             _vm._v(" "),
+            !this.addFieldButton
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: { click: _vm.changeButtonState }
+                  },
+                  [_vm._v("+")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              this.addFieldButton
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      on: { click: _vm.addProductField }
+                    },
+                    [_vm._v("Save field name")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              this.addFieldButton
+                ? _c("div", { staticClass: "col md-4" }, [
+                    this.addFieldButton
+                      ? _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.productFieldName,
+                              expression: "productFieldName"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { placeholder: "Product field name" },
+                          domProps: { value: _vm.productFieldName },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.productFieldName = $event.target.value
+                            }
+                          }
+                        })
+                      : _vm._e()
+                  ])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
             _vm._l(_vm.request.additionalFields, function(field, index) {
               return _c("div", { staticClass: "row" }, [
-                _c("label", [_vm._v(_vm._s(index) + ":")]),
+                _c("label", { staticClass: "col-md-12 mt-2" }, [
+                  _vm._v(_vm._s(index) + ":")
+                ]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -41916,6 +42219,53 @@ var render = function() {
                     }
                   }
                 })
+              ])
+            }),
+            _vm._v(" "),
+            _vm._l(_vm.request.productFields, function(field, index) {
+              return _c("div", { staticClass: "row" }, [
+                _c("label", { staticClass: "col-md-12 mt-2" }, [
+                  _vm._v(_vm._s(index) + ":")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.request.productFields[index],
+                      expression: "request.productFields[index]"
+                    }
+                  ],
+                  staticClass: "col-md-11 form-control",
+                  domProps: { value: _vm.request.productFields[index] },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.request.productFields,
+                        index,
+                        $event.target.value
+                      )
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "col-md-1 btn btn-sm btn-danger",
+                    attrs: { value: index },
+                    on: {
+                      click: function($event) {
+                        _vm.deleteField(index)
+                      }
+                    }
+                  },
+                  [_vm._v("X")]
+                )
               ])
             })
           ],
@@ -59642,8 +59992,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

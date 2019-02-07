@@ -5,12 +5,24 @@
 
             <!--Slider za cenu-->
             <li class="nav flex-column list-group-item">
-                <h5 class="nav-link font-weight-bold text-center">Cena:</h5>
-                <vue-slider v-on:drag-end="filterByPrice()" v-model="priceFilter"
-                                :max="this.getRoundedMaxPrice" :interval="100" :bgStyle="{'background-color': 'red'}"
+                <h5 class="nav-link font-weight-bold text-center">Price:</h5>
+                <vue-slider v-on:drag-end="filterByPrice()" v-model="priceFilter" :width="150"
+                                :max="this.getRoundedMaxPrice" :interval="10" :bgStyle="{'background-color': 'red'}"
                             :sliderStyle="{'background-color': 'black'}" :processStyle="{'background-color': 'red'}"
                             :tooltipStyle="{'background-color': 'white', 'color': 'black', 'font-weight': 'bold'}">
                 </vue-slider>
+                <!-- <div class="review-form">
+                    <h5 class="nav-link font-weight-bold text-center">Stars:</h5>
+                    <div class="input-rating d-flex justify-content-center">
+                        <div class="stars">
+                        <input id="star5" name="rating" value="5" type="radio" v-model="stars" v-on:change="filterByStars()"><label for="star5"></label>
+                        <input id="star4" name="rating" value="4" type="radio" v-model="stars" v-on:change="filterByStars()"><label for="star4"></label>
+                        <input id="star3" name="rating" value="3" type="radio" v-model="stars" v-on:change="filterByStars()"><label for="star3"></label>
+                        <input id="star2" name="rating" value="2" type="radio" v-model="stars" v-on:change="filterByStars()"><label for="star2"></label>
+                        <input id="star1" name="rating" value="1" type="radio" v-model="stars" v-on:change="filterByStars()"><label for="star1"></label>
+                        </div>
+                    </div>
+                </div> -->
             </li>
 
             <!--Kategorija-->
@@ -71,14 +83,19 @@
             ]),
 
             filterByPrice() {
-                axios.get('/search', {
+                if(typeof this.filters === 'undefined') {
+                    // ako nema drugih filtera
+                    axios.get('/search', {
                     params: {
                         'category': this.category._id,
                         'price' : this.priceFilter
                     }
                 }).then(response => {
                    this.loadProductsIntoStore(response.data);
-                });
+                }); 
+                } else {
+                    this.getFilteredData('price', this.priceFilter);
+                }
             },
 
             loadProductsIntoStore(products) {
@@ -107,8 +124,11 @@
                 }
             },
             getFilteredData(filter, value) {
-                this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
                 let paramFilters = {};
+                if(filter !== 'price') {
+                    // Ako je neki od checkboxovanih filtera firovao event prvo se promeni vrednost
+                    this.selectedFilters[filter][value] = !this.selectedFilters[filter][value];
+                } 
                 // Formira parametre samo od selektovanih filtera inverzna funkcija od ove iznad
                 for(let f in this.selectedFilters) {
                     let values = [];
@@ -121,6 +141,8 @@
                         paramFilters[f] = values;
                     }
                 }
+                // price filter se dodaje uvek
+                paramFilters['price'] = this.priceFilter;
                 axios.get('/api/categories/filter/' + this.category._id, {
                         params : paramFilters
                     })
@@ -131,9 +153,9 @@
         },
 
         computed: {
-          getRoundedMaxPrice() {
-              return Math.ceil(this.maxPrice/100)*100; // round na najblizu narednu 100
-          }
+            getRoundedMaxPrice() {
+                return Math.ceil(this.maxPrice/100)*100; // round na najblizu narednu 100
+            }
         },
 
         mounted() {

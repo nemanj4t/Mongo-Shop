@@ -51,9 +51,12 @@ class CheckoutController extends Controller
 
                 $request->session()->forget('shoppingCart');
                 $order = new Order;
+                $order->price = $price;
                 $order->user_id = Auth::user()->_id;
                 $order->products = [];
+                $order->items = 0;
                 foreach($cartItems as $item) {
+                    $order->items += $item->quantity;
                     $order->products = array_merge($order->products, [$item->product_id => $item->quantity]);
                     Product::reduceStock($item->product_id, $item->quantity);
                     $item->delete();

@@ -69,6 +69,8 @@ Route::post('/wishes/remove', 'UserController@deleteWish');
 
 Route::post('/product/{product}/comments', 'UserController@addComment');
 
+Route::get('/orders', 'OrderController@index')->middleware('auth');
+
 Route::get('/search', function(Request $request) {
     // Search bar
    if(isset($request['keyword'])) {
