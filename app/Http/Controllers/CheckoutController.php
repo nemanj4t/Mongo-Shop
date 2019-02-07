@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Cartalyst\Stripe\Exception\CardErrorException;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\Order as OrderNotification;
 use App\Product;
 use App\CartItem;
 use App\User;
 use App\Order;
+use Notification;
 
 
 class CheckoutController extends Controller 
@@ -62,6 +64,7 @@ class CheckoutController extends Controller
                     $item->delete();
                 }
                 $order->save();
+                Notification::send(Auth::user(), new OrderNotification($order));
                 return back()->with('success_message', 'Thank you! Your payment has been accepted.');
             } catch (CardErrorException $e) {
                 return back()->withErrors('Error! ' . $e->getMessage());
