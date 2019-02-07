@@ -103,4 +103,40 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
+    public function getRecommendations()
+    {
+        $products = [];
+        $productsmongo = Product::where('recommendation', true)->take(8)->get();
+        foreach ($productsmongo as $product) {
+            $product->category_name = $product->category->name;
+            $products[] = $product;
+        }
+        return $products;
+    }
+
+    public function getGoodPrice()
+    {
+        $products = [];
+        $productsmongo = Product::where('grade', '>=', 2.5)->take(8)->get();
+
+        foreach ($productsmongo as $product) {
+            $product->category_name = $product->category->name;
+            $products[] = $product;
+        }
+
+        return $products;
+    }
+
+    public function getNewProducts()
+    {
+        $products = [];
+        $productsmongo = Product::orderBy('created_at', 'desc')->take(8)->get();
+
+        foreach ($productsmongo as $product) {
+            $product->category_name = $product->category->name;
+            $products[] = $product;
+        }
+
+        return $products;
+    }
 }

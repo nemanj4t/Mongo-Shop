@@ -2,7 +2,7 @@
     <div>
         <div class="product">
             <div class="product-img">
-                <img src="http://www.independentmediators.co.uk/wp-content/uploads/2016/02/placeholder-image.jpg" alt="" />
+                <img :src="product.image" alt="" />
             </div>
             <div class="product-body">
                 <p class="product-category">{{category_name}}</p>
