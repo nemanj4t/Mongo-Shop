@@ -7,9 +7,9 @@
                 </ul>
             </div>
         </div>
-        
+
             <div class="col-md-7" offset-md-1>
-                <cart-item style="margin-top: 0px" :cartItem="cartItem" :key="cartItem._id" v-for="cartItem in getShoppingCart.products"></cart-item>
+                <cart-item class="p-4" style="margin-top: 0px" :cartItem="cartItem" :key="cartItem._id" v-for="cartItem in getShoppingCart.products"></cart-item>
             </div>
             <div v-if="getShoppingCart.products.length !== 0" class="col-md-3">
                 <div class="container">
