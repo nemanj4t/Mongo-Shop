@@ -105,7 +105,11 @@
                     <!-- /LOGO -->
 
                     <!-- SEARCH BAR -->
-                    <search-bar></search-bar>
+                    @if(isset($mainCategories) && !empty($mainCategories))
+                        <search-bar :category="{{ $mainCategories[0] }}"></search-bar>
+                    @else
+                        <search-bar></search-bar>
+                    @endif
                     <!-- /SEARCH BAR -->
 
                     <!-- ACCOUNT -->
