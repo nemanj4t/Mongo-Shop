@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div id="product-tab" style="margin-top: 0;">
                 <ul class="tab-nav">
-                    <li><a style="border: solid 1px; padding: 1rem;" class="navitemlink">Check out new products</a></li>
+                    <li class="p-0"><a style="border: solid 1px; padding: 1rem;" class="navitemlink">Check out new products</a></li>
                 </ul>
             </div>
         </div>

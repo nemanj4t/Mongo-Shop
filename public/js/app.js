@@ -40001,7 +40001,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-md-12" }, [
       _c("div", { attrs: { id: "product-tab" } }, [
         _c("ul", { staticClass: "tab-nav" }, [
-          _c("li", [
+          _c("li", { staticClass: "p-0" }, [
             _c(
               "a",
               {
@@ -40074,7 +40074,7 @@ var staticRenderFns = [
         { staticStyle: { "margin-top": "0" }, attrs: { id: "product-tab" } },
         [
           _c("ul", { staticClass: "tab-nav" }, [
-            _c("li", [
+            _c("li", { staticClass: "p-0" }, [
               _c(
                 "a",
                 {
@@ -40145,7 +40145,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-md-12" }, [
       _c("div", { attrs: { id: "product-tab" } }, [
         _c("ul", { staticClass: "tab-nav" }, [
-          _c("li", [
+          _c("li", { staticClass: "p-0" }, [
             _c(
               "a",
               {
