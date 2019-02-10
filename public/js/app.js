@@ -40608,6 +40608,7 @@ var render = function() {
       _vm._l(_vm.getShoppingCart.products, function(cartItem) {
         return _c("cart-item", {
           key: cartItem._id,
+          staticClass: "p-4",
           staticStyle: { "margin-top": "0px" },
           attrs: { cartItem: cartItem }
         })
@@ -59934,7 +59935,7 @@ __webpack_require__.r(__webpack_exports__);
         state.shopping_cart.items += 1;
       } else {
         state.shopping_cart.products.push(product);
-        state.shopping_cart.price += parseFloat(product.quantity * product.product.price);
+        state.shopping_cart.price += Number(parseFloat(product.quantity * product.product.price).toFixed(2));
         state.shopping_cart.items += product.quantity;
       }
     },
@@ -59997,8 +59998,13 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 __webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\js\app.js */"./resources/js/app.js");
 module.exports = __webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
+=======
+__webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\xampp\htdocs\mongo-nbp\resources\sass\app.scss */"./resources/sass/app.scss");
+>>>>>>> f4f5d2683ebfe25344b3ba9b77cda76024cb1b81
 
 
 /***/ })

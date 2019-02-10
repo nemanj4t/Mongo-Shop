@@ -39,7 +39,7 @@ export default {
                 state.shopping_cart.items += 1;
             } else {
                 state.shopping_cart.products.push(product);
-                state.shopping_cart.price += parseFloat(product.quantity * product.product.price);
+                state.shopping_cart.price += Number(parseFloat(product.quantity * product.product.price).toFixed(2));
                 state.shopping_cart.items += product.quantity;
             }
         },
