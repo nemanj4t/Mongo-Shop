@@ -2369,6 +2369,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['category'],
   data: function data() {
     return {
       keyword: ''
@@ -2378,13 +2379,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     search: function search() {
       var _this = this;
 
-      axios.get('/search', {
-        params: {
-          'keyword': this.keyword
-        }
-      }).then(function (response) {
-        _this.CHANGE_PRODUCTS_FOR_SHOW(response.data);
-      });
+      if (window.location.href.includes('/categories/')) {
+        axios.get('/search', {
+          params: {
+            'keyword': this.keyword
+          }
+        }).then(function (response) {
+          _this.CHANGE_PRODUCTS_FOR_SHOW(response.data);
+        });
+      } else {
+        // onda otvori posebnu stranu za search
+        window.location.href = window.location.href = '/categories/' + this.category._id + '?keyword=' + this.keyword;
+      }
     }
   })
 });
@@ -59991,8 +59997,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\My Documents\mongo-shop\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\mongo-shop-repo\mongo-shop\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

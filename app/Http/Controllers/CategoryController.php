@@ -9,10 +9,8 @@ use MongoDB\BSON;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $c = Category::find("5c4f7dd2d0a5342d40003994");
-        return Category::getFullPath($c);
     }
 
     public function show(Request $request, $id)
@@ -32,6 +30,11 @@ class CategoryController extends Controller
                     return (!empty($filter));
                 });
             }
+        }
+
+        // Ako je search bar napravio request (glupo resenje, ali da ne menjam sad)
+        if(isset($request['keyword'])) {
+            $products = Product::where('name', 'like', '%'.$request['keyword'].'%')->get();
         }
 
         return view('categories',

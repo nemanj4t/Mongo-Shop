@@ -18,6 +18,8 @@
     import { mapState, mapMutations } from 'vuex'
 
     export default {
+        props: ['category'],
+
         data() {
             return {
                 keyword: ''
@@ -30,13 +32,19 @@
             ]),
 
             search() {
-                axios.get('/search', {
-                    params: {
-                        'keyword': this.keyword
-                    }
-                }).then(response => {
-                    this.CHANGE_PRODUCTS_FOR_SHOW(response.data);
-                })
+                if(window.location.href.includes('/categories/')) {
+                    axios.get('/search', {
+                        params: {
+                            'keyword': this.keyword
+                        }
+                    }).then(response => {
+                        this.CHANGE_PRODUCTS_FOR_SHOW(response.data);
+                    })
+                } else {
+                    // onda otvori posebnu stranu za search
+                    window.location.href = window.location.href = '/categories/'
+                       + this.category._id + '?keyword=' + this.keyword;
+                }
             }
         }
     }
