@@ -8,7 +8,6 @@
                     <th>ID</th>
                     <th>Image</th>
                     <th>Name</th>
-                    <th>Category</th>
                     <th>Amount</th>
                     <th><router-link to="/products/create"><button class="btn btn-primary float-right">Add</button></router-link></th>
                 </tr>
@@ -18,8 +17,7 @@
                         <td>{{product._id}}</td>
                         <td><img id="img" :src="product.image"></td>
                         <td>{{product.name}}</td>
-                        <td>/</td>
-                        <td>0</td>
+                        <td>{{product.stock}}</td>
                         <td>
                             <div class = "row">
                                 <button class="btn btn-sm btn-danger float-right ml-2" @click="deleteProduct(product)">Delete</button>

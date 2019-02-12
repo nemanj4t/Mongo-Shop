@@ -48,17 +48,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" style="background-color: black" aria-labelledby="navbarDropdown">
-                                @auth('admin')
-                                    <a class="dropdown-item" href="{{ route('admin.logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        <i class="fas fa-sign-out-alt"></i>
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                @else
+                                @auth
                                     <a class="dropdown-item" href="/shoppingcart">
                                         <i class="fas fa-shopping-cart"></i>
                                         {{ __('Shopping Cart') }}
@@ -66,7 +56,7 @@
                                     <a class="dropdown-item" href="/orders">
                                             <i class="far fa-list-alt"></i>
                                             {{ __('Orders') }}
-                                        </a>
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
@@ -169,7 +159,7 @@
                 <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
                 <li><a class="nav-link navitemlink" href="/categories/{{ $item['id'] }}">{{ $item['name'] }}</a></li>
             @endforeach
-            
+
             @if(isset($product))
                 {{-- Ako je show za proizvod --}}
                 <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
@@ -179,7 +169,7 @@
             @elseif(isset($category))
                 {{-- Ako je show za kategoriju --}}
                 <li class="nav-link"><i class="fas fa-arrow-right"></i></li>
-                <li><a class="nav-link font-weight-bold navitemlink" href="#">{{ $category->name }}</a></li>         
+                <li><a class="nav-link font-weight-bold navitemlink" href="#">{{ $category->name }}</a></li>
             @endif
         </ul>
     </nav>

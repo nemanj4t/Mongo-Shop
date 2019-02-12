@@ -79,6 +79,14 @@
                                 @endforeach
                             @endif
                         @endforeach
+                        @if(isset($attr['product_properties']))
+                            @foreach($attr['product_properties'] as $key => $value)
+                                <tr>
+                                    <td>{{$key}}</td>
+                                    <td>{{$value}}</td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </table>
                 </div>
                 <!-- /Product details -->

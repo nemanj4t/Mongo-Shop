@@ -1,11 +1,11 @@
 <template>
-    <div style="height: 100%">
+    <div>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <div class="main" style="height: 100%">
-            <aside class="row" style="height: 100%">
-                <div class="sidebar left col-md-2">
+        <div class="main">
+            <aside class="row" style="overflow: hidden; min-height: 100vh;">
+                <div style="margin-bottom: -5000px; padding-bottom: 5000px;" class="sidebar left col-md-2">
                     <div class="user-panel">
                         <div class="float-left image">
                             <img src="https://pngimage.net/wp-content/uploads/2018/05/admin-png-images-4.png" class="rounded-circle" alt="User Image" />
@@ -33,11 +33,9 @@
                                 <li><router-link to='/users'>Manage Users</router-link></li>
                             </ul>
                         </li>
-
-                        <li> <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">Other Pages</span></a> </li>
                     </ul>
                 </div>
-                <div class="col-md-6 offset-md-2">
+                <div class="col-md-8 container mt-4">
                     <router-view></router-view>
                 </div>
             </aside>

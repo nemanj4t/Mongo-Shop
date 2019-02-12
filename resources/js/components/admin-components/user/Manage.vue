@@ -9,19 +9,17 @@
                     <th>Name</th>
                     <th>E-mail</th>
                     <th>User since</th>
-                    <th>Delete user</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr v-for="user in users">
-                        <td>{{user.id}}</td>
+                        <td>{{user._id}}</td>
                         <td>{{user.name}}</td>
                         <td>{{user.email}}</td>
                         <td>{{user.created_at}}</td>
                         <td>
-                            <div class = "row">
-                                <button class="btn btn-sm btn-danger float-right" @click="deleteUser(user)">Delete</button>
-                            </div>
+                            <button class="btn btn-sm btn-danger float-right" @click="deleteUser(user)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -41,7 +39,7 @@ export default {
     methods: {
         deleteUser(user) {
             axios.delete('/users/' + user._id)
-                .then(response => 
+                .then(response =>
                 {
                     console.log(response);
                     this.users.splice(this.users.indexOf(user), 1);

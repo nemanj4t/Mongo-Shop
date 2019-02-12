@@ -1,7 +1,7 @@
 <template>
     <div class='card'>
         <div class='card-header'>
-            Create product:        
+            Create product:
         </div>
         <div class='card-body'>
             <div>
@@ -30,22 +30,24 @@
                 <div class="form-group">
                     <label>Additional fields:</label>
                     <button v-if="!this.addFieldButton" class="btn btn-secondary" @click='changeButtonState'>+</button>
-                    <div class="row">
+                    <div class="row ml-auto mr-auto">
                         <button v-if="this.addFieldButton" class="btn btn-secondary" @click="addProductField">Save field name</button>
-                        <div v-if="this.addFieldButton" class="col md-4">
+                        <div v-if="this.addFieldButton" class="col-md-4">
                             <input v-if="this.addFieldButton" v-model="productFieldName" class="form-control" placeholder="Product field name">
                         </div>
                     </div>
-                    
-                    <div class="row" v-for="(field, index) in request.additionalFields">
-                        <label class="col-md-12 mt-2">{{index}}:</label>
-                        <input class="col-md-12 form-control" v-model="request.additionalFields[index]"/>
+
+                    <div class="form-group" v-for="(field, index) in request.additionalFields">
+                        <label class="mt-2">{{index}}:</label>
+                        <input class="form-control" v-model="request.additionalFields[index]"/>
                     </div>
-                    <div class="row" v-for="(field, index) in request.productFields">
-                        <label class="col-md-12 mt-2">{{index}}:</label>                         
-                        <input class="col-md-11 form-control" v-model="request.productFields[index]"/>                         
-                        <button class="col-md-1 btn btn-sm btn-danger" :value="index" @click="deleteField(index)">X</button>                      
-                    </div>               
+                    <div class="form-group" v-for="(field, index) in request.productFields">
+                        <label class="mt-2">{{index}}:</label>
+                        <div class="row ml-auto mr-auto">
+                            <input class="col-11 form-control" v-model="request.productFields[index]"/>
+                            <button class="col-1 float-right btn btn-sm btn-danger float-right" :value="index" @click="deleteField(index)"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary" @click="createProduct">Submit</button>
             </div>
@@ -75,7 +77,7 @@ export default {
     //props: ['categories'],
     name:'ProductCreate',
     methods: {
-        
+
         getCategory() {
             this.request.additionalFields = {};
             parent = this.findParent(this.request.category.category_id);
@@ -106,7 +108,7 @@ export default {
 
         createProduct() {
             axios.post('/products', this.request)
-            .then(response => 
+            .then(response =>
             {
                 console.log(response);
                 this.$router.push('/products');
@@ -136,7 +138,7 @@ export default {
 
     mounted() {
         axios.get('/api/categories')
-            .then(response => 
+            .then(response =>
             {
                 this.categories = response.data.categories;
                 this.addFieldButton = false;

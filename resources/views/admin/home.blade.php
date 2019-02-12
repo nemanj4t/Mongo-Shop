@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height: 100%" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,8 +19,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body style="height:100%">
-<div id="app" style="height:100%">
+<body >
+<div id="app" >
     <header class="header">
         <nav style="background-color: #d1374d" class="navbar navbar-toggleable-md navbar-light pt-0 pb-0 ">
             <a class="navbar-brand p-0 mr-5" style="font-size: 2rem; color: white" href="/"><i class="fas fa-home"></i> MONGO-SHOP</a>
@@ -35,7 +35,7 @@
             </form>
         </nav>
     </header>
-    <admin-panel></admin-panel> 
+    <admin-panel></admin-panel>
 </div>
 </body>
 </html>

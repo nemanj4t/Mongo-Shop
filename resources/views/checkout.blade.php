@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container" id="app">
+    <div class="container mt-4 mb-4">
         <div class="col-md-12 col-md-offset-3">
             <h1>Payment Form</h1>
             <div class="spacer"></div>
@@ -24,6 +24,4 @@
             <payment-form></payment-form>
         </div>
     </div>
-
-    <script src="{{ asset('js/app.js') }}"></script>
 @endsection

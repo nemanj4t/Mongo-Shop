@@ -1,7 +1,7 @@
 <template>
     <div class='card'>
         <div class='card-header'>
-            Edit category: 
+            Edit category:
         </div>
         <div class='card-body'>
             <div>
@@ -19,11 +19,17 @@
                 <div class="form-group">
                     <label>Additional fields:</label>
                     <button class="btn btn-secondary" @click='addField'>+</button>
-                    <div class="row" v-for="(field, index) in request.additionalFields">
-                        <input class="col-md-10 form-control mt-2" :name="'aditionalField_' + index" v-model = "request.additionalFields[index]"/>
-                        <button class="btn btn-sm btn-danger mt-2 ml-2" :value="index" @click="deleteField(index)">X</button>
-                    </div>            
                 </div>
+
+                <div class="row ml-1">
+                    <div class="form-group col-3 ml-1" v-for="(field, index) in request.additionalFields">
+                        <div class="row" >
+                            <input class="col-md-10 form-control mt-2" :name="'aditionalField_' + index" v-model = "request.additionalFields[index]"/>
+                            <button class="btn btn-sm btn-danger mt-2 ml-2" :value="index" @click="deleteField(index)"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary" @click="edit">Submit</button>
             </div>
         </div>
@@ -51,7 +57,7 @@ export default {
             this.request.additionalFields.push("");
            // console.log(this.additionalFields);
         },
-        
+
         deleteField(index) {
             this.request.additionalFields.splice(index, 1);
         },
@@ -67,7 +73,7 @@ export default {
         axios.get('/api/categories')
             .then(response => {this.categories = response.data.categories; console.log(this.categories);})
             .catch(error => console.log(error));
-        
+
         axios.get('/api/categories/' + this.$route.params.id)
             .then(response => {console.log(response); this.request.name = response.data.name; this.request.category_id = response.data.category_id; this.request.additionalFields = response.data.details;})
             .catch(error => console.log(error));

@@ -8,21 +8,20 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Details</th>
-                    <th>Amount</th>
+                    <th></th>
                     <th><router-link to="/categories/create"><button class="btn btn-primary float-right">Add</button></router-link></th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr v-for="category in categories">
                         <td>{{category._id}}</td>
-                        <td>{{category.name}}</a></td>
+                        <td>{{category.name}}</td>
                         <td>{{category.details}}</td>
-                        <td>0</td>
                         <td>
-                            <div class = "row">
-                                <button class="btn btn-sm btn-danger float-right" @click="deleteCategory(category)">Delete</button>
-                                <router-link :to="'/categories/edit/'+ category._id" ><button class="btn btn-sm btn-primary float-right">Edit</button></router-link>
-                            </div>
+                            <router-link :to="'/categories/edit/'+ category._id" ><button class="btn btn-sm btn-primary float-right">Edit</button></router-link>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-danger float-right" @click="deleteCategory(category)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -43,7 +42,7 @@ export default {
     methods: {
         deleteCategory(category) {
             axios.delete('/categories/' + category._id)
-                .then(response => 
+                .then(response =>
                 {
                     console.log(response);
                     this.categories.splice(this.categories.indexOf(category), 1);
